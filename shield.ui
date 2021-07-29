@@ -264,6 +264,26 @@
         <string>...</string>
        </property>
       </widget>
+      <widget class="QPushButton" name="learnFAQBtn">
+       <property name="geometry">
+        <rect>
+         <x>910</x>
+         <y>10</y>
+         <width>91</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Справка</string>
+       </property>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_4">
@@ -292,7 +312,7 @@
       <widget class="QGroupBox" name="targetValBox_2">
        <property name="geometry">
         <rect>
-         <x>350</x>
+         <x>160</x>
          <y>30</y>
          <width>631</width>
          <height>201</height>
@@ -435,8 +455,8 @@
       <widget class="QLabel" name="debugLabel4Query">
        <property name="geometry">
         <rect>
-         <x>450</x>
-         <y>280</y>
+         <x>180</x>
+         <y>270</y>
          <width>511</width>
          <height>71</height>
         </rect>
@@ -456,6 +476,26 @@
        </property>
        <property name="textFormat">
         <enum>Qt::AutoText</enum>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="queryFAQBtn">
+       <property name="geometry">
+        <rect>
+         <x>890</x>
+         <y>10</y>
+         <width>91</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Справка</string>
        </property>
       </widget>
      </widget>
@@ -548,10 +588,10 @@
       <widget class="QPushButton" name="chLinksBtn">
        <property name="geometry">
         <rect>
-         <x>20</x>
-         <y>180</y>
-         <width>121</width>
-         <height>51</height>
+         <x>90</x>
+         <y>210</y>
+         <width>101</width>
+         <height>41</height>
         </rect>
        </property>
        <property name="font">
@@ -562,14 +602,14 @@
         </font>
        </property>
        <property name="text">
-        <string>Изменить связи</string>
+        <string>Изменить</string>
        </property>
       </widget>
       <widget class="QLabel" name="debugLabel4Links">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>310</y>
+         <y>300</y>
          <width>241</width>
          <height>71</height>
         </rect>
@@ -651,8 +691,8 @@
       <widget class="QPushButton" name="epochsLoopsBtn">
        <property name="geometry">
         <rect>
-         <x>310</x>
-         <y>200</y>
+         <x>480</x>
+         <y>210</y>
          <width>101</width>
          <height>41</height>
         </rect>
@@ -669,7 +709,7 @@
       <widget class="QGroupBox" name="groupBox_3">
        <property name="geometry">
         <rect>
-         <x>510</x>
+         <x>530</x>
          <y>30</y>
          <width>231</width>
          <height>80</height>
@@ -695,6 +735,91 @@
          </rect>
         </property>
        </widget>
+      </widget>
+      <widget class="Line" name="line">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>781</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+      <widget class="Line" name="line_2">
+       <property name="geometry">
+        <rect>
+         <x>270</x>
+         <y>20</y>
+         <width>20</width>
+         <height>241</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+      <widget class="Line" name="line_3">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>250</y>
+         <width>781</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+      <widget class="Line" name="line_4">
+       <property name="geometry">
+        <rect>
+         <x>780</x>
+         <y>20</y>
+         <width>20</width>
+         <height>241</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="setingsFAQBtn">
+       <property name="geometry">
+        <rect>
+         <x>910</x>
+         <y>10</y>
+         <width>91</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Справка</string>
+       </property>
+      </widget>
+      <widget class="Line" name="line_5">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>20</y>
+         <width>20</width>
+         <height>241</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
       </widget>
      </widget>
     </widget>
