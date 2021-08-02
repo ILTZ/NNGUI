@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.special as ss
+from threading import Thread
 
 #activation func
 def sigmoid(x):
@@ -94,6 +95,7 @@ class neuralNetwork:
                     self.FN.changeWeights(hiddenOut2)
                     self.HN2.changeWeights(hiddenOut)
                     self.HN.changeWeights(inputs)  
+        print("Traning succes")
         pass
     def handLearnProcess(self, inputArr, targetArr):
         for epochs in range(self.epochs):
@@ -114,7 +116,21 @@ class neuralNetwork:
                 self.FN.changeWeights(hiddenOut2)
                 self.HN2.changeWeights(hiddenOut)
                 self.HN.changeWeights(inputs)  
-    pass
+        print("Train succes")
+        pass
+
+    def learn(self, inputArr, targetArr, param):
+        
+        if(param == 0):
+            th = Thread(target = self.handLearnProcess, args=[inputArr, targetArr])
+        elif (param == 1):
+            th = Thread(target = self.learnProcess, args= [inputArr, targetArr])
+
+        th.start()
+
+
+
+        pass
 
     #Сброс значений до дефолтных(см. после <import>-ов)
     def setDefaultParams(self):

@@ -207,7 +207,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         mutex.acquire()
 
       
-        self.nn.handLearnProcess(self.hand_input_arr, self.hand_target_val)
+        self.nn.learn(self.hand_input_arr, self.hand_target_val, 0)
 
         self.printDebugMessage("Тренировка завершена.", 'learn')
         pass
@@ -225,14 +225,10 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
     ######################################################
     def startLearn(self):
         procName = 'learn'
-        th2 = threading.Thread(target = self.showPercents)
 
         #В случае загрузки значенией из внешнего файла
         if self.learnFromFile == True:
-            th = threading.Thread(target = self.goToLearnFile)
-            #self.goToLearnFile()
-            th2.start()
-            th.start()
+            self.goToLearnFile()
         #В случае, если значения вводятся ручками
         else:
             try:
@@ -242,14 +238,10 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
                 self.showDebugDialog("Введите корректные значения!", 'error')
                 self.clearLearnBoxes()
                 return
-            th = threading.Thread(target = self.goToLearnHand)
-            th.start()
-            th2.start()
-            #self.goToLearnHand()
+            self.goToLearnHand()
 
 
-        th.join()
-        th2.join()
+
         self.printDebugMessage("Тренировка завершена!", procName)
         pass
 
