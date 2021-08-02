@@ -3,7 +3,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 import Ui_shield
 import threading
-
+import numpy as np
 
 from NNVSCode import neuralNetwork
 
@@ -25,15 +25,15 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.learnStartBtn.clicked.connect(self.startLearn)
         self.queryBtn.clicked.connect(self.defQuery)
         self.chLinksBtn.clicked.connect(self.setNewLinks)
-        self.loadFileBtn.clicked.connect(self.loadFile)
         self.clearBtn.clicked.connect(self.clearParams)
         self.currentParamBtn.triggered.connect(self.showCurrentParams)
         self.loadFromFile.triggered.connect(self.loadFile)
         self.epochsLoopsBtn.clicked.connect(self.setNewLearnParams)
+        self.tabWidget_2.tabBarClicked.connect(self.showParams)
         ##
         self.nn = neuralNetwork(def_inputN, def_hiddenN, def_outputN, def_learnRate)
         self.learnFromFile = False
-
+        self.performanceBox.setVisible(False)
         ##def_variables
         self.inputValues = []
         self.targetValues = []
@@ -41,6 +41,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.learnLoops = def_loops
         self.hand_input_arr = []
         self.hand_target_val = 0.0
+        self.percentValue = 0.0
 
     def showDebugDialog(self, message, type):
         msgBox = QMessageBox()
@@ -69,11 +70,15 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         elif proc == 'link':
             self.debugLabel4Links.setText(message)
         pass
-    def showPercents(self, targetVal, currentVal):
+    def setPercents(self, targetVal, currentVal):
         showVal = currentVal / targetVal
-        self.progressBar.setValue(showVal)
-        print(showVal)
+        self.percentValue = showVal
         pass
+    def showPercents(self):
+        for i in range(self.learnLoops):
+            self.progressBar.setValue(self.percentValue)
+        pass
+
     #Получение начальных значений
     def getParams(self, param):
         if param == 'learn':
@@ -157,7 +162,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         except:
             self.hNodesIn.clear()
             self.oNodesIn.clear()
-            self.printDebugMessage('Введите значения типа "int".', 'link')
+            self.showDebugDialog('Введите значения типа "int".', 'error')
             return
 
 
@@ -201,9 +206,9 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         mutex = threading.Lock()
         mutex.acquire()
 
-        for i in range(self.learnLoops):
-            self.nn.learnProcess(self.hand_input_arr, self.hand_target_val)
-            self.showPercents(self.learnLoops, i)
+      
+        self.nn.handLearnProcess(self.hand_input_arr, self.hand_target_val)
+
         self.printDebugMessage("Тренировка завершена.", 'learn')
         pass
 
@@ -213,20 +218,21 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         mutex = threading.Lock()
         mutex.acquire()
 
-        for epochs in range(self.epochs):
-            for count in range(self.learnLoops):
-                self.showPercents(self.learnLoops, count)
-                for i,t in zip(self.inputValues, self.targetValues):
-                    self.nn.learnProcess(i, t)
+
+        self.nn.learnProcess(self.inputValues, self.targetValues)
 
         mutex.release()
     ######################################################
     def startLearn(self):
         procName = 'learn'
+        th2 = threading.Thread(target = self.showPercents)
 
         #В случае загрузки значенией из внешнего файла
         if self.learnFromFile == True:
-            self.goToLearnFile()
+            th = threading.Thread(target = self.goToLearnFile)
+            #self.goToLearnFile()
+            th2.start()
+            th.start()
         #В случае, если значения вводятся ручками
         else:
             try:
@@ -236,8 +242,14 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
                 self.showDebugDialog("Введите корректные значения!", 'error')
                 self.clearLearnBoxes()
                 return
-            self.goToLearnHand()
+            th = threading.Thread(target = self.goToLearnHand)
+            th.start()
+            th2.start()
+            #self.goToLearnHand()
 
+
+        th.join()
+        th2.join()
         self.printDebugMessage("Тренировка завершена!", procName)
         pass
 
@@ -251,7 +263,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             self.clearQueryBoxes()
             return
 
-        self.outputLabel.setText(self.nn.query(inputArr))
+        self.outputLabel.setText(np.array2string(self.nn.query(inputArr)))
         pass
    
     #Для загрузки файлов из <file_name>.txt
@@ -307,6 +319,22 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
 
         self.clearAll()
         pass
+    #Оценка точности
+    def performanceTest(self):
+        #points = 0
+        #for i,t in zip(self.inputValues, self.targetValues):
+        #    x = self.nn.query(i)
+        #    if (i+self.)
 
+        pass
+    #При переключении на вкладку с настройками
+    def showParams(self, index):
+        if (index == 2):
+            self.hNodesIn.setText(str(self.nn.getCurrentWHH()))   
+            self.oNodesIn.setText(str(self.nn.getCurrentWHO()))
+            self.loopCount.setText(str(self.learnLoops))
+            self.epochsCount.setText(str(self.epochs))
+            self.learnRateBox.setText(str(self.nn.getCurrentLearnRate()))
+        pass
     
         
