@@ -2,10 +2,11 @@ import sys
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 import Ui_shield
-import threading
 import numpy as np
 
+
 from NNVSCode import neuralNetwork
+from Int4NN import NNControl
 
 #def params NN
 def_inputN = 5
@@ -15,108 +16,14 @@ def_learnRate = 0.3
 def_epochs = 1
 def_loops = 30000
 
-#Читай "интерфес" для общения с НН и корректной передачи в потоки гребаные
-class NNControl(QtCore.QObject):
-    finished = QtCore.pyqtSignal()
-    activate = QtCore.pyqtSignal()
-    def __init__(self):
-        QtCore.QObject.__init__(self)
-
-        self.inputN = def_inputN
-        self.hiddenN = def_hiddenN
-        self.outputN = def_outputN
-        self.learnRate = def_learnRate
-        self.epochs = def_epochs
-        self.learnLoops = def_loops
-
-        self.NN = neuralNetwork(self.inputN, self.hiddenN, self.outputN, self.learnRate)
-
-        self.inputVal = []
-        self.targetVal = 0.0
-
-        self.inputArr = []
-        self.targetArr = []
-    
-    #Восстановление стандартных параметров
-    def backToDefaultParams(self):
-        self.inputN = def_inputN
-        self.hiddenN = def_hiddenN
-        self.outputN = def_outputN
-        self.epochs = def_epochs
-        self.learnLoops = def_loops
-
-        self.inputVal.clear()
-        self.targetVal = 0.0
-        self.inputArr.clear()
-        self.targetArr.clear()
-
-        self.changeLinks(self.hiddenN, self.outputN)
-        self.changeLearnRate(def_learnRate)
-        pass
-    #Геттеры/сеттеры
-    def changeLinks(self, hiddenL, outL):
-        self.NN.setWHH(hiddenL)
-        self.NN.setWHO(outL)
-        self.NN.reRandWHOWeights()
-        self.NN.reRandWIHWeights()
-        pass
-    def changeLearnRate(self, newLR):
-        self.learnRate = newLR
-        self.NN.setLearnRate(newLR)
-        pass
-    def getLearnRate(self):
-        return self.NN.getCurrentLearnRate()
-    def setLearnLoops(self, newLL):
-        self.learnLoops = newLL
-        pass
-    def getLearnLoops(self):
-        return self.learnLoops()
-    def setEpochs(self, newEpoc):
-        self.epochs = newEpoc
-        pass
-    def getEpochs(self):
-        return self.epochs
-    #Обучение по вводимым вручную значениям
-    def handLearn(self):
-        for epochs in range(self.epochs):
-            for count in range(self.learnLoops):
-                self.NN.learnProcess(self.inputVal, self.targetVal)
-        print("TrainSucces")
-        self.finished.emit()
-        pass
-    #Обучение по значениям из файла
-    def fileLearn(self):
-        for epochs in range(self.epochs):
-            for count in range(self.learnLoops):
-                for i,t in zip(self.inputArr, self.targetArr):
-                    self.NN.learnProcess(i, t)
-        print("TrainSucces")
-        pass
-    #Стандартный опрос сети
-    def defQuery(self, inputArr):
-        return self.NN.query(inputArr)
-    #Установка входных значений перед отправкой выполнения обучения в отдельный поток
-    def setInputVal(self, inputArr, targetArr, param):
-        if param == 0:
-            self.inputVal = inputArr
-            self.targetVal = targetArr
-        elif param == 1:
-            self.inputArr = inputArr
-            self.targetArr = targetArr
-        else:
-            print("Uncorrect param")
-        pass
-    
-
-
-
 class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
+    finished = QtCore.pyqtSignal()
     def __init__(self):
         super().__init__()
         self.setupUi(self)
 
         ##slots
-        self.learnStartBtn.clicked.connect(self.learnInDefThread)
+        self.learnStartBtn.clicked.connect(self.startLearn)
         self.queryBtn.clicked.connect(self.defQuery)
         self.chLinksBtn.clicked.connect(self.setNewLinks)
         self.clearBtn.clicked.connect(self.clearParams)
@@ -138,19 +45,17 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.percentValue = 0.0
         
         #Threadings
-        self.MainThread = QtCore.QThread()
+        self.LearnThread = QtCore.QThread()
+        self.ChildThread = QtCore.QThread()
         self.INT = NNControl()
+        self.INT.PBSignal.connect(self.showPercents)
 
-        self.INT.moveToThread(self.MainThread)
-        self.MainThread.started.connect(self.INT.handLearn)
-        self.INT.finished.connect(self.MainThread.quit)
-        self.MainThread.finished.connect(self.correctThread)
+        self.INT.moveToThread(self.LearnThread)
+        self.LearnThread.started.connect(self.INT.startLearnProcess)
+        self.INT.finished.connect(self.LearnThread.quit)
+        self.LearnThread.finished.connect(self.correctThread)
 
-
-        
-
-    #Потоке
-        
+        #self.MainThread.started.connect(self.startLearn)       
 
     def showDebugDialog(self, message, type):
         msgBox = QMessageBox()
@@ -178,10 +83,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             self.debugLabel4Query.setText(message)
         elif proc == 'link':
             self.debugLabel4Links.setText(message)
-        pass
-    def setPercents(self, currentVal, targetVal, epochs):
-        showVal = currentVal / (targetVal * epochs)
-        self.percentValue = showVal
         pass
     def showPercents(self, value):
         self.progressBar.setValue(value * 100.0)
@@ -229,6 +130,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             self.learnRateBox.clear()
             return -1.0
     ######################################################
+    ######################################################
     def clearLearnBoxes(self):
         self.inputVal1.clear()
         self.inputVal2.clear()
@@ -257,6 +159,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.clearTargetBoxes()
         self.clearDebagPanels()
     ######################################################
+    ######################################################
     def setNewLinks(self):
         procName = 'link'
         wIH = 0
@@ -270,10 +173,9 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             self.oNodesIn.clear()
             self.showDebugDialog('Введите значения типа "int".', 'error')
             return
-
-
-        self.nn.setWHH(wIH)
-        self.nn.setWHO(wHO)
+        #self.nn.setWHH(wIH)
+        #self.nn.setWHO(wHO)
+        self.INT.changeLinks(wIH, wHO)
         pass
     def setNewLearnParams(self):
         
@@ -288,56 +190,42 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         if ((newLR > 1.0) or (newLR < 0.0)):
             self.showDebugDialog('Введите корректное значение коэффициента ошибки!\n(оно должно быть > 0.0 и < 1.0)', 'error')
             return
-
-        
-        self.nn.setLearnRate(newLR)
-        self.epochs = int(newLE)
-        self.learnLoops = int(newLL)
-
+        #self.nn.setLearnRate(newLR)
+        #self.epochs = int(newLE)
+        #self.learnLoops = int(newLL)
+        self.INT.setLearnRate(newLR)
+        self.INT.setEpochs(newLE)
+        self.INT.setLearnLoops(newLL)
         self.showDebugDialog("Новые значения установлены!", 'info')
         pass
     #Для отображения уставновленных параметров сети
     def showCurrentParams(self):
-        mes = (f"Количество входных значений: {self.nn.getCurrentWIH()}\n" +
-        f"Количество скрытых нодов: {self.nn.getCurrentWHH()}\n" +
-        f"Количество выходных значений: {self.nn.getCurrentWHO()}\n" +
-        f"Количество циклов обучения: {self.learnLoops}\n" +
-        f"Количество эпох: {self.epochs}\n" +
-        f"Коэффициент ошибки: {self.nn.getCurrentLearnRate()}\n")
+        mes = (f"Количество входных значений: {self.INT.getCurrentWIH()}\n" +
+        f"Количество скрытых нодов: {self.INT.getCurrentWHH()}\n" +
+        f"Количество выходных значений: {self.INT.getCurrentWHO()}\n" +
+        f"Количество циклов обучения: {self.INT.getLearnLoops()}\n" +
+        f"Количество эпох: {self.INT.getEpochs()}\n" +
+        f"Коэффициент ошибки: {self.INT.getLearnRate()}\n")
 
         self.showDebugDialog(mes, 'info')
         pass
     #Когда тренировка запускается со значениями из приложения
     def goToLearnHand(self):
-        for epochs in range(self.epochs):
-            for count in range(self.learnLoops):
-                self.nn.learnProcess(self.hand_input_arr, self.hand_target_val)
-                #self.setPercents(j, self.learnLoops, self.epochs)
-                self.showPercents(count / (self.learnLoops * self.epochs))
-        print("TrainSucces")
+        inputArr = self.getParams('learn')
+        targetArr = self.getTargetVal()
+        self.INT.setLFFStatus(False)
+        self.INT.setInputVal(inputArr, targetArr, 0)
+
+        self.LearnThread.start()
         pass
     #Когда тренировка запускается со значениями из внешнего файла
     def goToLearnFile(self):
-        for epochs in range(self.epochs):
-            for count in range(self.learnLoops):
-                for i,t in zip(self.inputValues, self.targetValues):
-                    self.nn.learnProcess(i, t)
-                    #self.setPercents(count, self.learnLoops, self.epochs)
-                    self.showPercents(count / (self.learnLoops * self.epochs))
-        print("TrainSucces")
+        self.INT.setInputVal(self.inputValues, self.targetValues, 1)
+        self.INT.setLFFStatus(True)
+
+        self.LearnThread.start()
         pass
     ######################################################
-    def learnInDefThread(self):
-        #self.MainThread.started.connect(self.startLearn)
-        #self.MainThread.finished.connect(self.MainThread.deleteLater)
-        #self.MainThread.start()
-
-        
-        self.INT.setInputVal([1.0,1.0,1.0,1.0,1.0], [1.0], 0)
-        self.MainThread.start()
-
-
-        pass
     def startLearn(self):
         procName = 'learn'
         #В случае загрузки значенией из внешнего файла
@@ -354,10 +242,10 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
                 return
             self.goToLearnHand()
         pass
+    #Дебаг в консоль
     def correctThread(self):
         print("ThreadStopped")
-
-
+    #Стандартный опрос, наверное, тоже стоит в поток запихать(?)
     def defQuery(self):
         procName = 'query'
         try:
@@ -367,7 +255,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             self.showDebugDialog("Некорректные данные!", 'error')
             self.clearQueryBoxes()
             return
-
         #self.outputLabel.setText(np.array2string(self.nn.query(inputArr)))
         self.outputLabel.setText(np.array2string(self.INT.defQuery(inputArr)))
         pass
@@ -407,7 +294,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         pass
     #Сброс к дефолтным параметрам
     def clearParams(self):
-        self.nn.setDefaultParams()
+        #self.nn.setDefaultParams()
         self.setVisible4Input(True)
         self.loadFile = False
 
@@ -419,6 +306,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.hand_input_arr = []
 
         self.clearAll()
+        self.INT.backToDefaultParams()
         pass
     #Оценка точности
     def performanceTest(self):
@@ -431,11 +319,11 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
     #При переключении на вкладку с настройками
     def showParams(self, index):
         if (index == 2):
-            self.hNodesIn.setText(str(self.nn.getCurrentWHH()))   
-            self.oNodesIn.setText(str(self.nn.getCurrentWHO()))
-            self.loopCount.setText(str(self.learnLoops))
-            self.epochsCount.setText(str(self.epochs))
-            self.learnRateBox.setText(str(self.nn.getCurrentLearnRate()))
+            self.hNodesIn.setText(str(self.INT.getCurrentWHH()))   
+            self.oNodesIn.setText(str(self.INT.getCurrentWHO()))
+            self.loopCount.setText(str(self.INT.getLearnLoops()))
+            self.epochsCount.setText(str(self.INT.getEpochs()))
+            self.learnRateBox.setText(str(self.INT.getLearnRate()))
         pass
     
     
