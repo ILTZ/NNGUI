@@ -76,62 +76,23 @@ class neuralNetwork:
     def learnProcess(self, inputArr, targetArr):
         #Код написан следующим образом для большей наглядности
         #Приведение матриц к "правильной" форме
-        for epochs in range(self.epochs):
-            for count in range(self.learnLoops):
-                for i,t in zip(inputArr, targetArr):
-                    inputs = np.array(i, ndmin = 2).T
-                    targets = np.array(t, ndmin = 2).T
-                    #default query
-                    hiddenOut = self.HN.query(inputs)
-                    hiddenOut2 = self.HN2.query(hiddenOut)
-                    finalOut = self.FN.query(hiddenOut2)
-                    #errors
-                    finalError = targets - finalOut
-                    #Т.к. это выходной нейрон, для него ошибка расчитывается иначе, чем для скрытых
-                    self.FN.error = finalError
-                    hiddenError2 = self.HN2.backProp(finalError, self.FN.weights)
-                    hiddenError1 = self.HN.backProp(hiddenError2, self.HN2.weights)
-                    #Смена весов на каждом нейроне
-                    self.FN.changeWeights(hiddenOut2)
-                    self.HN2.changeWeights(hiddenOut)
-                    self.HN.changeWeights(inputs)  
-        print("Traning succes")
+        inputs = np.array(inputArr, ndmin = 2).T
+        targets = np.array(targetArr, ndmin = 2).T
+        #default query
+        hiddenOut = self.HN.query(inputs)
+        hiddenOut2 = self.HN2.query(hiddenOut)
+        finalOut = self.FN.query(hiddenOut2)
+        #errors
+        finalError = targets - finalOut
+        #Т.к. это выходной нейрон, для него ошибка расчитывается иначе, чем для скрытых
+        self.FN.error = finalError
+        hiddenError2 = self.HN2.backProp(finalError, self.FN.weights)
+        hiddenError1 = self.HN.backProp(hiddenError2, self.HN2.weights)
+        #Смена весов на каждом нейроне
+        self.FN.changeWeights(hiddenOut2)
+        self.HN2.changeWeights(hiddenOut)
+        self.HN.changeWeights(inputs)  
         pass
-    def handLearnProcess(self, inputArr, targetArr):
-        for epochs in range(self.epochs):
-            for count in range(self.learnLoops):
-                inputs = np.array(inputArr, ndmin = 2).T
-                targets = np.array(targetArr, ndmin = 2).T
-                #default query
-                hiddenOut = self.HN.query(inputs)
-                hiddenOut2 = self.HN2.query(hiddenOut)
-                finalOut = self.FN.query(hiddenOut2)
-                #errors
-                finalError = targets - finalOut
-                #Т.к. это выходной нейрон, для него ошибка расчитывается иначе, чем для скрытых
-                self.FN.error = finalError
-                hiddenError2 = self.HN2.backProp(finalError, self.FN.weights)
-                hiddenError1 = self.HN.backProp(hiddenError2, self.HN2.weights)
-                #Смена весов на каждом нейроне
-                self.FN.changeWeights(hiddenOut2)
-                self.HN2.changeWeights(hiddenOut)
-                self.HN.changeWeights(inputs)  
-        print("Train succes")
-        pass
-
-    def learn(self, inputArr, targetArr, param):
-        
-        if(param == 0):
-            th = Thread(target = self.handLearnProcess, args=[inputArr, targetArr])
-        elif (param == 1):
-            th = Thread(target = self.learnProcess, args= [inputArr, targetArr])
-
-        th.start()
-
-
-
-        pass
-
     #Сброс значений до дефолтных(см. после <import>-ов)
     def setDefaultParams(self):
         self.iNodes = def_inputN

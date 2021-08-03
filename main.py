@@ -2,7 +2,6 @@ import threading
 from PyQt5 import QtWidgets
 import sys
 
-import NNVSCode
 import GUI
 from threading import Thread
 
