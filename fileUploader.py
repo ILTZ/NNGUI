@@ -1,17 +1,33 @@
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
-
+import os
 
 class FileUpLoader:
     def __init__(self):
 
         pass
     
-    def loadFromFileTXT(self):
+    def loadFromFile(self, parent):
+        
+        name = QFileDialog.getOpenFileName(parent, 'Open file', '/home')[0]
+        filename, fileEx = os.path.splitext(name)
+
+        if (fileEx == '.txt'):
+            return self.loadFromFileTXT(name)
+        elif (fileEx == '.xlsx'):
+            return self.loadFromFileEXC(name)
+        else:
+            print("Некорректное расширение файла!")
+            return
+
+
+        pass
+
+    def loadFromFileTXT(self, path):
         inputValues = []
         targetValues = []
-        name = QFileDialog.getOpenFileName(self, 'Open file', '/home')[0]
+        #name = QFileDialog.getOpenFileName(parent, 'Open file', '/home')[0]
         try:
-            n = open(name, 'r')
+            n = open(path, 'r')
         except:
             print("Ошибка при открытии файла.")
             return 
@@ -27,12 +43,13 @@ class FileUpLoader:
             inputValues.append(floatVal)
             targetValues.append(float(stringTarg))
 
+        print(inputValues)
+        print(targetValues)
 
-
-        return zip(inputValues, targetValues)
+        return [inputValues, targetValues]
     pass
 
-    def loadFromFileEXC(self):
+    def loadFromFileEXC(self, path):
 
         pass
     

@@ -11,8 +11,12 @@ def_loops = 30000
 
 #Читай "интерфейс" для общения с НН и корректной передачи в потоки гребаные
 class NNControl(QtCore.QObject):
+    #Сигнал для окончания потока
     finished = QtCore.pyqtSignal()
-    activate = QtCore.pyqtSignal()
+    #Сишнал для доступности кнопок
+    finished4Btn = QtCore.pyqtSignal(bool)
+    #Сигнал для отмены доступности кнопок
+    activate4Btn = QtCore.pyqtSignal(bool)
     #Передает в окно сигнал со значением для отображения на прогресс-баре
     PBSignal = QtCore.pyqtSignal(float)
     def __init__(self):
@@ -32,6 +36,8 @@ class NNControl(QtCore.QObject):
 
         self.inputArr = []
         self.targetArr = []
+
+        self.zipInput = []
 
         self.learnFromFile = False
     
@@ -97,6 +103,7 @@ class NNControl(QtCore.QObject):
                 it += 1
         print("TrainSucces")
         self.PBSignal.emit(1)
+        self.finished4Btn.emit(True)
         self.finished.emit()
         pass
     #Обучение по значениям из файла
@@ -110,10 +117,12 @@ class NNControl(QtCore.QObject):
                 it += 1
         print("TrainSucces")
         self.PBSignal.emit(1)
+        self.finished4Btn.emit(True)
         self.finished.emit()
         pass
     #Булево нужно для корректной работы с потоком, в котором выполняется(не смог придумать иначе и привязал старт потока к этой функции)
     def startLearnProcess(self):
+        self.activate4Btn.emit(False)
         if (self.learnFromFile):
             self.fileLearn()
         else:
@@ -124,13 +133,13 @@ class NNControl(QtCore.QObject):
         return self.NN.query(inputArr)
     #Установка входных значений перед отправкой выполнения обучения в отдельный поток(от параметра зависит, будут установленны
     # значения для обучения из формы, либо из файла)
-    def setInputVal(self, inputArr, targetArr, param):
+    def setInputVal(self, inputArr, targetArr = 0, param = 1):
         if param == 0:
             self.inputVal = inputArr
             self.targetVal = targetArr
         elif param == 1:
-            self.inputArr = inputArr
-            self.targetArr = targetArr
+            self.inputArr = inputArr[0]
+            self.targetArr = inputArr[1]
         else:
             print("Uncorrect param")
         pass

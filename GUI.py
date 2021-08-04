@@ -5,8 +5,9 @@ import Ui_shield
 import numpy as np
 
 
-from NNVSCode import neuralNetwork
+
 from Int4NN import NNControl
+from fileUploader import FileUpLoader
 
 #def params NN
 def_inputN = 5
@@ -32,23 +33,21 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.epochsLoopsBtn.clicked.connect(self.setNewLearnParams)
         self.tabWidget_2.tabBarClicked.connect(self.showParams)
         ##
-        self.nn = neuralNetwork(def_inputN, def_hiddenN, def_outputN, def_learnRate)
         self.learnFromFile = False
-        self.performanceBox.setVisible(False)
-        ##def_variables
+        self.performanceBox.setVisible(False)  
+
         self.inputValues = []
-        self.targetValues = []
-        self.epochs = def_epochs
-        self.learnLoops = def_loops
-        self.hand_input_arr = []
-        self.hand_target_val = 0.0
-        self.percentValue = 0.0
-        
+        self.targetValues = []  
+        self.zipInput = []
         #Threadings
         self.LearnThread = QtCore.QThread()
         self.ChildThread = QtCore.QThread()
         self.INT = NNControl()
+        self.UpLoader = FileUpLoader()
+
         self.INT.PBSignal.connect(self.showPercents)
+        self.INT.activate4Btn.connect(self.btnLock)
+        self.INT.finished4Btn.connect(self.btnLock)
 
         self.INT.moveToThread(self.LearnThread)
         self.LearnThread.started.connect(self.INT.startLearnProcess)
@@ -161,7 +160,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
     ######################################################
     ######################################################
     def setNewLinks(self):
-        procName = 'link'
         wIH = 0
         wHO = 0
 
@@ -173,16 +171,13 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             self.oNodesIn.clear()
             self.showDebugDialog('Введите значения типа "int".', 'error')
             return
-        #self.nn.setWHH(wIH)
-        #self.nn.setWHO(wHO)
+
         self.INT.changeLinks(wIH, wHO)
         pass
     def setNewLearnParams(self):
-        
         newLL = self.getLearnLoops()
         newLE = self.getLearnEpochs()
         newLR = self.getLearnRate()
-        print(newLL)
 
         if ((newLL) < 0 or (newLE < 0)):
             self.showDebugDialog('Введите корректные значения для количества циклов и эпох!', 'error')
@@ -190,9 +185,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         if ((newLR > 1.0) or (newLR < 0.0)):
             self.showDebugDialog('Введите корректное значение коэффициента ошибки!\n(оно должно быть > 0.0 и < 1.0)', 'error')
             return
-        #self.nn.setLearnRate(newLR)
-        #self.epochs = int(newLE)
-        #self.learnLoops = int(newLL)
+
         self.INT.setLearnRate(newLR)
         self.INT.setEpochs(newLE)
         self.INT.setLearnLoops(newLL)
@@ -211,8 +204,8 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         pass
     #Когда тренировка запускается со значениями из приложения
     def goToLearnHand(self):
-        inputArr = self.getParams('learn')
-        targetArr = self.getTargetVal()
+        inputArr = self.hand_input_arr
+        targetArr = self.hand_target_val
         self.INT.setLFFStatus(False)
         self.INT.setInputVal(inputArr, targetArr, 0)
 
@@ -220,7 +213,8 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         pass
     #Когда тренировка запускается со значениями из внешнего файла
     def goToLearnFile(self):
-        self.INT.setInputVal(self.inputValues, self.targetValues, 1)
+        #self.INT.setInputVal(self.inputValues, self.targetValues, 1)
+        self.INT.setInputVal(self.zipInput)
         self.INT.setLFFStatus(True)
 
         self.LearnThread.start()
@@ -258,32 +252,15 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         #self.outputLabel.setText(np.array2string(self.nn.query(inputArr)))
         self.outputLabel.setText(np.array2string(self.INT.defQuery(inputArr)))
         pass
-   
     #Для загрузки файлов из <file_name>.txt
     def loadFile(self):
         #Данные читаются при записе их в виде <X.X,X.X,X.X.......'\t'Y.Y>
         #где X.X - входные значения, Y.Y - целевое, '\t' - табуляция
-        name = QFileDialog.getOpenFileName(self, 'Open file', '/home')[0]
-        try:
-            n = open(name, 'r')
-        except:
-            self.printDebugMessage("Не удается открыть файл.", 'learn')
-            return 
-
-        stringVal = ""
-        stringTarg = ""
-        for line in n:
-            stringVal = line.split('\t')[0]
-            stringTarg = line.split('\t')[1]
-
-            floatVal = [float(x) for x in stringVal.split(',')]
-
-            self.inputValues.append(floatVal)
-            self.targetValues.append(float(stringTarg))
-
+        
+        self.zipInput = self.UpLoader.loadFromFile(self)
         self.setVisible4Input(False)
         self.learnFromFile = True
-        self.printDebugMessage('Данные успешно загружены!', 'query')
+        self.showDebugDialog('Данные успешно загружены!', 'info')
         pass
     ######################################################
     ######################################################
@@ -325,6 +302,12 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             self.epochsCount.setText(str(self.INT.getEpochs()))
             self.learnRateBox.setText(str(self.INT.getLearnRate()))
         pass
-    
+    #Лок кнопока при начале обучения
+    def btnLock(self, val):
+        self.clearBtn.setEnabled(val)
+        self.learnStartBtn.setEnabled(val)
+        self.queryBtn.setEnabled(val)
+        self.chLinksBtn.setEnabled(val)
+        self.epochsLoopsBtn.setEnabled(val)
     
         
