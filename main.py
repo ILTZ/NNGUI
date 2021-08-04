@@ -1,7 +1,6 @@
-import threading
 from PyQt5 import QtWidgets
 import sys
-
+from fileUploader import FileUpLoader
 import GUI
 from threading import Thread
 
@@ -14,8 +13,11 @@ def main():
     app.exec_()
 
 
+
 if __name__ == '__main__':
     main()
+
+    
 
     
 

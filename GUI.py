@@ -32,7 +32,15 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.loadFromFile.triggered.connect(self.loadFile)
         self.epochsLoopsBtn.clicked.connect(self.setNewLearnParams)
         self.tabWidget_2.tabBarClicked.connect(self.showParams)
+
+        self.learnFAQBtn.clicked.connect(self.changeVisFAQLearn)
+        self.setingsFAQBtn.clicked.connect(self.changeVisFAQSet)
         ##
+        self.FAQLearnBox.setVisible(False)
+        self.FAQSetingsBox.setVisible(False)
+        self.showFAQLearn = False
+        self.showFAQSet = False
+
         self.learnFromFile = False
         self.performanceBox.setVisible(False)  
         self.hand_input_arr = []
@@ -45,6 +53,8 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.ChildThread = QtCore.QThread()
         self.INT = NNControl()
         self.UpLoader = FileUpLoader()
+        self.UpLoader.correctSignal.connect(self.fileUpLoadMessage)
+        self.UpLoader.correctSimbols.connect(self.showDebugDialog)
 
         self.INT.PBSignal.connect(self.showPercents)
         self.INT.activate4Btn.connect(self.btnLock)
@@ -55,6 +65,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.INT.finished.connect(self.LearnThread.quit)
         self.LearnThread.finished.connect(self.correctThread)
 
+        
         #self.MainThread.started.connect(self.startLearn)       
 
     def showDebugDialog(self, message, type):
@@ -87,6 +98,22 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
     def showPercents(self, value):
         self.progressBar.setValue(value * 100.0)
         pass
+    def fileUpLoadMessage(self, bVal):
+        if (bVal == True):
+            self.showDebugDialog("Данные успешно загружены!", 'info')
+            self.learnFromFile = True
+            self.setVisible4Input(False)
+        else:
+            self.showDebugDialog("Ошибка при чтении файлов!", 'error')
+        pass
+
+    def changeVisFAQLearn(self):
+        self.showFAQLearn = not self.showFAQLearn
+        self.FAQLearnBox.setVisible(self.showFAQLearn)
+        pass
+    def changeVisFAQSet(self):
+        self.showFAQSet = not self.showFAQSet
+        self.FAQSetingsBox.setVisible(self.showFAQSet)
     #Получение начальных значений
     def getParams(self, param):
         if param == 'learn':
@@ -257,11 +284,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
     def loadFile(self):
         #Данные читаются при записе их в виде <X.X,X.X,X.X.......'\t'Y.Y>
         #где X.X - входные значения, Y.Y - целевое, '\t' - табуляция
-        
         self.zipInput = self.UpLoader.loadFromFile(self)
-        self.setVisible4Input(False)
-        self.learnFromFile = True
-        self.showDebugDialog('Данные успешно загружены!', 'info')
         pass
     ######################################################
     ######################################################
@@ -284,6 +307,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.hand_target_val = 0.0
         self.hand_input_arr.clear()
 
+        self.showPercents(0)
         self.clearAll()
         self.INT.backToDefaultParams()
         pass
