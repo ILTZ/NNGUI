@@ -35,7 +35,8 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         ##
         self.learnFromFile = False
         self.performanceBox.setVisible(False)  
-
+        self.hand_input_arr = []
+        self.hand_target_val = 0.0
         self.inputValues = []
         self.targetValues = []  
         self.zipInput = []
@@ -273,14 +274,15 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
     def clearParams(self):
         #self.nn.setDefaultParams()
         self.setVisible4Input(True)
-        self.loadFile = False
+        self.learnFromFile = False
+
 
         self.inputValues.clear()
         self.targetValues.clear()
         self.epochs = def_epochs
         self.learnLoops = def_loops
         self.hand_target_val = 0.0
-        self.hand_input_arr = []
+        self.hand_input_arr.clear()
 
         self.clearAll()
         self.INT.backToDefaultParams()

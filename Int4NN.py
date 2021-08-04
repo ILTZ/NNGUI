@@ -56,6 +56,8 @@ class NNControl(QtCore.QObject):
 
         self.changeLinks(self.hiddenN, self.outputN)
         self.changeLearnRate(def_learnRate)
+
+        self.learnFromFile = False
         pass
     #Геттеры/сеттеры
     def changeLinks(self, hiddenL, outL):
@@ -95,6 +97,7 @@ class NNControl(QtCore.QObject):
         pass
     #Обучение по вводимым вручную значениям
     def handLearn(self):
+        print("HandLearn", self.epochs, self.learnLoops, self.learnFromFile)
         it = 0
         for epochs in range(self.epochs):
             for count in range(self.learnLoops):
@@ -108,6 +111,7 @@ class NNControl(QtCore.QObject):
         pass
     #Обучение по значениям из файла
     def fileLearn(self):
+        print("FileLearn", self.epochs, self.learnLoops, self.learnFromFile)
         it = 0
         for epochs in range(self.epochs):
             for count in range(self.learnLoops):
