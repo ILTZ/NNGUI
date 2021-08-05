@@ -38,11 +38,14 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         ##
         self.FAQLearnBox.setVisible(False)
         self.FAQSetingsBox.setVisible(False)
+        #Переменные для отображения подсказок
         self.showFAQLearn = False
         self.showFAQSet = False
 
         self.learnFromFile = False
-        self.performanceBox.setVisible(False)  
+        #Пока не готово
+        self.performanceBox.setVisible(False) 
+
         self.hand_input_arr = []
         self.hand_target_val = 0.0
         self.inputValues = []
@@ -60,15 +63,13 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.LearnThread.started.connect(self.INT.startLearnProcess)
         self.INT.finished.connect(self.LearnThread.quit)
         self.LearnThread.finished.connect(self.correctThread)
-        #Поток для процесса занрузки фалов
+        #Поток для процесса загрузки фалов
         self.ReadThread = QtCore.QThread()
         self.UpLoader = FileUpLoader()
-        #self.UpLoader.setParent(self)
-
+        
         self.UpLoader.correctSignal.connect(self.fileUpLoadMessage)
         self.UpLoader.correctSimbols.connect(self.showDebugDialog)
         
-
         self.UpLoader.moveToThread(self.ReadThread)
         self.ReadThread.started.connect(self.UpLoader.loadFromFile)
         self.ReadThread.finished.connect(self.correctThread)
@@ -258,7 +259,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         pass
     #Когда тренировка запускается со значениями из внешнего файла
     def goToLearnFile(self):
-        #self.INT.setInputVal(self.inputValues, self.targetValues, 1)
         self.INT.setInputVal(self.zipInput)
         self.INT.setLFFStatus(True)
 
@@ -281,7 +281,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
                 return
             self.goToLearnHand()
         pass
-    #Дебаг в консоль
+    #Дебаг в консоль про потоки
     def correctThread(self):
         print("ThreadStopped")
     #Стандартный опрос, наверное, тоже стоит в поток запихать(?)
@@ -294,10 +294,9 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             self.showDebugDialog("Некорректные данные!", 'error')
             self.clearQueryBoxes()
             return
-        #self.outputLabel.setText(np.array2string(self.nn.query(inputArr)))
         self.outputLabel.setText(np.array2string(self.INT.defQuery(inputArr)))
         pass
-    #Для загрузки файлов из <file_name>.txt
+    #Для загрузки файлов из <file_name>.txt/.xlsx
     def setFilePath(self, path):
         self.UpLoader.setPath(path)
         pass
@@ -317,7 +316,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         pass
     #Сброс к дефолтным параметрам
     def clearParams(self):
-        #self.nn.setDefaultParams()
         self.setVisible4Input(True)
         self.learnFromFile = False
 
@@ -341,7 +339,8 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         #    if (i+self.)
 
         pass
-    #При переключении на вкладку с настройками
+    #При переключении на вкладку с настройками параметры заполняются из текущих
+    # параметров сети
     def showParams(self, index):
         if (index == 2):
             self.hNodesIn.setText(str(self.INT.getCurrentWHH()))   
