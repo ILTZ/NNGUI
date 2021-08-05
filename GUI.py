@@ -48,13 +48,9 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.inputValues = []
         self.targetValues = []  
         self.zipInput = []
-        #Threadings
+        #Поток для процесса обучения
         self.LearnThread = QtCore.QThread()
-        self.ChildThread = QtCore.QThread()
         self.INT = NNControl()
-        self.UpLoader = FileUpLoader()
-        self.UpLoader.correctSignal.connect(self.fileUpLoadMessage)
-        self.UpLoader.correctSimbols.connect(self.showDebugDialog)
 
         self.INT.PBSignal.connect(self.showPercents)
         self.INT.activate4Btn.connect(self.btnLock)
@@ -64,9 +60,21 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.LearnThread.started.connect(self.INT.startLearnProcess)
         self.INT.finished.connect(self.LearnThread.quit)
         self.LearnThread.finished.connect(self.correctThread)
+        #Поток для процесса занрузки фалов
+        self.ReadThread = QtCore.QThread()
+        self.UpLoader = FileUpLoader()
+        #self.UpLoader.setParent(self)
 
+        self.UpLoader.correctSignal.connect(self.fileUpLoadMessage)
+        self.UpLoader.correctSimbols.connect(self.showDebugDialog)
         
-        #self.MainThread.started.connect(self.startLearn)       
+
+        self.UpLoader.moveToThread(self.ReadThread)
+        self.ReadThread.started.connect(self.UpLoader.loadFromFile)
+        self.ReadThread.finished.connect(self.correctThread)
+        
+        
+        
 
     def showDebugDialog(self, message, type):
         msgBox = QMessageBox()
@@ -102,11 +110,20 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         if (bVal == True):
             self.showDebugDialog("Данные успешно загружены!", 'info')
             self.learnFromFile = True
+            self.setParametrsAfterRead()
+            self.ReadThread.quit()
             self.setVisible4Input(False)
         else:
             self.showDebugDialog("Ошибка при чтении файлов!", 'error')
+            self.ReadThread.quit()
+        pass
+    
+    def setParametrsAfterRead(self):
+        self.zipInput = self.UpLoader.getValues()
         pass
 
+        
+    #Отображение подсказок в форме
     def changeVisFAQLearn(self):
         self.showFAQLearn = not self.showFAQLearn
         self.FAQLearnBox.setVisible(self.showFAQLearn)
@@ -281,10 +298,15 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.outputLabel.setText(np.array2string(self.INT.defQuery(inputArr)))
         pass
     #Для загрузки файлов из <file_name>.txt
+    def setFilePath(self, path):
+        self.UpLoader.setPath(path)
+        pass
     def loadFile(self):
-        #Данные читаются при записе их в виде <X.X,X.X,X.X.......'\t'Y.Y>
-        #где X.X - входные значения, Y.Y - целевое, '\t' - табуляция
-        self.zipInput = self.UpLoader.loadFromFile(self)
+        #Делегировать открытие окна UpLoader-у низя(т.к. нужен parent, а объекты с 
+        # parent-ом низя передать в отдельный поток)
+        name = QFileDialog.getOpenFileName(self, 'Open file', '/home')[0]
+        self.setFilePath(name)
+        self.ReadThread.start()
         pass
     ######################################################
     ######################################################
