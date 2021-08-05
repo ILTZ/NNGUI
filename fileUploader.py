@@ -7,25 +7,41 @@ import os
 class FileUpLoader(QObject):
     correctSignal = pyqtSignal(bool)
     correctSimbols = pyqtSignal(str, str)
+
+
     def __init__(self):
         QObject.__init__(self)
 
+        
+        self.inputValues = []
+        self.targetValues = []
+
+        self.path = ''
+
         pass
     
-    def loadFromFile(self, parent):
+    def setPath(self, path):
+        self.path = path
+        pass
+
+    def getValues(self):
+        return [self.inputValues, self.targetValues]
+
+    def loadFromFile(self):
         
-        name = QFileDialog.getOpenFileName(parent, 'Open file', '/home')[0]
-        filename, fileEx = os.path.splitext(name)
+       
+        filename, fileEx = os.path.splitext(self.path)
 
         if (fileEx == '.txt'):
-            return self.loadFromFileTXT(name)
+            return self.loadFromFileTXT(self.path)
         elif (fileEx == '.xlsx'):
-            return self.loadFromFileEXC(name)
+            return self.loadFromFileEXC(self.path)
         elif (fileEx == '.csv'):
 
             pass
         else:
             print("Некорректное расширение файла!")
+            self.correctSignal.emit(False)
             return
 
 
@@ -58,11 +74,10 @@ class FileUpLoader(QObject):
             inputValues.append(floatVal)
             targetValues.append(floatTarget)
 
-        print(inputValues)
-        print(targetValues)
-
+        self.inputValues = inputValues
+        self.targetValues = targetValues
         self.correctSignal.emit(True)
-        return [inputValues, targetValues]
+        
     pass
 
     def loadFromFileEXC(self, path):
@@ -95,8 +110,11 @@ class FileUpLoader(QObject):
             self.correctSimbols.emit("Некорректные данные в файле!", 'error')
             return
             
+
+        self.inputValues = inputValues
+        self.targetValues = targetValues
         self.correctSignal.emit(True)
-        return [inputValues, targetValues]
+        
     
     def loadFileCSV(self, path):
 
