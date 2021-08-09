@@ -44,7 +44,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
 
         self.learnFromFile = False
         #Пока не готово
-        self.performanceBox.setVisible(False) 
+        #self.performanceBox.setVisible(False) 
 
         self.hand_input_arr = []
         self.hand_target_val = 0.0
@@ -62,8 +62,9 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.INT.moveToThread(self.LearnThread)
         self.LearnThread.started.connect(self.INT.startLearnProcess)
         self.INT.finished.connect(self.LearnThread.quit)
+        self.INT.finished.connect(self.showPerformance)
         self.LearnThread.finished.connect(self.correctThread)
-        #Поток для процесса загрузки фалов
+        #Поток для процесса загрузки файлов
         self.ReadThread = QtCore.QThread()
         self.UpLoader = FileUpLoader()
         
@@ -114,6 +115,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             self.setParametrsAfterRead()
             self.ReadThread.quit()
             self.setVisible4Input(False)
+            self.woLoadFromFileBoxFAQ.setVisible(False)
         else:
             self.showDebugDialog("Ошибка при чтении файлов!", 'error')
             self.ReadThread.quit()
@@ -261,6 +263,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
     def goToLearnFile(self):
         self.INT.setInputVal(self.zipInput)
         self.INT.setLFFStatus(True)
+        self.INT.setPerfError(self.errorBox.value())
 
         self.LearnThread.start()
         pass
@@ -326,21 +329,19 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.learnLoops = def_loops
         self.hand_target_val = 0.0
         self.hand_input_arr.clear()
+        self.woLoadFromFileBoxFAQ.setVisible(True)
 
         self.showPercents(0)
         self.clearAll()
         self.INT.backToDefaultParams()
         pass
-    #Оценка точности
-    def performanceTest(self):
-        #points = 0
-        #for i,t in zip(self.inputValues, self.targetValues):
-        #    x = self.nn.query(i)
-        #    if (i+self.)
-
-        pass
     #При переключении на вкладку с настройками параметры заполняются из текущих
     # параметров сети
+    #Отображение производительности сети
+    def showPerformance(self):
+        if (self.learnFromFile):
+            self.performanceLabel.setText(str(self.INT.getPerformanceRate()))
+        pass
     def showParams(self, index):
         if (index == 2):
             self.hNodesIn.setText(str(self.INT.getCurrentWHH()))   
@@ -356,5 +357,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.queryBtn.setEnabled(val)
         self.chLinksBtn.setEnabled(val)
         self.epochsLoopsBtn.setEnabled(val)
+        self.errorBox.setEnabled(val)
     
         

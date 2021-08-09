@@ -40,6 +40,8 @@ class NNControl(QtCore.QObject):
         self.zipInput = []
 
         self.learnFromFile = False
+        self.performanceError = 0.0
+        self.performanceRate = 0.0
     
     #Восстановление стандартных параметров
     def backToDefaultParams(self):
@@ -95,6 +97,12 @@ class NNControl(QtCore.QObject):
     def setLFFStatus(self, val):
         self.learnFromFile = val
         pass
+
+    def setPerfError(self, value):
+        self.performanceError = value
+        pass
+    def getPerformanceRate(self):
+        return self.performanceRate
     #Обучение по вводимым вручную значениям
     def handLearn(self):
         print("HandLearn", self.epochs, self.learnLoops, self.learnFromFile)
@@ -120,6 +128,7 @@ class NNControl(QtCore.QObject):
                     self.PBSignal.emit(it / (self.learnLoops * self.epochs))
                 it += 1
         print("TrainSucces")
+        self.performanceTest()
         self.PBSignal.emit(1)
         self.finished4Btn.emit(True)
         self.finished.emit()
@@ -146,4 +155,21 @@ class NNControl(QtCore.QObject):
             self.targetArr = inputArr[1]
         else:
             print("Uncorrect param")
+        pass
+    def performanceTest(self):
+        val = 0
+        count = 0
+
+
+        for i,t in zip(self.inputArr, self.targetArr):
+            count += 1
+            value = self.NN.query(i)
+
+            
+            minVal = t[0] - self.performanceError
+            maxVal = t[0] + self.performanceError
+            if ((value < maxVal) and (value > minVal)):
+                val += 1
+
+        self.performanceRate = val/count
         pass
