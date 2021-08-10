@@ -94,11 +94,12 @@ class FileUpLoader(QObject):
         
         try:
             tempFull = file.values.tolist()
+            print(tempFull)
             for i in range(len(tempFull)):
                 tempIn = []
                 tempTar = []
                 for count in range(len(tempFull[i])):
-                    if (count < 5):
+                    if (count < (len(tempFull[i]) - 1)):
                         x = float(tempFull[i][count])
                         tempIn.append(x)
                     else:

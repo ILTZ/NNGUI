@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
 from NNVSCode import neuralNetwork
+import numpy as np
 
 #def params NN
 def_inputN = 5
@@ -19,6 +20,8 @@ class NNControl(QtCore.QObject):
     activate4Btn = QtCore.pyqtSignal(bool)
     #Передает в окно сигнал со значением для отображения на прогресс-баре
     PBSignal = QtCore.pyqtSignal(float)
+    #Дебаг сообщение
+    DebugSignal = QtCore.pyqtSignal(str, str)
     def __init__(self):
         QtCore.QObject.__init__(self)
 
@@ -62,9 +65,11 @@ class NNControl(QtCore.QObject):
         self.learnFromFile = False
         pass
     #Геттеры/сеттеры
-    def changeLinks(self, hiddenL, outL):
+    def changeLinks(self, hiddenL, outL, inputL = 5):
+        self.NN.setWIH(inputL)
         self.NN.setWHH(hiddenL)
         self.NN.setWHO(outL)
+        
         self.NN.reRandWHOWeights()
         self.NN.reRandWIHWeights()
         pass
@@ -172,4 +177,27 @@ class NNControl(QtCore.QObject):
                 val += 1
 
         self.performanceRate = val/count
+        pass
+    #Процесс схоранения/загрузки весов
+    def saveWeights(self, path):
+        HN1w = self.NN.HN.getWeights()
+        HN2w = self.NN.HN2.getWeights()
+        FNw = self.NN.FN.getWeights()
+
+        np.savez(path, HN1w, HN2w, FNw)
+
+        self.DebugSignal.emit("Веса сохранены.", 'info')
+        pass
+    def loadWeights(self, path):
+        allArr = np.load(path)
+        
+        HN = allArr['arr_0']
+        HN2 = allArr['arr_1']
+        FN = allArr['arr_2']
+
+        self.NN.HN.setWeights(HN)
+        self.NN.HN2.setWeights(HN2)
+        self.NN.FN.setWeights(FN)
+
+        self.DebugSignal.emit("Веса загружены и поставлены.", 'info')
         pass

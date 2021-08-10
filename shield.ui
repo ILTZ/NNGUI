@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1160</width>
-    <height>507</height>
+    <height>505</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -751,6 +751,48 @@ float(с плавающей точкой). </string>
         </widget>
        </widget>
       </widget>
+      <widget class="QPushButton" name="LoadWeightsBtn">
+       <property name="geometry">
+        <rect>
+         <x>1030</x>
+         <y>380</y>
+         <width>91</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Загрузить
+веса</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="SaveWeightsBtn">
+       <property name="geometry">
+        <rect>
+         <x>1030</x>
+         <y>330</y>
+         <width>91</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Сохранить
+веса</string>
+       </property>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_4">
@@ -987,8 +1029,10 @@ float(с плавающей точкой). </string>
         </font>
        </property>
        <property name="text">
-        <string>Количество связей между входным
-                и скрытым слоем</string>
+        <string>Количество входных значений</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
       <widget class="QTextEdit" name="hNodesIn">
@@ -1018,8 +1062,10 @@ float(с плавающей точкой). </string>
         </font>
        </property>
        <property name="text">
-        <string>Количество связей между скрытым
-                и выходным слоем</string>
+        <string>Количество выходных значений</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
       <widget class="QTextEdit" name="oNodesIn">
@@ -1133,6 +1179,100 @@ float(с плавающей точкой). </string>
           <height>31</height>
          </rect>
         </property>
+       </widget>
+       <widget class="QGroupBox" name="FAQSetingsBox">
+        <property name="geometry">
+         <rect>
+          <x>-300</x>
+          <y>-110</y>
+          <width>1011</width>
+          <height>401</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string/>
+        </property>
+        <widget class="Line" name="line_15">
+         <property name="geometry">
+          <rect>
+           <x>250</x>
+           <y>260</y>
+           <width>20</width>
+           <height>81</height>
+          </rect>
+         </property>
+         <property name="toolTipDuration">
+          <number>3</number>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="lineWidth">
+          <number>3</number>
+         </property>
+         <property name="midLineWidth">
+          <number>0</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+        <widget class="Line" name="line_16">
+         <property name="geometry">
+          <rect>
+           <x>260</x>
+           <y>330</y>
+           <width>91</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="lineWidth">
+          <number>3</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_6">
+         <property name="geometry">
+          <rect>
+           <x>350</x>
+           <y>282</y>
+           <width>441</width>
+           <height>111</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>10</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Box</enum>
+         </property>
+         <property name="lineWidth">
+          <number>2</number>
+         </property>
+         <property name="midLineWidth">
+          <number>0</number>
+         </property>
+         <property name="text">
+          <string>Между входным и выходным слоем присутствуют еще 2 скрытых слоя.
+Данные параметры определяют, по каким правилам будут генериров-
+аться и сколько весов будут между входным и скрытым, скрытым и 
+скрытым, скрытым и выходным нейронами.
+&quot;Количество связей между скрытым и выходным слоем&quot; также влияет
+на количетсво выходных значений.</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+        </widget>
        </widget>
       </widget>
       <widget class="QPushButton" name="epochsLoopsBtn">
@@ -1268,100 +1408,22 @@ float(с плавающей точкой). </string>
         <enum>Qt::Vertical</enum>
        </property>
       </widget>
-      <widget class="QGroupBox" name="FAQSetingsBox">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>1011</width>
-         <height>401</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string/>
-       </property>
-       <widget class="Line" name="line_15">
-        <property name="geometry">
-         <rect>
-          <x>250</x>
-          <y>260</y>
-          <width>20</width>
-          <height>81</height>
-         </rect>
-        </property>
-        <property name="toolTipDuration">
-         <number>3</number>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="lineWidth">
-         <number>3</number>
-        </property>
-        <property name="midLineWidth">
-         <number>0</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-       <widget class="Line" name="line_16">
-        <property name="geometry">
-         <rect>
-          <x>260</x>
-          <y>330</y>
-          <width>91</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="lineWidth">
-         <number>3</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_6">
-        <property name="geometry">
-         <rect>
-          <x>350</x>
-          <y>282</y>
-          <width>441</width>
-          <height>111</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>10</pointsize>
-          <weight>50</weight>
-          <bold>false</bold>
-         </font>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-        <property name="lineWidth">
-         <number>2</number>
-        </property>
-        <property name="midLineWidth">
-         <number>0</number>
-        </property>
-        <property name="text">
-         <string>Между входным и выходным слоем присутствуют еще 2 скрытых слоя.
-Данные параметры определяют, по каким правилам будут генериров-
-аться и сколько весов будут между входным и скрытым, скрытым и 
-скрытым, скрытым и выходным нейронами.
-&quot;Количество связей между скрытым и выходным слоем&quot; также влияет
-на количетсво выходных значений.</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-        </property>
-       </widget>
-      </widget>
+      <zorder>epochsGroupBox</zorder>
+      <zorder>label</zorder>
+      <zorder>hNodesIn</zorder>
+      <zorder>label_2</zorder>
+      <zorder>oNodesIn</zorder>
+      <zorder>chLinksBtn</zorder>
+      <zorder>debugLabel4Links</zorder>
+      <zorder>groupBox</zorder>
+      <zorder>epochsLoopsBtn</zorder>
+      <zorder>groupBox_3</zorder>
+      <zorder>line</zorder>
+      <zorder>line_2</zorder>
+      <zorder>line_3</zorder>
+      <zorder>line_4</zorder>
+      <zorder>setingsFAQBtn</zorder>
+      <zorder>line_5</zorder>
      </widget>
     </widget>
    </widget>

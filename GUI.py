@@ -1,3 +1,4 @@
+from os import path
 import sys
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
@@ -35,6 +36,10 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
 
         self.learnFAQBtn.clicked.connect(self.changeVisFAQLearn)
         self.setingsFAQBtn.clicked.connect(self.changeVisFAQSet)
+
+        #Веса
+        self.LoadWeightsBtn.clicked.connect(self.loadWeights)
+        self.SaveWeightsBtn.clicked.connect(self.saveWeights)
         ##
         self.FAQLearnBox.setVisible(False)
         self.FAQSetingsBox.setVisible(False)
@@ -43,8 +48,9 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.showFAQSet = False
 
         self.learnFromFile = False
-        #Пока не готово
-        #self.performanceBox.setVisible(False) 
+
+        #Количество принимаемых значений
+        self.countOfNumbers = def_inputN
 
         self.hand_input_arr = []
         self.hand_target_val = 0.0
@@ -64,6 +70,8 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.INT.finished.connect(self.LearnThread.quit)
         self.INT.finished.connect(self.showPerformance)
         self.LearnThread.finished.connect(self.correctThread)
+        #Debug signal
+        self.INT.DebugSignal.connect(self.showDebugDialog)
         #Поток для процесса загрузки файлов
         self.ReadThread = QtCore.QThread()
         self.UpLoader = FileUpLoader()
@@ -91,6 +99,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             msgBox.setWindowTitle("INFO")
             msgBox.setIcon(QMessageBox.Information)
 
+        self.ReadThread.quit()
         msgBox.exec_()
         pass
     def printDebugMessage(self, message, proc):
@@ -120,12 +129,49 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             self.showDebugDialog("Ошибка при чтении файлов!", 'error')
             self.ReadThread.quit()
         pass
-    
+    #После загрузки из файла аплоадер подает сигнал, и GUI получает у него извлеченные из файла значения
+    #ток счас понял, что надо бы сразу в INT Отправлять
     def setParametrsAfterRead(self):
         self.zipInput = self.UpLoader.getValues()
         pass
 
-        
+    #Enable/disable слоты для входных значений после изменения количества входных значений
+    def disSlots(self):
+        self.inputVal1.setEnabled(False)
+        self.inputVal1_2.setEnabled(False)
+
+        self.inputVal2.setEnabled(False)
+        self.inputVal2_2.setEnabled(False)
+
+        self.inputVal3.setEnabled(False)
+        self.inputVal3_2.setEnabled(False)
+
+        self.inputVal4.setEnabled(False)
+        self.inputVal4_2.setEnabled(False)
+
+        self.inputVal5.setEnabled(False)
+        self.inputVal5_2.setEnabled(False)
+        pass
+    def slotsEnDis(self):
+        self.disSlots()
+        for i in range(self.countOfNumbers):
+            if (i == 0):
+                self.inputVal1.setEnabled(True)
+                self.inputVal1_2.setEnabled(True)
+            if (i == 1):
+                self.inputVal2.setEnabled(True)
+                self.inputVal2_2.setEnabled(True)
+            if (i == 2):
+                self.inputVal3.setEnabled(True)
+                self.inputVal3_2.setEnabled(True)
+            if (i == 3):
+                self.inputVal4.setEnabled(True)
+                self.inputVal4_2.setEnabled(True)
+            if (i == 4):
+                self.inputVal5.setEnabled(True)
+                self.inputVal5_2.setEnabled(True)
+        pass
+
     #Отображение подсказок в форме
     def changeVisFAQLearn(self):
         self.showFAQLearn = not self.showFAQLearn
@@ -136,20 +182,45 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.FAQSetingsBox.setVisible(self.showFAQSet)
     #Получение начальных значений
     def getParams(self, param):
+        #Хз как иначе брать из ячеек ровно то количество параметров, 
+        #под которое в процессе работы может быть подстроена сетка
+        x = []
         if param == 'learn':
-            first = float(self.inputVal1.toPlainText())
-            second = float(self.inputVal2.toPlainText())
-            thirth = float(self.inputVal3.toPlainText())
-            fourth = float(self.inputVal4.toPlainText())
-            fifth = float(self.inputVal5.toPlainText())
+            for i in range(self.countOfNumbers):
+                if (i == 0):
+                    first = float(self.inputVal1.toPlainText())
+                    x.append(first)
+                if (i == 1):
+                    second = float(self.inputVal2.toPlainText())
+                    x.append(second)
+                if (i == 2):
+                    thirth = float(self.inputVal3.toPlainText())
+                    x.append(thirth)
+                if (i == 3):
+                    fourth = float(self.inputVal4.toPlainText())
+                    x.append(fourth)
+                if (i == 4):
+                    fifth = float(self.inputVal5.toPlainText())
+                    x.append(fifth)
         elif param == 'query':
-            first = float(self.inputVal1_2.toPlainText())
-            second = float(self.inputVal2_2.toPlainText())
-            thirth = float(self.inputVal3_2.toPlainText())
-            fourth = float(self.inputVal4_2.toPlainText())
-            fifth = float(self.inputVal5_2.toPlainText())
+            for i in range(self.countOfNumbers):
+                if (i == 0):
+                    first = float(self.inputVal1_2.toPlainText())
+                    x.append(first)
+                if (i == 1):
+                    second = float(self.inputVal2_2.toPlainText())
+                    x.append(second)
+                if (i == 2):
+                    thirth = float(self.inputVal3_2.toPlainText())
+                    x.append(thirth)
+                if (i == 3):
+                    fourth = float(self.inputVal4_2.toPlainText())
+                    x.append(fourth)
+                if (i == 4):
+                    fifth = float(self.inputVal5_2.toPlainText())
+                    x.append(fifth)
 
-        x = [first, second, thirth, fourth, fifth]
+        print(x)
         return x
 
     def getTargetVal(self):
@@ -220,7 +291,10 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             self.showDebugDialog('Введите значения типа "int".', 'error')
             return
 
-        self.INT.changeLinks(wIH, wHO)
+        self.countOfNumbers = wIH
+        self.slotsEnDis()
+        self.INT.changeLinks(wIH, wHO, wIH)
+        self.showDebugDialog("Параметры успешно изменены!", "info")
         pass
     def setNewLearnParams(self):
         newLL = self.getLearnLoops()
@@ -266,6 +340,15 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.INT.setPerfError(self.errorBox.value())
 
         self.LearnThread.start()
+        pass
+    #Загрузка весов
+    def loadWeights(self):
+        path = QFileDialog.getOpenFileName(self, 'Open file')[0]
+        self.INT.loadWeights(path)
+        pass
+    def saveWeights(self):
+        path = QFileDialog.getSaveFileName(self, 'Save file')[0]
+        self.INT.saveWeights(path)
         pass
     ######################################################
     def startLearn(self):
@@ -321,7 +404,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
     def clearParams(self):
         self.setVisible4Input(True)
         self.learnFromFile = False
-
+        self.countOfNumbers = def_inputN
 
         self.inputValues.clear()
         self.targetValues.clear()
@@ -333,6 +416,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
 
         self.showPercents(0)
         self.clearAll()
+        self.slotsEnDis()
         self.INT.backToDefaultParams()
         pass
     #При переключении на вкладку с настройками параметры заполняются из текущих
