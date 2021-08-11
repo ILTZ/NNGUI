@@ -143,11 +143,16 @@ class NNControl(QtCore.QObject):
     #Булево нужно для корректной работы с потоком, в котором выполняется(не смог придумать иначе и привязал старт потока к этой функции)
     def startLearnProcess(self):
         self.activate4Btn.emit(False)
-        if (self.learnFromFile):
-            self.fileLearn()
-        else:
-            self.handLearn()
-        pass
+        try:
+            if (self.learnFromFile):
+                self.fileLearn()
+            else:
+                self.handLearn()
+            pass
+        except:
+            self.activate4Btn.emit(True)
+            self.DebugSignal.emit("Проверьте параметры сети (после изменеия количества входных значений связи должны быть изменены)", 'error')
+            self.finished.emit()
     #Стандартный опрос сети
     def defQuery(self, inputArr):
         return self.NN.query(inputArr)
