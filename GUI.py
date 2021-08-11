@@ -40,6 +40,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         #Веса
         self.LoadWeightsBtn.clicked.connect(self.loadWeights)
         self.SaveWeightsBtn.clicked.connect(self.saveWeights)
+        self.RerandWeightsBtn.clicked.connect(self.rerandWeights)
         ##
         self.FAQLearnBox.setVisible(False)
         self.FAQSetingsBox.setVisible(False)
@@ -249,6 +250,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             return -1.0
     ######################################################
     ######################################################
+    #Очистка слотов от установленных значений
     def clearLearnBoxes(self):
         self.inputVal1.clear()
         self.inputVal2.clear()
@@ -278,6 +280,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.clearDebagPanels()
     ######################################################
     ######################################################
+    #Смена количества входных/выходных значений
     def setNewLinks(self):
         wIH = 0
         wHO = 0
@@ -296,6 +299,12 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.INT.changeLinks(wIH, wHO, wIH)
         self.showDebugDialog("Параметры успешно изменены!", "info")
         pass
+    #После смены может потребоваться перерандомить веса
+    def rerandWeights(self):
+        self.INT.rerandWeights()
+        self.showDebugDialog("Новый веса сгенерированы.", 'info')
+        pass
+    #Установка новых количество циклов, эпох и К-обучения
     def setNewLearnParams(self):
         newLL = self.getLearnLoops()
         newLE = self.getLearnEpochs()

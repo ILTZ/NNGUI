@@ -1081,7 +1081,7 @@ float(с плавающей точкой). </string>
       <widget class="QPushButton" name="chLinksBtn">
        <property name="geometry">
         <rect>
-         <x>90</x>
+         <x>20</x>
          <y>210</y>
          <width>101</width>
          <height>41</height>
@@ -1408,6 +1408,27 @@ float(с плавающей точкой). </string>
         <enum>Qt::Vertical</enum>
        </property>
       </widget>
+      <widget class="QPushButton" name="RerandWeightsBtn">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>210</y>
+         <width>111</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Сгенерировать
+новые веса</string>
+       </property>
+      </widget>
       <zorder>epochsGroupBox</zorder>
       <zorder>label</zorder>
       <zorder>hNodesIn</zorder>
@@ -1424,6 +1445,7 @@ float(с плавающей точкой). </string>
       <zorder>line_4</zorder>
       <zorder>setingsFAQBtn</zorder>
       <zorder>line_5</zorder>
+      <zorder>RerandWeightsBtn</zorder>
      </widget>
     </widget>
    </widget>

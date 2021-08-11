@@ -64,15 +64,17 @@ class NNControl(QtCore.QObject):
 
         self.learnFromFile = False
         pass
-    #Геттеры/сеттеры
+    #Процесс смены количества связей и перерандома весов
     def changeLinks(self, hiddenL, outL, inputL = 5):
         self.NN.setWIH(inputL)
         self.NN.setWHH(hiddenL)
         self.NN.setWHO(outL)
-        
+        pass
+    def rerandWeights(self):
         self.NN.reRandWHOWeights()
         self.NN.reRandWIHWeights()
         pass
+    #Геттеры/сеттеры
     def getCurrentWIH(self):
         return self.NN.getCurrentWIH()
     def getCurrentWHH(self):
