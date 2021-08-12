@@ -352,12 +352,18 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         pass
     #Загрузка весов
     def loadWeights(self):
-        path = QFileDialog.getOpenFileName(self, 'Open file')[0]
-        self.INT.loadWeights(path)
+        path = QFileDialog.getOpenFileName(self, 'Open file')
+        if (path[0] == ""):
+            print("UnLoaded")
+            return
+        self.INT.loadWeights(path[0])
         pass
     def saveWeights(self):
-        path = QFileDialog.getSaveFileName(self, 'Save file')[0]
-        self.INT.saveWeights(path)
+        path = QFileDialog.getSaveFileName(self, 'Save file')
+        if (path[0] == ""):
+            print("UnSaved")
+            return
+        self.INT.saveWeights(path[0])
         pass
     ######################################################
     def startLearn(self):
@@ -398,8 +404,11 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
     def loadFile(self):
         #Делегировать открытие окна UpLoader-у низя(т.к. нужен parent, а объекты с 
         # parent-ом низя передать в отдельный поток)
-        name = QFileDialog.getOpenFileName(self, 'Open file', '/home')[0]
-        self.setFilePath(name)
+        path = QFileDialog.getOpenFileName(self, 'Open file', filter=("TextFiles (*.txt *.xlsx)"))
+        if (path[0] == ""):
+            print("UnLoaded")
+            return
+        self.setFilePath(path[0])
         self.ReadThread.start()
         pass
     ######################################################
@@ -451,5 +460,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.chLinksBtn.setEnabled(val)
         self.epochsLoopsBtn.setEnabled(val)
         self.errorBox.setEnabled(val)
+        self.RerandWeightsBtn.setEnabled(val)
     
         

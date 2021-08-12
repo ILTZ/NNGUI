@@ -4,6 +4,8 @@ from fileUploader import FileUpLoader
 import GUI
 from threading import Thread
 
+
+
 def main():
     app = QtWidgets.QApplication(sys.argv)
     
@@ -16,6 +18,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+ 
 
     
 
