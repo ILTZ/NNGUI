@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from NNVSCode import neuralNetwork
 import numpy as np
 
+
 #def params NN
 def_inputN = 5
 def_hiddenN = 5

@@ -5,6 +5,9 @@ import scipy.special as ss
 #activation func
 def sigmoid(x):
     return ss.expit(x)
+def equal(x):
+    return x
+
 
 #def params NN
 def_inputN = 5
@@ -24,11 +27,12 @@ class Neiron:
         self.output = []
         self.error = []
         self.deltaWeights = []
-        self.lr = learnRate   
+        self.lr = learnRate  
+        self.activationFunc = lambda x : sigmoid(x) 
         
     def query(self, inputArr):
         self.input = np.dot(self.weights, inputArr)
-        self.output = sigmoid(self.input)
+        self.output = self.activationFunc(self.input)
         return self.output
     
     def backProp(self, inputError, oWeights):
@@ -55,11 +59,14 @@ class neuralNetwork:
         self.epochs = def_epochs
         #Далее на основе входных значений конструктора составляются матрицы весов для каждого нейрона
         #hidden neir #1
-        self.HN = Neiron(np.random.normal(0.0, pow(self.hNodes, -0.5), (self.hNodes, self.iNodes)), learnRate)
+        #self.HN = Neiron(np.random.normal(0.0, pow(self.hNodes, -0.5), (self.hNodes, self.iNodes)), learnRate)
+        self.HN = Neiron(randWeights(self.hNodes, self.iNodes), self.lr)
         #hidden neir #2
-        self.HN2 = Neiron(np.random.normal(0.0, pow(self.hNodes, -0.5), (self.hNodes, self.hNodes)), learnRate)
+        #self.HN2 = Neiron(np.random.normal(0.0, pow(self.hNodes, -0.5), (self.hNodes, self.hNodes)), learnRate)
+        self.HN2 = Neiron(randWeights(self.hNodes, self.hNodes), self.lr)
         #final output neiron
-        self.FN = Neiron(np.random.normal(0.0, pow(self.oNodes, -0.5), (self.oNodes, self.hNodes)), learnRate)
+        #self.FN = Neiron(np.random.normal(0.0, pow(self.oNodes, -0.5), (self.oNodes, self.hNodes)), learnRate)
+        self.FN = Neiron(randWeights(self.oNodes, self.hNodes), self.lr)
 
         
         

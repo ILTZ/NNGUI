@@ -49,4 +49,4 @@ model2.add(keras.layers.Dense(1, activation="sigmoid"))
 model2.compile(loss="binary_crossentropy", optimizer="sgd", metrics=["accuracy"])
 print(model2.summary())
 
-asd = model2.fit(x,y,epochs=100, validation_data=(x,y))
+asd = model2.fit(x,y,epochs=10000, validation_data=(x,y))
