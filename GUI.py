@@ -41,9 +41,12 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.LoadWeightsBtn.clicked.connect(self.loadWeights)
         self.SaveWeightsBtn.clicked.connect(self.saveWeights)
         self.RerandWeightsBtn.clicked.connect(self.rerandWeights)
+
+        #Количество нейронов на слой
+        self.chCountBtn.clicked.connect(self.setNewNeironCounts)
         ##
         self.FAQLearnBox.setVisible(False)
-        self.FAQSetingsBox.setVisible(False)
+        #self.FAQSetingsBox.setVisible(False)
         #Переменные для отображения подсказок
         self.showFAQLearn = False
         self.showFAQSet = False
@@ -83,9 +86,24 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.UpLoader.moveToThread(self.ReadThread)
         self.ReadThread.started.connect(self.UpLoader.loadFromFile)
         self.ReadThread.finished.connect(self.correctThread)
-        
-        
-        
+    ##################################
+    ##Проверка пользовательского ввода    
+    def correctToInt(self, val):
+        try:
+            x = int(val)
+        except:
+            self.showDebugDialog("Введите значение типа <int> (целое число).", "error")
+            return False
+        return True
+    def correctToFloat(self, val):
+        try:
+            x = float(val)
+        except:
+            self.showDebugDialog("Введите значение типа <float> (натуральная дробь).", "error")
+            return False
+        return True
+    ##################################
+    ##################################
 
     def showDebugDialog(self, message, type):
         msgBox = QMessageBox()
@@ -181,6 +199,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
     def changeVisFAQSet(self):
         self.showFAQSet = not self.showFAQSet
         self.FAQSetingsBox.setVisible(self.showFAQSet)
+    #############################
     #Получение начальных значений
     def getParams(self, param):
         #Хз как иначе брать из ячеек ровно то количество параметров, 
@@ -223,7 +242,8 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
 
         print(x)
         return x
-
+    #############################
+    #Получение значений с вкладки "Настройки"
     def getTargetVal(self):
         try:
             return float(self.targetVal.toPlainText())
@@ -248,6 +268,11 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         except:
             self.learnRateBox.clear()
             return -1.0
+    def getNeironCount(self): #количество нейронов в слоях
+        H1 = int(self.hiddenLayerCount1.toPlainText())
+        H2 = int(self.HiddenLayerCount2.toPlainText())
+        return [H1, H2]
+        pass
     ######################################################
     ######################################################
     #Очистка слотов от установленных значений
@@ -268,18 +293,16 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.outputLabel.clear()
     def clearTargetBoxes(self):
         self.targetVal.clear()
-    def clearDebagPanels(self):
-        self.debugLabel4Links.clear()
-        self.debugLabel4Learn.clear()
-        self.debugLabel4Query.clear()
+
     
     def clearAll(self):
         self.clearLearnBoxes()
         self.clearQueryBoxes()
         self.clearTargetBoxes()
-        self.clearDebagPanels()
+
     ######################################################
     ######################################################
+    #Установка новых значений
     #Смена количества входных/выходных значений
     def setNewLinks(self):
         wIH = 0
@@ -302,7 +325,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
     #После смены может потребоваться перерандомить веса
     def rerandWeights(self):
         self.INT.rerandWeights()
-        self.showDebugDialog("Новый веса сгенерированы.", 'info')
+        self.showDebugDialog("Новые веса сгенерированы.", 'info')
         pass
     #Установка новых количество циклов, эпох и К-обучения
     def setNewLearnParams(self):
@@ -322,6 +345,20 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.INT.setLearnLoops(newLL)
         self.showDebugDialog("Новые значения установлены!", 'info')
         pass
+    
+    def setNewNeironCounts(self):
+        try:
+            newCounts = self.getNeironCount()
+        except:
+            self.showDebugDialog("Введите корректноые значения количества нейронов!", "error")
+            self.hiddenLayerCount1.clear()
+            self.HiddenLayerCount2.clear()
+            return
+        
+        self.INT.setCurrentNeironH2(newCounts)
+        self.showDebugDialog("Новые значения нейронов установлены!", "info")
+        pass
+
     #Для отображения уставновленных параметров сети
     def showCurrentParams(self):
         mes = (f"Количество входных значений: {self.INT.getCurrentWIH()}\n" +
@@ -329,7 +366,9 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         f"Количество выходных значений: {self.INT.getCurrentWHO()}\n" +
         f"Количество циклов обучения: {self.INT.getLearnLoops()}\n" +
         f"Количество эпох: {self.INT.getEpochs()}\n" +
-        f"Коэффициент ошибки: {self.INT.getLearnRate()}\n")
+        f"Коэффициент ошибки: {self.INT.getLearnRate()}\n" + 
+        f"Количество нейронов в 1-м скрытом слое: {self.INT.getCurrentNeironsCount()[0]}\n" + 
+        f"Количество нейронов во 2-м скрытом слое: {self.INT.getCurrentNeironsCount()[1]}")
 
         self.showDebugDialog(mes, 'info')
         pass
@@ -461,5 +500,8 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.epochsLoopsBtn.setEnabled(val)
         self.errorBox.setEnabled(val)
         self.RerandWeightsBtn.setEnabled(val)
+        self.chCountBtn.setEnabled(val)
+
+    
     
         

@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
 from NNVSCode import neuralNetwork
+from NNV2 import neuralNetwork2
 import numpy as np
 
 
@@ -33,7 +34,8 @@ class NNControl(QtCore.QObject):
         self.epochs = def_epochs
         self.learnLoops = def_loops
 
-        self.NN = neuralNetwork(self.inputN, self.hiddenN, self.outputN, self.learnRate)
+        #self.NN = neuralNetwork(self.inputN, self.hiddenN, self.outputN, self.learnRate)
+        self.NN = neuralNetwork2(self.inputN, self.hiddenN, self.outputN, self.learnRate)
 
         self.inputVal = []
         self.targetVal = 0.0
@@ -64,6 +66,7 @@ class NNControl(QtCore.QObject):
         self.changeLearnRate(def_learnRate)
 
         self.learnFromFile = False
+        self.NN.setDefaultParams()
         pass
     #Процесс смены количества связей и перерандома весов
     def changeLinks(self, hiddenL, outL, inputL = 5):
@@ -72,8 +75,9 @@ class NNControl(QtCore.QObject):
         self.NN.setWHO(outL)
         pass
     def rerandWeights(self):
-        self.NN.reRandWHOWeights()
-        self.NN.reRandWIHWeights()
+        self.NN.randWeights4H1()
+        self.NN.randWeights4H2()
+        self.NN.randWeights4F()
         pass
     #Геттеры/сеттеры
     def getCurrentWIH(self):
@@ -111,6 +115,13 @@ class NNControl(QtCore.QObject):
         pass
     def getPerformanceRate(self):
         return self.performanceRate
+
+    def getCurrentNeironsCount(self):
+        return self.NN.getCurrentNeironCount()
+        pass
+    def setCurrentNeironH2(self, arr):
+        self.NN.setCurrentNeironCount(arr)
+        pass
     #Обучение по вводимым вручную значениям
     def handLearn(self):
         print("HandLearn", self.epochs, self.learnLoops, self.learnFromFile)

@@ -46,8 +46,8 @@ class Neiron:
         #Что-то из этого было матрицей, а что-то - np.array()
         #из-за чего numpy ругался
         #просто приводим значения к 1-му типу
-        self.output = np.reshape(np.array(self.output), (5,1))
-        self.error = np.reshape(np.array(self.error), (5,1))
+        #self.output = np.reshape(np.array(self.output), (5,1))
+        #self.error = np.reshape(np.array(self.error), (5,1))
 
         self.weights += self.lr * np.dot((self.error * self.output * (1.0 - self.output)), np.transpose(inputArr))
         return
@@ -98,8 +98,8 @@ class neuralNetwork2:
         self.learnLoops = def_learnLoop
         self.epochs = def_epochs
 
-        self.HiddenLayer1Count = 3#def_hidden1Capacity
-        self.HiddenLayer2Count = 3#def_hidden2Capacity
+        self.HiddenLayer1Count = def_hidden1Capacity
+        self.HiddenLayer2Count = def_hidden2Capacity
         self.HiddenLayer1 = []
         self.HiddenLayer2 = []
         #Далее на основе входных значений конструктора составляются матрицы весов для каждого нейрона...
@@ -132,7 +132,8 @@ class neuralNetwork2:
         #Настакиваем значения, приходящие из 1-го слоя для КАЖДОГО нейрона второго слоя...
         TempValArr2nd = []
         for i in range(self.HiddenLayer2Count):
-            temp = np.array(np.mat('0.0;0.0;0.0;0.0;0.0'), subok=True)
+            #temp = np.array(np.mat('0.0;0.0;0.0;0.0;0.0'), subok=True)
+            temp = np.zeros((self.hNodes,1))
             for j in range(len(TempValArr1st)):
                 temp += self.HiddenLayer2[i].query(TempValArr1st[j])
             #....и прогоняем их через сигмоиду перед отправкой на следующий этап
@@ -141,7 +142,8 @@ class neuralNetwork2:
             self.HiddenLayer2[i].output = sigmoid(temp)
                 
         #Идет настак финального выходного значения....
-        finalTemp = np.array(np.mat('0.0'), subok=True)
+        #finalTemp = np.array(np.mat('0.0'), subok=True)
+        finalTemp = np.zeros((self.oNodes,1))
         for j in range(len(TempValArr2nd)):
             finalTemp += self.FN.query(TempValArr2nd[j], j)
         #..прогоняется через сигмоиду
@@ -181,7 +183,7 @@ class neuralNetwork2:
         #Настакиваем значения, приходящие из 1-го слоя для КАЖДОГО нейрона второго слоя...
         TempValArr2nd = []
         for i in range(self.HiddenLayer2Count):
-            temp = np.array(np.mat('0.0;0.0;0.0;0.0;0.0'), subok=True)
+            temp = np.zeros((self.hNodes,1))
             for j in range(len(TempValArr1st)):
                 temp += self.HiddenLayer2[i].query(TempValArr1st[j])
             #....и прогоняем их через сигмоиду перед отправкой на следующий этап
@@ -190,7 +192,7 @@ class neuralNetwork2:
             self.HiddenLayer2[i].output = sigmoid(temp)
                 
 
-        finalTemp = np.array(np.mat('0.0'), subok=True)
+        finalTemp = np.zeros((self.oNodes,1))
         for j in range(len(TempValArr2nd)):
             finalTemp += self.FN.query(TempValArr2nd[j], j)
         finalTemp = sigmoid(finalTemp)
@@ -210,25 +212,90 @@ class neuralNetwork2:
             finalWeights.append(randWeights(self.oNodes, self.hNodes))
         self.FN.setWeights(finalWeights)
         pass
+    
+    def reFillHidden1Arr(self):
+        self.HiddenLayer1.clear()
+        for i in range(self.HiddenLayer1Count):
+            self.HiddenLayer1.append(Neiron(randWeights(self.hNodes, self.iNodes), self.lr))
+        pass
+    def reFillHidden2Arr(self):
+        self.HiddenLayer2.clear()
+        for i in range(self.HiddenLayer1Count):
+            self.HiddenLayer2.append(Neiron(randWeights(self.hNodes, self.hNodes), self.lr))
+        pass
+    def setDefaultParams(self):
+        self.iNodes = def_inputN
+        self.hNodes = def_hiddenN
+        self.oNodes = def_outputN
+
+        self.lr = def_learnRate
+        self.learnLoops = def_learnLoop
+        self.epochs = def_epochs
 
 
+        self.HiddenLayer1Count = def_hidden1Capacity
+        self.HiddenLayer2Count = def_hidden2Capacity
+        self.reFillHidden1Arr()
+        self.reFillHidden2Arr()
+        self.randWeights4H1()
+        self.randWeights4H2()
+        self.randWeights4F()
+        pass
+    ################
+    #Get/set values#
+    ################
+    def getCurrentWIH(self): #input values count
+        return self.iNodes
+    def setWIH(self, number):
+        self.iNodes = number
+    def getCurrentWHH(self): #hiiden nodes
+        return self.hNodes
+    def setWHH(self, number):
+        self.hNodes = number
+    def getCurrentWHO(self): #output values count
+        return self.oNodes
+    def setWHO(self, number):
+        self.oNodes = number
+    def changeLearnRate(self, newLr): #speedlearn of NN
+        for i in range(self.HiddenLayer1Count):
+            self.HiddenLayer1[i].lr = newLr
+        for i in range(self.HiddenLayer2Count):
+            self.HiddenLayer2[i].lr = newLr
+        self.FN.lr = newLr
+    def getCurrentLearnRate(self):
+        return self.lr
+    def setLearnRate(self, number):
+        self.lr = number
+        self.changeLearnRate(self.lr)
+    def getCurrentNeironCount(self):
+        return [self.HiddenLayer1Count, self.HiddenLayer2Count]
+    def setCurrentNeironCount(self, arr):
+        self.HiddenLayer1Count = arr[0]
+        self.HiddenLayer2Count = arr[1]
+        self.reFillHidden1Arr()
+        self.randWeights4H1()
+        self.reFillHidden2Arr()
+        self.randWeights4H2()
+        self.randWeights4F()
 
-x = [1.0, 1.0, 1.0, 1.0, 1.0]
-x2 = [1.0, 1.0, 1.0, 1.0, 0.0]
-y = [1.0]
-y2 = [0.8]
-x3 = [1.0, 1.0, 1.0, 0.0, 0.0]
-y3 = [0.6]
 
-NN = neuralNetwork2(def_inputN, def_hiddenN, def_outputN, def_learnRate)
+#x = [1.0, 1.0, 1.0, 1.0, 1.0]
+#x2 = [1.0, 1.0, 1.0, 1.0, 0.0]
+#y = [1.0]
+#y2 = [0.8]
+#x3 = [1.0, 1.0, 1.0, 0.0, 0.0]
+#y3 = [0.6]
+
+#NN = neuralNetwork2(def_inputN, def_hiddenN, def_outputN, def_learnRate)
 
 #for i in range(def_learnLoop):
 #    NN.learnProcess(x,y)
 
-for i in range(10000):
-    NN.learnProcess(x,y)
-    NN.learnProcess(x2, y2)
-    NN.learnProcess(x3, y3)
-print(NN.query(x))
-print(NN.query(x2))
-print(NN.query(x3))
+#for i in range(10000):
+#    NN.learnProcess(x,y)
+#    NN.learnProcess(x2, y2)
+#    NN.learnProcess(x3, y3)
+#print(NN.query(x))
+#print(NN.query(x2))
+#print(NN.query(x3))
+
