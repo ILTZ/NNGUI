@@ -197,8 +197,9 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.FAQLearnBox.setVisible(self.showFAQLearn)
         pass
     def changeVisFAQSet(self):
-        self.showFAQSet = not self.showFAQSet
-        self.FAQSetingsBox.setVisible(self.showFAQSet)
+        
+
+        pass
     #############################
     #Получение начальных значений
     def getParams(self, param):
@@ -490,6 +491,8 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             self.loopCount.setText(str(self.INT.getLearnLoops()))
             self.epochsCount.setText(str(self.INT.getEpochs()))
             self.learnRateBox.setText(str(self.INT.getLearnRate()))
+            self.hiddenLayerCount1.setText(str(self.INT.getCurrentNeironsCount()[0]))
+            self.HiddenLayerCount2.setText(str(self.INT.getCurrentNeironsCount()[1]))
         pass
     #Лок кнопока при начале обучения
     def btnLock(self, val):

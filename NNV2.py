@@ -98,8 +98,8 @@ class neuralNetwork2:
         self.learnLoops = def_learnLoop
         self.epochs = def_epochs
 
-        self.HiddenLayer1Count = def_hidden1Capacity
-        self.HiddenLayer2Count = def_hidden2Capacity
+        self.HiddenLayer1Count = 3#def_hidden1Capacity
+        self.HiddenLayer2Count = 4#def_hidden2Capacity
         self.HiddenLayer1 = []
         self.HiddenLayer2 = []
         #Далее на основе входных значений конструктора составляются матрицы весов для каждого нейрона...
@@ -167,7 +167,8 @@ class neuralNetwork2:
                 self.HiddenLayer1[j].changeWeights(inputs)
             #затем, меняем веса самого нейрона 2-го слоя, от которого искали ошибку, и процесс повторяется,
             #но уже с i+1 нейроном 2-го слоя
-            self.HiddenLayer2[i].changeWeights(TempValArr1st[i])
+            for k in range(len(TempValArr1st)):
+                self.HiddenLayer2[i].changeWeights(TempValArr1st[k])
         
         pass
 
@@ -220,7 +221,7 @@ class neuralNetwork2:
         pass
     def reFillHidden2Arr(self):
         self.HiddenLayer2.clear()
-        for i in range(self.HiddenLayer1Count):
+        for i in range(self.HiddenLayer2Count):
             self.HiddenLayer2.append(Neiron(randWeights(self.hNodes, self.hNodes), self.lr))
         pass
     def setDefaultParams(self):
@@ -277,25 +278,47 @@ class neuralNetwork2:
         self.reFillHidden2Arr()
         self.randWeights4H2()
         self.randWeights4F()
+    ###########################
+    ##Работа с весами нейронов
+    def getWeights1st(self): #1-st hidden layer
+        tempArr = []
+        for el in self.HiddenLayer1:
+            tempArr.append(el.getWeights())
+    def setWeights1st(self, newWeights, count):
+        self.HiddenLayer1[count].setWeights(newWeights)
+    #########
+    def getWeights2nd(self): #2-nd hidden layer
+        tempArr = []
+        for el in self.HiddenLayer2:
+            tempArr.append(el.getWeights())
+    def setWeights2nd(self, weights, count):
+        self.HiddenLayer2[count].setWeights(weights)
+    #########
+    def getFinalNeironWeights(self): #Final layer(final neiron)
+        return self.FN.getWeights()
+    def setFinalNeironWeights(self, weights):
+        self.FN.setWeights(weights)
+        
+def test():
+    x = [1.0, 1.0, 1.0, 1.0, 1.0]
+    x2 = [1.0, 1.0, 1.0, 1.0, 0.0]
+    y = [1.0]
+    y2 = [0.8]
+    x3 = [1.0, 1.0, 1.0, 0.0, 0.0]
+    y3 = [0.6]
 
+    NN = neuralNetwork2(def_inputN, def_hiddenN, def_outputN, def_learnRate)
 
-#x = [1.0, 1.0, 1.0, 1.0, 1.0]
-#x2 = [1.0, 1.0, 1.0, 1.0, 0.0]
-#y = [1.0]
-#y2 = [0.8]
-#x3 = [1.0, 1.0, 1.0, 0.0, 0.0]
-#y3 = [0.6]
+    #for i in range(def_learnLoop):
+    #    NN.learnProcess(x,y)
 
-#NN = neuralNetwork2(def_inputN, def_hiddenN, def_outputN, def_learnRate)
+    for i in range(10000):
+        NN.learnProcess(x,y)
+        NN.learnProcess(x2, y2)
+        NN.learnProcess(x3, y3)
+    print(NN.query(x))
+    print(NN.query(x2))
+    print(NN.query(x3))
 
-#for i in range(def_learnLoop):
-#    NN.learnProcess(x,y)
-
-#for i in range(10000):
-#    NN.learnProcess(x,y)
-#    NN.learnProcess(x2, y2)
-#    NN.learnProcess(x3, y3)
-#print(NN.query(x))
-#print(NN.query(x2))
-#print(NN.query(x3))
+#test()
 
