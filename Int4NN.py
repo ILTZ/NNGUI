@@ -199,13 +199,27 @@ class NNControl(QtCore.QObject):
         pass
     #Процесс схоранения/загрузки весов
     def saveWeights(self, path):
-        HN1w = self.NN.HN.getWeights()
-        HN2w = self.NN.HN2.getWeights()
-        FNw = self.NN.FN.getWeights()
+        ####################
+        ##For 1-neirons net
+        #HN1w = self.NN.HN.getWeights()
+        #HN2w = self.NN.HN2.getWeights()
+        #FNw = self.NN.FN.getWeights()
+        #np.savez(path, HN1w, HN2w, FNw)
+        #self.DebugSignal.emit("Веса сохранены.", 'info')
 
-        np.savez(path, HN1w, HN2w, FNw)
+        ####################
+        ##For multiNerirons net
+        tempArr = []
+        for i in range(self.NN.HiddenLayer1Count):
+            tempArr.append(self.NN.HiddenLayer1[i].getWeights())
+        tempArr2 = []
+        for i in range(self.NN.HiddenLayer2Count):
+            tempArr2.append(self.NN.HiddenLayer2[i].getWeights())
+        tempArr3 = []
+        tempArr3.append(self.NN.FN.getWeights())
 
-        self.DebugSignal.emit("Веса сохранены.", 'info')
+        np.savez(path, tempArr, tempArr2, tempArr3)
+
         pass
     def loadWeights(self, path):
         allArr = np.load(path)
@@ -214,9 +228,20 @@ class NNControl(QtCore.QObject):
         HN2 = allArr['arr_1']
         FN = allArr['arr_2']
 
-        self.NN.HN.setWeights(HN)
-        self.NN.HN2.setWeights(HN2)
-        self.NN.FN.setWeights(FN)
+
+        try:
+            for i in range(len(HN)):
+                self.NN.setWeights1st(HN[i],i)
+            for i in range(len(HN2)):
+                self.NN.setWeights2nd(HN2[i], i)
+            self.NN.setFinalNeironWeights(FN[0])
+        except:
+            self.DebugSignal.emit("Несоответствие весов и нейронов!", "error")
+            return
+
+  
+
+        
 
         self.DebugSignal.emit("Веса загружены и поставлены.", 'info')
         pass
