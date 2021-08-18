@@ -2,7 +2,11 @@ from os import path
 import sys
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
+
 import Ui_shield
+import Ui_startWindow
+import Ui_FAQwindow
+
 import numpy as np
 
 
@@ -24,6 +28,12 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
 
+        ##SubWindows
+        self.startTitle = GUIstartWindow()
+        self.startTitle.finished.connect(self.show)
+        self.startTitle.FAQsig.connect(self.showAboutWindow)
+
+        self.FAQTitle = GUIFaqWin()
         ##slots
         self.learnStartBtn.clicked.connect(self.startLearn)
         self.queryBtn.clicked.connect(self.defQuery)
@@ -120,18 +130,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
 
         self.ReadThread.quit()
         msgBox.exec_()
-        pass
-    def printDebugMessage(self, message, proc):
-        self.debugLabel4Learn.clear()
-        self.debugLabel4Query.clear()
-        self.debugLabel4Links.clear()
-
-        if proc == 'learn':
-           self.debugLabel4Learn.setText(message)
-        elif proc == 'query' :
-            self.debugLabel4Query.setText(message)
-        elif proc == 'link':
-            self.debugLabel4Links.setText(message)
         pass
     def showPercents(self, value):
         self.progressBar.setValue(value * 100.0)
@@ -243,7 +241,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
 
         print(x)
         return x
-    #############################
+    #########################################
     #Получение значений с вкладки "Настройки"
     def getTargetVal(self):
         try:
@@ -294,8 +292,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.outputLabel.clear()
     def clearTargetBoxes(self):
         self.targetVal.clear()
-
-    
     def clearAll(self):
         self.clearLearnBoxes()
         self.clearQueryBoxes()
@@ -303,6 +299,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
 
     ######################################################
     ######################################################
+
     #Установка новых значений
     #Смена количества входных/выходных значений
     def setNewLinks(self):
@@ -328,7 +325,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.INT.rerandWeights()
         self.showDebugDialog("Новые веса сгенерированы.", 'info')
         pass
-    #Установка новых количество циклов, эпох и К-обучения
+    #Установка новых количество циклов, эпох и К-обучения, и количества нейронов в слоях
     def setNewLearnParams(self):
         newLL = self.getLearnLoops()
         newLE = self.getLearnEpochs()
@@ -477,13 +474,15 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.slotsEnDis()
         self.INT.backToDefaultParams()
         pass
-    #При переключении на вкладку с настройками параметры заполняются из текущих
-    # параметров сети
-    #Отображение производительности сети
+    ##########################
+    #Отображение точности сети
     def showPerformance(self):
         if (self.learnFromFile):
             self.performanceLabel.setText(str(self.INT.getPerformanceRate()))
         pass
+    ###########################################################################
+    #При переключении на вкладку с настройками параметры заполняются из текущих
+    # параметров сети
     def showParams(self, index):
         if (index == 2):
             self.hNodesIn.setText(str(self.INT.getCurrentWHH()))   
@@ -494,6 +493,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             self.hiddenLayerCount1.setText(str(self.INT.getCurrentNeironsCount()[0]))
             self.HiddenLayerCount2.setText(str(self.INT.getCurrentNeironsCount()[1]))
         pass
+    ################################
     #Лок кнопока при начале обучения
     def btnLock(self, val):
         self.clearBtn.setEnabled(val)
@@ -504,7 +504,43 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.errorBox.setEnabled(val)
         self.RerandWeightsBtn.setEnabled(val)
         self.chCountBtn.setEnabled(val)
+    ###############################
+    #Отображение окна "О программе"
+    def showAboutWindow(self):
+        self.FAQTitle.show()
+        pass
+#########################################
+##Стартовое окно с лого/авторами и прочим
+class GUIstartWindow(QtWidgets.QMainWindow, Ui_startWindow.Ui_MainWindow):
 
+    finished = QtCore.pyqtSignal()
+    FAQsig = QtCore.pyqtSignal()
+
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+        self.StartWorkBtn.clicked.connect(self.goToProgram)
+        self.FAQBtn.clicked.connect(self.showFAQ)
+
+        self.show()
+
+
+
+    def goToProgram(self):
+        self.finished.emit()
+        self.close()
+        pass
+    def showFAQ(self):
+        self.FAQsig.emit()
+        pass
+    pass
+####################
+##Окно "О программе"
+class GUIFaqWin(QtWidgets.QMainWindow, Ui_FAQwindow.Ui_MainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
     
     
         

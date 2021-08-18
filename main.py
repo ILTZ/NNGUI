@@ -9,9 +9,13 @@ from threading import Thread
 def main():
     app = QtWidgets.QApplication(sys.argv)
     
+
     window = GUI.GUImm()
 
-    window.show()
+
+
+
+    #window.show()
     app.exec_()
 
 
