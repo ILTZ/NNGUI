@@ -98,8 +98,8 @@ class neuralNetwork2:
         self.learnLoops = def_learnLoop
         self.epochs = def_epochs
 
-        self.HiddenLayer1Count = 3#def_hidden1Capacity
-        self.HiddenLayer2Count = 4#def_hidden2Capacity
+        self.HiddenLayer1Count = def_hidden1Capacity
+        self.HiddenLayer2Count = def_hidden2Capacity
         self.HiddenLayer1 = []
         self.HiddenLayer2 = []
         #Далее на основе входных значений конструктора составляются матрицы весов для каждого нейрона...
@@ -132,7 +132,6 @@ class neuralNetwork2:
         #Настакиваем значения, приходящие из 1-го слоя для КАЖДОГО нейрона второго слоя...
         TempValArr2nd = []
         for i in range(self.HiddenLayer2Count):
-            #temp = np.array(np.mat('0.0;0.0;0.0;0.0;0.0'), subok=True)
             temp = np.zeros((self.hNodes,1))
             for j in range(len(TempValArr1st)):
                 temp += self.HiddenLayer2[i].query(TempValArr1st[j])
@@ -142,7 +141,6 @@ class neuralNetwork2:
             self.HiddenLayer2[i].output = sigmoid(temp)
                 
         #Идет настак финального выходного значения....
-        #finalTemp = np.array(np.mat('0.0'), subok=True)
         finalTemp = np.zeros((self.oNodes,1))
         for j in range(len(TempValArr2nd)):
             finalTemp += self.FN.query(TempValArr2nd[j], j)
