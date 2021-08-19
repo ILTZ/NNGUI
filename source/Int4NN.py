@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5 import QtCore
 from NNVSCode import neuralNetwork
 from NNV2 import neuralNetwork2
 import numpy as np
@@ -34,6 +34,7 @@ class NNControl(QtCore.QObject):
         self.epochs = def_epochs
         self.learnLoops = def_loops
 
+        self.stopSignal = False
         #self.NN = neuralNetwork(self.inputN, self.hiddenN, self.outputN, self.learnRate)
         self.NN = neuralNetwork2(self.inputN, self.hiddenN, self.outputN, self.learnRate)
 
@@ -131,6 +132,12 @@ class NNControl(QtCore.QObject):
                 self.NN.learnProcess(self.inputVal, self.targetVal)
                 self.PBSignal.emit(it / (self.learnLoops * self.epochs))
                 it += 1
+                if (self.stopSignal == True):
+                    self.stopSignal = False
+                    self.finished4Btn.emit(True)
+                    self.DebugSignal.emit("Процесс тренировки остановлен.", 'info')
+                    self.finished.emit()
+                    return
         print("TrainSucces")
         self.PBSignal.emit(1)
         self.finished4Btn.emit(True)
@@ -146,6 +153,12 @@ class NNControl(QtCore.QObject):
                     self.NN.learnProcess(i, t)
                     self.PBSignal.emit(it / (self.learnLoops * self.epochs))
                 it += 1
+                if (self.stopSignal == True):
+                    self.stopSignal = False
+                    self.finished4Btn.emit(True)
+                    self.DebugSignal.emit("Процесс тренировки остановлен.", 'info')
+                    self.finished.emit()
+                    return
         print("TrainSucces")
         self.performanceTest()
         self.PBSignal.emit(1)

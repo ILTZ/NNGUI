@@ -1,8 +1,6 @@
 from PyQt5 import QtWidgets
 import sys
-from fileUploader import FileUpLoader
 import GUI
-from threading import Thread
 
 
 
@@ -13,7 +11,7 @@ def main():
     window = GUI.GUImm()
 
 
-
+    
 
     #window.show()
     app.exec_()

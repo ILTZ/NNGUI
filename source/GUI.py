@@ -1,6 +1,5 @@
 from os import path
-import sys
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 
 import Ui_shield
@@ -465,7 +464,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
                 return
             self.goToLearnHand()
         pass
-    def goToLearnHand(self):
+    def goToLearnHand(self):    #По факту - просто запускает поток обучения(та, что ниже - тоже самое)
         inputArr = self.hand_input_arr
         targetArr = self.hand_target_val
         self.INT.setLFFStatus(False)
@@ -481,9 +480,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.LearnThread.start()
         pass
     def stopLearn(self):        #"Стоп" обучения сети
-        self.LearnThread.quit()
-        print("Got it")
-        pass
+        self.INT.stopSignal = True
 
     def loadWeights(self):      #Загрузка весов
         path = QFileDialog.getOpenFileName(self, 'Open file')

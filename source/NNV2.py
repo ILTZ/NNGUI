@@ -11,8 +11,7 @@ def_inputN = 5
 def_hiddenN = 5
 def_outputN = 1
 def_learnRate = 0.3
-def_learnLoop = 30000
-def_epochs = 1
+
 
 def_hidden1Capacity = 5
 def_hidden2Capacity = 5
@@ -95,8 +94,7 @@ class neuralNetwork2:
         self.oNodes = outputNodes
         
         self.lr = learnRate
-        self.learnLoops = def_learnLoop
-        self.epochs = def_epochs
+ 
 
         self.HiddenLayer1Count = def_hidden1Capacity
         self.HiddenLayer2Count = def_hidden2Capacity
@@ -228,8 +226,7 @@ class neuralNetwork2:
         self.oNodes = def_outputN
 
         self.lr = def_learnRate
-        self.learnLoops = def_learnLoop
-        self.epochs = def_epochs
+
 
 
         self.HiddenLayer1Count = def_hidden1Capacity
