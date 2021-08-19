@@ -482,6 +482,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         pass
     def stopLearn(self):        #"Стоп" обучения сети
         self.LearnThread.quit()
+        print("Got it")
         pass
 
     def loadWeights(self):      #Загрузка весов
@@ -520,6 +521,9 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.errorBox.setEnabled(val)
         self.RerandWeightsBtn.setEnabled(val)
         self.chCountBtn.setEnabled(val)
+        self.loadFromFile.setEnabled(val)
+        self.SaveWeightsBtn.setEnabled(val)
+        self.LoadWeightsBtn.setEnabled(val)
     def startTrain_Act(self):
         self.startLearn()
         pass

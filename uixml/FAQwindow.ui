@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>635</width>
-    <height>599</height>
+    <width>648</width>
+    <height>803</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
      <rect>
       <x>10</x>
       <y>50</y>
-      <width>621</width>
+      <width>631</width>
       <height>171</height>
      </rect>
     </property>
@@ -42,7 +42,7 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>601</width>
+       <width>611</width>
        <height>141</height>
       </rect>
      </property>
@@ -80,13 +80,204 @@
      <string>NEIRONET V_1.0</string>
     </property>
    </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>340</y>
+      <width>631</width>
+      <height>111</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="title">
+     <string>Раздел &quot;Обучение&quot;</string>
+    </property>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>611</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>В разделе обучения происходит старт и остановка обучения.
+Пользователь имеет возможность как вводить значения вручную(в соответствующие слоты для
+входных значений), так и использовать выборки из внешних файлов.
+Перед началом обучения убедитесь, что параметры нейронной сети (количество входных/выходных
+значений соответствуют вашим требованиям).</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>220</y>
+      <width>631</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="title">
+     <string>&quot;Меню&quot;</string>
+    </property>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>611</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Во вкладке &quot;Меню&quot; (левый верхний угол), кликнув по соответствующей кнопке, пользователь может
+увидеть текущие параметры нейросети.
+Также, по нажатию на кнопку &quot;Загрузить из внешнего файла&quot; можно выбрать файл с выборкой
+данных. Сама выборка должна быть подготовлена (все переменные нормированы) и представлена
+ в формате &quot;X.X,X.X,X.X......Y.Y&quot;, где &quot;X.X&quot; - входной параметр, &quot;Y.Y&quot; - целевое значение. Последнее
+значение в строке выборки всегда будет целевым значением элемента выборки этой строки.
+</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_4">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>450</y>
+      <width>631</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="title">
+     <string>Раздел &quot;Прогон&quot;</string>
+    </property>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>611</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>В данном разделе происходит стандартный опрос сети (пользователь вводит значения, ожидая
+получить требуемый результат).
+Производить стандартный опрос имеет смысл лишь после обучения сети на какой-либо выборке
+данных.</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_5">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>540</y>
+      <width>631</width>
+      <height>211</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="title">
+     <string>Раздел &quot;Настройки&quot;</string>
+    </property>
+    <widget class="QLabel" name="label_6">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>611</width>
+       <height>181</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Данный раздел отвечает за внутренние параметры сети.
+В левой части экрана пользователь может изменять количество входных/выходных значений,
+количество нейронов в 1-м и 2-м скрытых слоях (после данных изменений веса должны быть сгене-
+рированы заново, за что отвечает одноименная кнопка).
+Параметры &quot;Количество циклов&quot; и &quot;Количество эпох&quot; будут определять, на сколько точно нейросеть
+будет обучена на представляемой выборке. Параметр &quot;Коэффициент обучения&quot; отвечает за то,
+на сколько &quot;быстро&quot; нейросеть будет обучаться (как сильно её веса будут меняться за 1 цикл).
+Если текущие веса нейросети удовлетворяют целям пользователя, он может их сохранить, нажав
+на кнопку &quot;Сохранить веса&quot;. 
+&quot;Загрузить веса&quot; отвечает за одноименное действие (перед загрузкой весов необходимо привести
+нейросеть в то состояние, в котором загружаемые веса сохранялись).</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+    </widget>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>635</width>
+     <width>648</width>
      <height>21</height>
     </rect>
    </property>
