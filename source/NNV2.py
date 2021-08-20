@@ -33,6 +33,9 @@ class Neiron:
         self.input = np.dot(self.weights, inputArr)
         #self.output = self.ActivationFunc(self.input)
         return self.input
+    def query2(self, inputArr, count):       #For 2nd hidden
+        self.input = np.dot(self.weights[count], inputArr)
+        return self.input
     def setOutput(self):
         self.output = self.ActivationFunc(self.input)
         pass
@@ -40,16 +43,16 @@ class Neiron:
     def backProp(self, inputError, oWeights):
         self.error = np.dot(oWeights.T, inputError)
         return self.error
-    
-    def changeWeights(self, inputArr):
-        #Что-то из этого было матрицей, а что-то - np.array()
-        #из-за чего numpy ругался
-        #просто приводим значения к 1-му типу
-        #self.output = np.reshape(np.array(self.output), (5,1))
-        #self.error = np.reshape(np.array(self.error), (5,1))
 
+
+    def changeWeights(self, inputArr):
         self.weights += self.lr * np.dot((self.error * self.output * (1.0 - self.output)), np.transpose(inputArr))
         return
+    def changeWeights2(self, inputArr, count):   #For 2nd hidden
+        #Гм, как бэ, у нас 5 нейронов в 1-м слое, 5 во втором, и для каждого нейрона 1-го слоя(скрытого)
+        #нужен свой набор весов, который будет меняться
+        self.weights[count] += self.lr * np.dot((self.error * self.output * (1.0 - self.output)), np.transpose(inputArr))
+        pass
     ##
     def getWeights(self):
         return self.weights
@@ -107,7 +110,11 @@ class neuralNetwork2:
             self.HiddenLayer1.append(Neiron(randWeights(self.hNodes, self.iNodes), self.lr))
         #hidden neir layer #2
         for i in range(self.HiddenLayer2Count):
-            self.HiddenLayer2.append(Neiron(randWeights(self.hNodes, self.hNodes), self.lr))
+            finalWeights = []
+            for j in range(self.HiddenLayer2Count):
+                finalWeights.append(randWeights(self.hNodes, self.hNodes))
+
+            self.HiddenLayer2.append(Neiron(finalWeights, self.lr))
         #final output neiron/последний нейрон, покач-то, всегда будет 1
         finalWeights = [] #генерится массив с матрицами весов(в зависимости от количества нейронов ..
         #...в предыдущем слое)
@@ -132,7 +139,7 @@ class neuralNetwork2:
         for i in range(self.HiddenLayer2Count):
             temp = np.zeros((self.hNodes,1))
             for j in range(len(TempValArr1st)):
-                temp += self.HiddenLayer2[i].query(TempValArr1st[j])
+                temp += self.HiddenLayer2[i].query2(TempValArr1st[j], j)
             #....и прогоняем их через сигмоиду перед отправкой на следующий этап
             TempValArr2nd.append(sigmoid(temp))
             #Также пока-что назначаем им выходные значения
@@ -158,13 +165,13 @@ class neuralNetwork2:
             backProp2 = self.HiddenLayer2[i].backProp(FinalError, self.FN.weights[i])
             for j in range(self.HiddenLayer1Count):
                 #..далее, эта ошибка передается КАЖДОМУ нейрону 1-го скрытого слоя...
-                backProp1 = self.HiddenLayer1[j].backProp(backProp2, self.HiddenLayer2[i].weights)
+                backProp1 = self.HiddenLayer1[j].backProp(backProp2, self.HiddenLayer2[i].weights[j])
                 #...и тут же меняются веса этого нейрона
                 self.HiddenLayer1[j].changeWeights(inputs)
             #затем, меняем веса самого нейрона 2-го слоя, от которого искали ошибку, и процесс повторяется,
             #но уже с i+1 нейроном 2-го слоя
             for k in range(len(TempValArr1st)):
-                self.HiddenLayer2[i].changeWeights(TempValArr1st[k])
+                self.HiddenLayer2[i].changeWeights2(TempValArr1st[k],k)
         
         pass
 
@@ -182,7 +189,7 @@ class neuralNetwork2:
         for i in range(self.HiddenLayer2Count):
             temp = np.zeros((self.hNodes,1))
             for j in range(len(TempValArr1st)):
-                temp += self.HiddenLayer2[i].query(TempValArr1st[j])
+                temp += self.HiddenLayer2[i].query2(TempValArr1st[j],j)
             #....и прогоняем их через сигмоиду перед отправкой на следующий этап
             TempValArr2nd.append(sigmoid(temp))
             #Также покачто назначаем им выходные значения
@@ -201,6 +208,10 @@ class neuralNetwork2:
         pass
     def randWeights4H2(self):
         for i in range(self.HiddenLayer2Count):
+            finalWeights = [] 
+            for j in range(self.HiddenLayer2Count):
+                finalWeights.append(randWeights(self.oNodes, self.hNodes))
+
             self.HiddenLayer2[i].setWeights(randWeights(self.hNodes, self.hNodes))
         pass
     def randWeights4F(self):
@@ -315,5 +326,6 @@ def test():
     print(NN.query(x2))
     print(NN.query(x3))
 
-#test()
+test()
+
 
