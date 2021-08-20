@@ -246,7 +246,8 @@ class NNControl(QtCore.QObject):
             for i in range(len(HN)):
                 self.NN.setWeights1st(HN[i],i)
             for i in range(len(HN2)):
-                self.NN.setWeights2nd(HN2[i], i)
+                for j in range(len(HN2[i])):
+                    self.NN.setWeights2nd(HN2[i][j], i)
             self.NN.setFinalNeironWeights(FN[0])
         except:
             self.DebugSignal.emit("Несоответствие весов и нейронов!", "error")

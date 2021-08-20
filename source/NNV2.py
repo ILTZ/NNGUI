@@ -111,7 +111,7 @@ class neuralNetwork2:
         #hidden neir layer #2
         for i in range(self.HiddenLayer2Count):
             finalWeights = []
-            for j in range(self.HiddenLayer2Count):
+            for j in range(self.HiddenLayer1Count):
                 finalWeights.append(randWeights(self.hNodes, self.hNodes))
 
             self.HiddenLayer2.append(Neiron(finalWeights, self.lr))
@@ -209,10 +209,10 @@ class neuralNetwork2:
     def randWeights4H2(self):
         for i in range(self.HiddenLayer2Count):
             finalWeights = [] 
-            for j in range(self.HiddenLayer2Count):
-                finalWeights.append(randWeights(self.oNodes, self.hNodes))
+            for j in range(self.HiddenLayer1Count):
+                finalWeights.append(randWeights(self.hNodes, self.hNodes))
 
-            self.HiddenLayer2[i].setWeights(randWeights(self.hNodes, self.hNodes))
+            self.HiddenLayer2[i].setWeights(finalWeights)
         pass
     def randWeights4F(self):
         finalWeights = [] 
@@ -306,11 +306,11 @@ class neuralNetwork2:
         self.FN.setWeights(weights)
         
 def test():
-    x = [1.0, 1.0, 1.0, 1.0, 1.0]
-    x2 = [1.0, 1.0, 1.0, 1.0, 0.0]
+    x = [1.0, 1.0, 1.0, 1.0]
+    x2 = [1.0, 1.0, 1.0, 0.0]
     y = [1.0]
     y2 = [0.8]
-    x3 = [1.0, 1.0, 1.0, 0.0, 0.0]
+    x3 = [1.0, 1.0, 0.0, 0.0]
     y3 = [0.6]
 
     NN = neuralNetwork2(def_inputN, def_hiddenN, def_outputN, def_learnRate)
@@ -318,7 +318,7 @@ def test():
     #for i in range(def_learnLoop):
     #    NN.learnProcess(x,y)
 
-    for i in range(10000):
+    for i in range(100):
         NN.learnProcess(x,y)
         NN.learnProcess(x2, y2)
         NN.learnProcess(x3, y3)
@@ -326,6 +326,6 @@ def test():
     print(NN.query(x2))
     print(NN.query(x3))
 
-test()
+#test()
 
 
