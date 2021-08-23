@@ -58,6 +58,10 @@ class Neiron:
         return self.weights
     def setWeights(self, newWeights):
         self.weights = newWeights
+    def setWeights2(self, newWeights):
+        for i in range(len(newWeights)):
+            self.weights[i] = newWeights[i]
+        pass
 
 class FinalNeiron:
     def __init__(self, iWeights, learnRate):
@@ -89,6 +93,9 @@ class FinalNeiron:
         return self.weights
     def setWeights(self, newWeights):
         self.weights = newWeights
+        pass
+
+
 
 class neuralNetwork2:
     def __init__(self, inputNodes, hiddenNodes, outputNodes, learnRate):
@@ -113,6 +120,7 @@ class neuralNetwork2:
             finalWeights = []
             for j in range(self.HiddenLayer1Count):
                 finalWeights.append(randWeights(self.hNodes, self.hNodes))
+
 
             self.HiddenLayer2.append(Neiron(finalWeights, self.lr))
         #final output neiron/последний нейрон, покач-то, всегда будет 1
@@ -298,7 +306,7 @@ class neuralNetwork2:
         for el in self.HiddenLayer2:
             tempArr.append(el.getWeights())
     def setWeights2nd(self, weights, count):
-        self.HiddenLayer2[count].setWeights(weights)
+            self.HiddenLayer2[count].setWeights2(weights)
     #########
     def getFinalNeironWeights(self): #Final layer(final neiron)
         return self.FN.getWeights()
