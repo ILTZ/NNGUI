@@ -395,8 +395,8 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.UpLoader.setPath(path)
         pass
     def loadFile(self):
-        #Делегировать открытие окна UpLoader-у низя(т.к. нужен parent, а объекты с 
-        # parent-ом низя передать в отдельный поток)
+        #self.UpLoader.showPathWindow()
+
         path = QFileDialog.getOpenFileName(self, 'Open file', filter=("TextFiles (*.txt *.xlsx)"))
         if (path[0] == ""):
             print("UnLoaded")
@@ -481,6 +481,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         pass
     def stopLearn(self):        #"Стоп" обучения сети
         self.INT.stopSignal = True
+        pass
 
     def loadWeights(self):      #Загрузка весов
         path = QFileDialog.getOpenFileName(self, 'Open file')
