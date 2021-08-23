@@ -164,9 +164,7 @@ class neuralNetwork2:
         #Финальная ошибка нейронной сети
         FinalError = targets - finalTemp
         self.FN.error = FinalError
-        #Смена КАЖДОГО набора весов на финальном нейроне
-        for i in range(len(TempValArr2nd)):
-            self.FN.changeWeights(TempValArr2nd[i], i)
+
         
         #Фуууух, сначала вычисляем ошибку на i-ом нейроне 2-го скрытого слоя...
         for i in range(self.HiddenLayer2Count):
@@ -181,6 +179,10 @@ class neuralNetwork2:
             for k in range(len(TempValArr1st)):
                 self.HiddenLayer2[i].changeWeights2(TempValArr1st[k],k)
         
+        #Смена КАЖДОГО набора весов на финальном нейроне
+        for i in range(len(TempValArr2nd)):
+            self.FN.changeWeights(TempValArr2nd[i], i)
+            
         pass
 
     def query(self, inputArr):

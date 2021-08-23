@@ -231,8 +231,13 @@ class NNControl(QtCore.QObject):
         tempArr3 = []
         tempArr3.append(self.NN.FN.getWeights())
 
-        np.savez(path, tempArr, tempArr2, tempArr3)
+        try:
+            np.savez(path, tempArr, tempArr2, tempArr3)
+        except:
+            self.DebugSignal.emit("Невозможно сохранить!", "error")
+            return
 
+        self.DebugSignal.emit("Веса сохранены!", "info")
         pass
     def loadWeights(self, path):
         allArr = np.load(path)
