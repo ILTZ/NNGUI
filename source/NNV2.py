@@ -115,11 +115,13 @@ class neuralNetwork2:
         #hidden neir layer #1
         for i in range(self.HiddenLayer1Count):
             self.HiddenLayer1.append(Neiron(randWeights(self.hNodes, self.iNodes), self.lr))
+            #self.HiddenLayer1.append(Neiron(np.ones((self.hNodes, self.iNodes)), self.lr))
         #hidden neir layer #2
         for i in range(self.HiddenLayer2Count):
             finalWeights = []
             for j in range(self.HiddenLayer1Count):
                 finalWeights.append(randWeights(self.hNodes, self.hNodes))
+                #finalWeights.append(np.ones((self.hNodes, self.hNodes)))
 
 
             self.HiddenLayer2.append(Neiron(finalWeights, self.lr))
@@ -128,6 +130,7 @@ class neuralNetwork2:
         #...в предыдущем слое)
         for i in range(self.HiddenLayer2Count):
             finalWeights.append(randWeights(self.oNodes, self.hNodes))
+            #finalWeights.append(np.ones((self.oNodes, self.hNodes)))
 
         self.FN = FinalNeiron(finalWeights, self.lr)
 

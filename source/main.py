@@ -3,7 +3,6 @@ import sys
 import GUI
 
 
-
 def main():
     app = QtWidgets.QApplication(sys.argv)
     
@@ -18,11 +17,15 @@ def main():
 
 
 
+
 if __name__ == '__main__':
     main()
+  
     
- 
 
+   
+
+    pass
     
 
     
