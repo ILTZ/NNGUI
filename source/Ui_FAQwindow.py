@@ -16,7 +16,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(648, 803)
+        MainWindow.resize(648, 842)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(filenameIcon), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
@@ -110,6 +110,13 @@ class Ui_MainWindow(object):
         self.label_6.setFont(font)
         self.label_6.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.label_6.setObjectName("label_6")
+        self.label_7 = QtWidgets.QLabel(self.centralwidget)
+        self.label_7.setGeometry(QtCore.QRect(20, 760, 611, 41))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.label_7.setFont(font)
+        self.label_7.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.label_7.setObjectName("label_7")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 648, 21))
@@ -159,3 +166,5 @@ class Ui_MainWindow(object):
 "на кнопку \"Сохранить веса\". \n"
 "\"Загрузить веса\" отвечает за одноименное действие (перед загрузкой весов необходимо привести\n"
 "нейросеть в то состояние, в котором загружаемые веса сохранялись)."))
+        self.label_7.setText(_translate("MainWindow", "Более подробно про каждый раздел нейросети можно узнать, кликнув по кнопке \"Помощь\", а также \n"
+"кнопке \"Подсказка\" в соответствующих разделах."))

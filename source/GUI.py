@@ -5,6 +5,10 @@ from PyQt5.QtWidgets import QFileDialog, QMessageBox
 import Ui_shield
 import Ui_startWindow
 import Ui_FAQwindow
+import Ui_helpLearn
+import Ui_helpQuery
+import Ui_helpProp
+
 
 import numpy as np
 
@@ -27,23 +31,30 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
 
+        self.oNodesIn.setEnabled(False)
+
         ##SubWindows
         self.startTitle = GUIstartWindow()
         self.startTitle.finished.connect(self.show)
         self.startTitle.FAQsig.connect(self.showAboutWindow)
         self.FAQTitle = GUIFaqWin()
+
+        self.helpLearnTitle = GUIhelpLearn()
+        self.helpQueryWindow = GUIhelpQuery()
+        self.helpPropWindow = GUIhelpProp()
         ################################################################
         #____________________________________________________start slots
         #Вкладка "Обучение"
         self.learnStartBtn.clicked.connect(self.startTrain_Act)
         self.StopBtn.clicked.connect(self.stopTrain_Act)
-
+        self.learnHelpBtn.clicked.connect(self.showHelpLearnWindow_Act)
         self.learnFAQBtn.clicked.connect(self.changeVisFAQLearn_Act)
         self.showFAQLearn = False
         self.FAQLearnBox.setVisible(False)
         ########################################################
         #Вкладка "Прогон"
         self.queryBtn.clicked.connect(self.defQuery_Act)
+        self.queryHelpBtn.clicked.connect(self.showHelpQueryHelpWindow_Act)
         ########################################################
         #Вкладка "Настройки"
         self.LoadWeightsBtn.clicked.connect(self.loadWeights_Act)
@@ -58,6 +69,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.setingsFAQBtn.clicked.connect(self.changeVisFAQSet_Act)
         self.showFAQSet = False 
         self.FAQSettingsBox.setVisible(False)
+        self.settingsHelpBtn.clicked.connect(self.showHelpPropWindow_Act)
 
         self.tabWidget_2.tabBarClicked.connect(self.showParams) #Чтобы во владке всегда стояли текущие параметры сети
         #########################################################
@@ -176,6 +188,25 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
     def setVisible4Input(self, param):  #Когда данные берутся из внешнего файла, боксы для входных значений нам уже не нужны
         self.inputValuesBox.setVisible(param)
         self.targetValBox.setVisible(param)
+        pass
+
+    def showHelpLearnTitle(self):
+        self.helpLearnTitle.close()
+        self.helpPropWindow.close()
+
+        self.helpLearnTitle.show()
+        pass
+    def showHelpQueryTitle(self):
+        self.helpLearnTitle.close()
+        self.helpPropWindow.close()
+
+        self.helpQueryWindow.show()
+        pass
+    def showHelpPropTitle(self):
+        self.helpLearnTitle.close()
+        self.helpQueryWindow.close()
+
+        self.helpPropWindow.show()
         pass
     #Очистка боксов от вводимых пользователем значений
     def clearLearnBoxes(self):
@@ -573,7 +604,16 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
     def changeVisFAQQuery_Act(self):
 
         pass
-   
+    def showHelpLearnWindow_Act(self):
+        self.showHelpLearnTitle()
+        pass
+    def showHelpQueryHelpWindow_Act(self):
+        self.showHelpQueryTitle()
+        pass
+    def showHelpPropWindow_Act(self):
+        self.showHelpPropTitle()
+        pass
+
 #########################################
 ##Стартовое окно с лого/авторами и прочим
 class GUIstartWindow(QtWidgets.QMainWindow, Ui_startWindow.Ui_MainWindow):
@@ -600,6 +640,7 @@ class GUIstartWindow(QtWidgets.QMainWindow, Ui_startWindow.Ui_MainWindow):
         self.FAQsig.emit()
         pass
     pass
+
 ####################
 ##Окно "О программе"
 class GUIFaqWin(QtWidgets.QMainWindow, Ui_FAQwindow.Ui_MainWindow):
@@ -607,5 +648,23 @@ class GUIFaqWin(QtWidgets.QMainWindow, Ui_FAQwindow.Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
     
-    
-        
+###################
+##Окно помощи "Обучение"
+class GUIhelpLearn(QtWidgets.QMainWindow, Ui_helpLearn.Ui_helpWindow)  :
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+###################
+##Окно помощи "Опрос"
+class GUIhelpQuery(QtWidgets.QMainWindow, Ui_helpQuery.Ui_helpWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+###################
+##Окно помощи "Настройки"
+class GUIhelpProp(QtWidgets.QMainWindow, Ui_helpProp.Ui_helpWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)     

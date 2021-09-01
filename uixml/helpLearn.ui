@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>helpWindow</class>
+ <widget class="QMainWindow" name="helpWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>662</width>
+    <height>521</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Помощь</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../source/resources/icon.png</normaloff>../source/resources/icon.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGroupBox" name="textGroupBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>641</width>
+      <height>541</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="title">
+     <string>Обучение</string>
+    </property>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>30</y>
+       <width>611</width>
+       <height>501</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>В разделе &quot;Обучение&quot; проходит процесс выбора параметров, на которые будет
+настраиваться нейросеть.
+Данные для нейросети (выборка) могут быть как заданы в ручную, так и 
+выбраны из файла (при помощи кнопки в &quot;Меню&quot; в левом верхнем углу).
+При задании данных в ручную необходимо ввести значения в слоты &quot;Входные
+значения&quot;, а также целевое для этих данных значение в слот &quot;Целевое значение&quot;.
+Загрузить выборку из файла можно в случае, если файл имеет расширение
+&quot;.txt&quot; и &quot;.xlsx&quot;. Для корректного чтение необходимо, чтобы:
+1) Если файл имеет расширение &quot;.txt&quot; - значения должны быть введены в 
+формате &quot;X.X,X.X,X.X,X.X_/t_Y.Y&quot;, где X.X - одно из входных значений, Y.Y - 
+выходное значение, а _/t_ - табуляция (кнопка &quot;Tab&quot;);
+2) Если файл имеет расширение &quot;.xlsx&quot; - одно значение должно занимать одну
+ячейку (число должно быть разделено точкой), а последнее значение в строке
+должно быть целевым для данной строки.
+Кнопки &quot;Старт&quot; и &quot;Стоп&quot; выполняют одноименные действия в процессе
+тренировки.
+&quot;Оценка точности&quot; отвечает за то, на сколько корректно настроилась нейросеть
+на представленную выборку, и работает только в случае загрузки выборки из 
+файла. Перед стартом тренировки выберите нужную погрешность, и после
+завершения тренировки в строке &quot;Значение&quot; появится значение от 0.0 до 1.0,
+где 0.0 - оценка точности неудовлетворительна, а 1.0 - сеть настроена точно
+(относительно заданной погрешности).</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>662</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
