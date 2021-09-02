@@ -132,6 +132,8 @@ class FileUpLoader(QObject):
             inputValues.append(floatVal)
             targetValues.append(floatTarget)
 
+        n.close()
+
         self.inputValues = inputValues
         self.targetValues = targetValues
         self.correctSignal.emit(True)
@@ -169,7 +171,7 @@ class FileUpLoader(QObject):
             self.correctSimbols.emit("Некорректные данные в файле!", 'error')
             return
             
-
+        
         self.inputValues = inputValues
         self.targetValues = targetValues
         self.correctSignal.emit(True)

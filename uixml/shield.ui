@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1164</width>
-    <height>508</height>
+    <height>505</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -41,7 +41,7 @@
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <property name="elideMode">
      <enum>Qt::ElideLeft</enum>
@@ -1502,14 +1502,14 @@ float(с плавающей точкой). </string>
        <property name="geometry">
         <rect>
          <x>730</x>
-         <y>280</y>
+         <y>260</y>
          <width>231</width>
-         <height>141</height>
+         <height>171</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>8</pointsize>
+         <pointsize>10</pointsize>
          <weight>50</weight>
          <bold>false</bold>
         </font>
@@ -1616,26 +1616,6 @@ float(с плавающей точкой). </string>
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
-      <widget class="QPushButton" name="clearBtn">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>350</y>
-         <width>131</width>
-         <height>51</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Сбросить параметры</string>
-       </property>
-      </widget>
      </widget>
      <widget class="QPushButton" name="setingsFAQBtn">
       <property name="geometry">
@@ -1657,9 +1637,30 @@ float(с плавающей точкой). </string>
        <string>Подсказка</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="clearBtn">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>340</y>
+        <width>131</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Сбросить параметры</string>
+      </property>
+     </widget>
      <zorder>FAQSettingsBox</zorder>
      <zorder>groupBoxLink</zorder>
      <zorder>setingsFAQBtn</zorder>
+     <zorder>clearBtn</zorder>
     </widget>
    </widget>
   </widget>

@@ -1,5 +1,10 @@
-from os import path
-from PyQt5 import QtWidgets, QtCore
+import os
+dirname = os.path.dirname(__file__)
+filenameIcon = os.path.join(dirname, 'resources/icon.png')
+filenameErrorIcon = os.path.join(dirname, 'resources/errorIcon.png')
+filenameInfoIcon = os.path.join(dirname, 'resources/infoIcon.png')
+
+from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 
 import Ui_shield
@@ -17,6 +22,7 @@ import numpy as np
 from Int4NN import NNControl
 from fileUploader import FileUpLoader
 
+
 #def params NN
 def_inputN = 5
 def_hiddenN = 5
@@ -31,8 +37,18 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
 
-        self.oNodesIn.setEnabled(False)
+        self.icon = QtGui.QIcon()
+        self.icon.addPixmap(QtGui.QPixmap(filenameIcon), QtGui.QIcon.Normal, QtGui.QIcon.Off) 
+        self.setWindowIcon(self.icon)
 
+        self.errorIcon = QtGui.QIcon()
+        self.errorIcon.addPixmap(QtGui.QPixmap(filenameErrorIcon), QtGui.QIcon.Normal, QtGui.QIcon.Off) 
+
+        self.infoIcon = QtGui.QIcon()
+        self.infoIcon.addPixmap(QtGui.QPixmap(filenameInfoIcon), QtGui.QIcon.Normal, QtGui.QIcon.Off) 
+
+        self.oNodesIn.setEnabled(False) ##Not work yet
+        self.goToClose = False
         ##SubWindows
         self.startTitle = GUIstartWindow()
         self.startTitle.finished.connect(self.show)
@@ -40,8 +56,13 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.FAQTitle = GUIFaqWin()
 
         self.helpLearnTitle = GUIhelpLearn()
+        self.helpLearnTitle.setWindowIcon(self.icon)
+
         self.helpQueryWindow = GUIhelpQuery()
+        self.helpQueryWindow.setWindowIcon(self.icon)
+        
         self.helpPropWindow = GUIhelpProp()
+        self.helpPropWindow.setWindowIcon(self.icon)
         ################################################################
         #____________________________________________________start slots
         #Вкладка "Обучение"
@@ -216,7 +237,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.inputVal4.clear()
         self.inputVal5.clear()
         self.targetVal.clear()
-        self.loopCount.clear()
     def clearQueryBoxes(self):
         self.inputVal1_2.clear()
         self.inputVal2_2.clear()
@@ -243,17 +263,21 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.showDebugDialog(mes, 'info')
         pass
     def showDebugDialog(self, message, type):       #Окно для отправки в него дебаг сообщений  
+        if self.goToClose:
+            return
+
         msgBox = QMessageBox()
-        
         msgBox.setText(message)
         
         #msgBox.setStandardButtons(QMessageBox.standardButtons)
         if type == 'error':
             msgBox.setWindowTitle("ERROR")
-            msgBox.setIcon(QMessageBox.Warning)
+            msgBox.setWindowIcon(self.errorIcon)
+            #msgBox.setIcon(QMessageBox.Warning)
         elif type == 'info':
+            msgBox.setWindowIcon(self.infoIcon)
             msgBox.setWindowTitle("INFO")
-            msgBox.setIcon(QMessageBox.Information)
+            #msgBox.setIcon(QMessageBox.Information)
 
         self.ReadThread.quit()
         msgBox.exec_()
@@ -454,6 +478,29 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
     #
     #__________________________________________________Load from file end
     #####################################################################
+    
+    def closeEvent(self, event):
+        result = QMessageBox.question(self, "Exit",
+                                      "Закрыть программу?",
+                                      QMessageBox.Yes | QMessageBox.No)
+        event.ignore()
+
+        if result == QMessageBox.Yes:
+            self.goToClose = True
+
+            self.INT.stopSignal = True
+            self.helpLearnTitle.close()
+            self.helpQueryWindow.close()
+            self.helpPropWindow.close()
+            self.FAQTitle.close()
+            
+            
+            event.accept()
+
+            
+
+        pass
+
 
     #######################################################
     ##____________________________________Работа с сеткой
@@ -477,6 +524,8 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.clearAll()
         self.slotsEnDis()
         self.INT.backToDefaultParams()
+        self.showDebugDialog("Параметры сброшены.", 'info')
+        self.showParams(2)
         pass
 
     def startLearn(self):       #"Старт" обучения сетки
