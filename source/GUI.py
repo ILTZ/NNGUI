@@ -37,6 +37,8 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
 
+        
+
         self.icon = QtGui.QIcon()
         self.icon.addPixmap(QtGui.QPixmap(filenameIcon), QtGui.QIcon.Normal, QtGui.QIcon.Off) 
         self.setWindowIcon(self.icon)
@@ -681,16 +683,33 @@ class GUIstartWindow(QtWidgets.QMainWindow, Ui_startWindow.Ui_MainWindow):
         self.StartWorkBtn.clicked.connect(self.goToProgram)
         self.FAQBtn.clicked.connect(self.showFAQ)
 
+
         self.show()
+        self.fastClose = True
 
 
 
     def goToProgram(self):
+        self.fastClose = False
         self.finished.emit()
         self.close()
         pass
     def showFAQ(self):
         self.FAQsig.emit()
+        pass
+
+    def closeEvent(self, event):
+        if (self.fastClose):
+            result = QMessageBox.question(self, "Выход",
+                                          "Закрыть программу?",
+                                          QMessageBox.Yes | QMessageBox.No)
+            event.ignore()
+
+            if result == QMessageBox.Yes:
+                event.accept()
+
+            
+
         pass
     pass
 
