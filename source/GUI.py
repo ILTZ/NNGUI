@@ -480,7 +480,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
     #####################################################################
     
     def closeEvent(self, event):
-        result = QMessageBox.question(self, "Exit",
+        result = QMessageBox.question(self, "Выход",
                                       "Закрыть программу?",
                                       QMessageBox.Yes | QMessageBox.No)
         event.ignore()
@@ -495,6 +495,10 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             self.FAQTitle.close()
             
             
+            if (self.ReadThread.isRunning()):
+                self.ReadThread.terminate()
+                #self.ReadThread.wait()
+
             event.accept()
 
             
