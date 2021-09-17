@@ -1,5 +1,6 @@
 import os
 dirname = os.path.dirname(__file__)
+filenameLogo = os.path.join(dirname, 'resources/logo.png')
 filenameIcon = os.path.join(dirname, 'resources/icon.png')
 filenameErrorIcon = os.path.join(dirname, 'resources/errorIcon.png')
 filenameInfoIcon = os.path.join(dirname, 'resources/infoIcon.png')
@@ -37,7 +38,10 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
 
-        
+
+
+
+        self.setFixedSize(self.size())
 
         self.icon = QtGui.QIcon()
         self.icon.addPixmap(QtGui.QPixmap(filenameIcon), QtGui.QIcon.Normal, QtGui.QIcon.Off) 
@@ -49,13 +53,20 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.infoIcon = QtGui.QIcon()
         self.infoIcon.addPixmap(QtGui.QPixmap(filenameInfoIcon), QtGui.QIcon.Normal, QtGui.QIcon.Off) 
 
+        
+
         self.oNodesIn.setEnabled(False) ##Not work yet
         self.goToClose = False
         ##SubWindows
         self.startTitle = GUIstartWindow()
         self.startTitle.finished.connect(self.show)
         self.startTitle.FAQsig.connect(self.showAboutWindow)
+
         self.FAQTitle = GUIFaqWin()
+        self.FAQTitle.setWindowIcon(self.icon)
+
+        self.startTitle.setWindowIcon(self.icon)
+        self.startTitle.setLogo(filenameLogo)
 
         self.helpLearnTitle = GUIhelpLearn()
         self.helpLearnTitle.setWindowIcon(self.icon)
@@ -682,11 +693,14 @@ class GUIstartWindow(QtWidgets.QMainWindow, Ui_startWindow.Ui_MainWindow):
 
         self.StartWorkBtn.clicked.connect(self.goToProgram)
         self.FAQBtn.clicked.connect(self.showFAQ)
-
+        self.setFixedSize(self.size())
 
         self.show()
         self.fastClose = True
 
+    def setLogo(self, path):
+        self.LogoLabel.setPixmap(QtGui.QPixmap(path))
+        pass
 
 
     def goToProgram(self):
@@ -719,6 +733,7 @@ class GUIFaqWin(QtWidgets.QMainWindow, Ui_FAQwindow.Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.setFixedSize(self.size())
     
 ###################
 ##Окно помощи "Обучение"
@@ -726,6 +741,7 @@ class GUIhelpLearn(QtWidgets.QMainWindow, Ui_helpLearn.Ui_helpWindow)  :
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.setFixedSize(self.size())
 
 ###################
 ##Окно помощи "Опрос"
@@ -733,10 +749,12 @@ class GUIhelpQuery(QtWidgets.QMainWindow, Ui_helpQuery.Ui_helpWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.setFixedSize(self.size())
 
 ###################
 ##Окно помощи "Настройки"
 class GUIhelpProp(QtWidgets.QMainWindow, Ui_helpProp.Ui_helpWindow):
     def __init__(self):
         super().__init__()
-        self.setupUi(self)     
+        self.setupUi(self)  
+        self.setFixedSize(self.size())   

@@ -49,6 +49,12 @@
       <height>41</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Times New Roman</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Начать работу</string>
     </property>
@@ -73,8 +79,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Calibri</family>
-      <pointsize>12</pointsize>
+      <family>Times New Roman</family>
+      <pointsize>14</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -97,21 +103,22 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
+      <family>Times New Roman</family>
+      <pointsize>12</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
      </font>
     </property>
     <property name="frameShape">
      <enum>QFrame::WinPanel</enum>
     </property>
     <property name="text">
-     <string>
+     <string>Руководитель проекта: Побединских 
+                                       Владимир
+                                       Викторович
 
-Руководитель проекта: Побединских В.В.
-
-
-Разработал:                     Писарев И.Д.</string>
+Разработал:                     Писарев Илья 
+                                        Дмитриевич</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -125,6 +132,12 @@
       <width>111</width>
       <height>41</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Times New Roman</family>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>О программе</string>
