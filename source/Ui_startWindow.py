@@ -26,6 +26,7 @@ class Ui_MainWindow(object):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("f:\\Dev\\neyroNet\\code\\NNCopyVsCode\\NNGUI\\uixml\\resources/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
+        MainWindow.setAutoFillBackground(False)
         MainWindow.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
         MainWindow.setAnimated(False)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -138,9 +139,9 @@ class Ui_MainWindow(object):
         self.StartWorkBtn.setText(_translate("MainWindow", "Начать работу"))
         self.MainTextLabel.setText(_translate("MainWindow", "НЕЙРОННАЯ СЕТЬ С ОБРАТНЫМ\n"
 "РАСПРОСТРАНЕНИЕМ ОШИБКИ"))
-        self.DevLabel.setText(_translate("MainWindow", "Руководитель:       проф., д.т.н. Побединский Владимир Викторович\n"
+        self.DevLabel.setText(_translate("MainWindow", "Разработал:           Писарев Илья Дмитриевич\n"
 "\n"
-"Разработал:           Писарев Илья Дмитриевич"))
+"Руководитель:       проф., д.т.н. Побединский В. В."))
         self.FAQBtn.setText(_translate("MainWindow", "О программе"))
         self.label.setText(_translate("MainWindow", "Уральский государственный\n"
 "лесотехнический университет"))

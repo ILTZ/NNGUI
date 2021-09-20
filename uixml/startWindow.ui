@@ -178,9 +178,9 @@
      <enum>QFrame::NoFrame</enum>
     </property>
     <property name="text">
-     <string>Руководитель:       проф., д.т.н. Побединский Владимир Викторович
+     <string>Разработал:           Писарев Илья Дмитриевич
 
-Разработал:           Писарев Илья Дмитриевич</string>
+Руководитель:       проф., д.т.н. Побединский В. В.</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
