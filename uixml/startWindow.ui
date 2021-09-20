@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -10,6 +13,18 @@
     <height>544</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::DefaultContextMenu</enum>
+  </property>
+  <property name="acceptDrops">
+   <bool>false</bool>
+  </property>
   <property name="windowTitle">
    <string>УГЛТУ</string>
   </property>
@@ -17,24 +32,36 @@
    <iconset>
     <normaloff>resources/icon.png</normaloff>resources/icon.png</iconset>
   </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonIconOnly</enum>
+  </property>
+  <property name="animated">
+   <bool>false</bool>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="LogoLabel">
     <property name="geometry">
      <rect>
-      <x>-10</x>
+      <x>640</x>
       <y>0</y>
-      <width>541</width>
-      <height>191</height>
+      <width>201</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="text">
      <string/>
     </property>
+    <property name="textFormat">
+     <enum>Qt::RichText</enum>
+    </property>
     <property name="pixmap">
-     <pixmap>../../../logo.png</pixmap>
+     <pixmap>../source/resources/logo.png</pixmap>
     </property>
     <property name="scaledContents">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="wordWrap">
      <bool>false</bool>
@@ -43,8 +70,8 @@
    <widget class="QPushButton" name="StartWorkBtn">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>460</y>
+      <x>0</x>
+      <y>0</y>
       <width>111</width>
       <height>41</height>
      </rect>
@@ -71,22 +98,60 @@
    <widget class="QLabel" name="MainTextLabel">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>190</y>
+      <x>250</x>
+      <y>180</y>
       <width>381</width>
       <height>91</height>
      </rect>
     </property>
+    <property name="palette">
+     <palette>
+      <active>
+       <colorrole role="WindowText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </active>
+      <inactive>
+       <colorrole role="WindowText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </inactive>
+      <disabled>
+       <colorrole role="WindowText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>120</red>
+          <green>120</green>
+          <blue>120</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </disabled>
+     </palette>
+    </property>
     <property name="font">
      <font>
       <family>Times New Roman</family>
-      <pointsize>14</pointsize>
+      <pointsize>16</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
     <property name="text">
-     <string>Нейронная сеть</string>
+     <string>НЕЙРОННАЯ СЕТЬ С ОБРАТНЫМ
+РАСПРОСТРАНЕНИЕМ ОШИБКИ</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -95,30 +160,27 @@
    <widget class="QLabel" name="DevLabel">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>350</y>
-      <width>291</width>
-      <height>151</height>
+      <x>50</x>
+      <y>370</y>
+      <width>661</width>
+      <height>91</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>Times New Roman</family>
-      <pointsize>12</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
+      <pointsize>16</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="frameShape">
-     <enum>QFrame::WinPanel</enum>
+     <enum>QFrame::NoFrame</enum>
     </property>
     <property name="text">
-     <string>Руководитель проекта: Побединских 
-                                       Владимир
-                                       Викторович
+     <string>Руководитель:       проф., д.т.н. Побединский Владимир Викторович
 
-Разработал:                     Писарев Илья 
-                                        Дмитриевич</string>
+Разработал:           Писарев Илья Дмитриевич</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -127,8 +189,8 @@
    <widget class="QPushButton" name="FAQBtn">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>460</y>
+      <x>110</x>
+      <y>0</y>
       <width>111</width>
       <height>41</height>
      </rect>
@@ -152,16 +214,83 @@
      <bool>false</bool>
     </property>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>848</width>
-     <height>21</height>
-    </rect>
-   </property>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>10</y>
+      <width>251</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Times New Roman</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Уральский государственный
+лесотехнический университет</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>110</y>
+      <width>851</width>
+      <height>241</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../source/resources/startWindowPict.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>480</y>
+      <width>131</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Times New Roman</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Екатеринбург
+2021</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <zorder>LogoLabel</zorder>
+   <zorder>StartWorkBtn</zorder>
+   <zorder>DevLabel</zorder>
+   <zorder>FAQBtn</zorder>
+   <zorder>label</zorder>
+   <zorder>label_2</zorder>
+   <zorder>MainTextLabel</zorder>
+   <zorder>label_3</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

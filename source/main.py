@@ -3,6 +3,8 @@ import sys
 import GUI
 import os
 
+
+#Disable DPI scaling
 import ctypes
 awareness = ctypes.c_int()
 errorCode = ctypes.windll.shcore.GetProcessDpiAwareness(0, ctypes.byref(awareness))
@@ -10,7 +12,7 @@ print(awareness.value)
 errorCode = ctypes.windll.shcore.SetProcessDpiAwareness(0) 
 errorCode = ctypes.windll.shcore.GetProcessDpiAwareness(0, ctypes.byref(awareness))
 print(awareness.value)
-
+###################################################################################
 
 def setScaleDPI():
 

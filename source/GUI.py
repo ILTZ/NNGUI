@@ -1,5 +1,6 @@
 import os
 dirname = os.path.dirname(__file__)
+filepathStartSkin = os.path.join(dirname, 'resources/startWindowPict.png')
 filenameLogo = os.path.join(dirname, 'resources/logo.png')
 filenameIcon = os.path.join(dirname, 'resources/icon.png')
 filenameErrorIcon = os.path.join(dirname, 'resources/errorIcon.png')
@@ -40,6 +41,8 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
 
 
 
+        ######################################################
+        ##_________________________________________icons_start
 
         self.setFixedSize(self.size())
 
@@ -54,6 +57,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.infoIcon.addPixmap(QtGui.QPixmap(filenameInfoIcon), QtGui.QIcon.Normal, QtGui.QIcon.Off) 
 
         
+
 
         self.oNodesIn.setEnabled(False) ##Not work yet
         self.goToClose = False
@@ -76,9 +80,13 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         
         self.helpPropWindow = GUIhelpProp()
         self.helpPropWindow.setWindowIcon(self.icon)
+
+        ##____________________________________________icons_end
+        #######################################################
+
         ################################################################
         #____________________________________________________start slots
-        #Вкладка "Обучение"
+        #Вкладка "Learn"
         self.learnStartBtn.clicked.connect(self.startTrain_Act)
         self.StopBtn.clicked.connect(self.stopTrain_Act)
         self.learnHelpBtn.clicked.connect(self.showHelpLearnWindow_Act)
@@ -86,11 +94,11 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.showFAQLearn = False
         self.FAQLearnBox.setVisible(False)
         ########################################################
-        #Вкладка "Прогон"
+        #Вкладка "Query"
         self.queryBtn.clicked.connect(self.defQuery_Act)
         self.queryHelpBtn.clicked.connect(self.showHelpQueryHelpWindow_Act)
         ########################################################
-        #Вкладка "Настройки"
+        #Вкладка "Settings"
         self.LoadWeightsBtn.clicked.connect(self.loadWeights_Act)
         self.SaveWeightsBtn.clicked.connect(self.saveWeights_Act)
         self.RerandWeightsBtn.clicked.connect(self.randWeights_Act)
@@ -107,7 +115,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
 
         self.tabWidget_2.tabBarClicked.connect(self.showParams) #Чтобы во владке всегда стояли текущие параметры сети
         #########################################################
-        #Кнопки "Меню"
+        #Buttons "Menu"
         self.currentParamBtn.triggered.connect(self.currentParams_Act)
         self.loadFromFile.triggered.connect(self.loadFromFile_Act)
         self.FAQbtn.triggered.connect(self.showAboutWindow_Act)
@@ -126,7 +134,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         ####################################################################
         #_______________________________________________________start threads
         #############################
-        #Поток для процесса обучения#
+        #LearnProcess thread#
         self.learnFromFile = False
         self.LearnThread = QtCore.QThread()
         self.INT = NNControl()
@@ -142,7 +150,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.LearnThread.finished.connect(self.correctThread)
         self.INT.DebugSignal.connect(self.showDebugDialog)  #Debug signal
         ####################################
-        #Поток для процесса загрузки файлов#
+        #ReadFromFile thread#
         self.ReadThread = QtCore.QThread()
         self.UpLoader = FileUpLoader()
         
@@ -698,6 +706,8 @@ class GUIstartWindow(QtWidgets.QMainWindow, Ui_startWindow.Ui_MainWindow):
         self.show()
         self.fastClose = True
 
+        self.label_2.setPixmap(QtGui.QPixmap(filepathStartSkin))
+        
     def setLogo(self, path):
         self.LogoLabel.setPixmap(QtGui.QPixmap(path))
         pass
