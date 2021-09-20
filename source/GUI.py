@@ -59,7 +59,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         
 
 
-        self.oNodesIn.setEnabled(False) ##Not work yet
+        #self.oNodesIn.setEnabled(False) ##Not work yet
         self.goToClose = False
         ##SubWindows
         self.startTitle = GUIstartWindow()
@@ -478,6 +478,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             print("UnLoaded")
             return
         self.setFilePath(path[0])
+        self.UpLoader.setCountOfTargets(self.INT.getCurrentWHO())
         self.ReadThread.start()
         pass
     def setParametrsAfterRead(self):                #После загрузки из файла аплоадер подает сигнал, и GUI получает у него извлеченные из файла значения                                           
@@ -574,7 +575,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         targetArr = self.hand_target_val
         self.INT.setLFFStatus(False)
         self.INT.setInputVal(inputArr, targetArr, 0)
-
         self.LearnThread.start()
         pass
     def goToLearnFile(self):

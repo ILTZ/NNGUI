@@ -23,7 +23,7 @@ class loadFileWindow(QMainWindow, Ui_MainWindow):
 
         pass
 
-    def showFAQ(self):      #Чо такое .csv в кратце
+    def showFAQ(self):      
         if self.csvRBtn.isChecked():
             self.csvBox.setVisible(True)
         else:
@@ -69,6 +69,7 @@ class FileUpLoader(QObject):
 
         self.path = ''
 
+        self.countTarget = 0
 
         self.pathWindow = loadFileWindow()
         pass
@@ -77,6 +78,10 @@ class FileUpLoader(QObject):
         self.pathWindow.show()
         pass
 
+    def setCountOfTargets(self, val):
+        if (val > 1):
+            self.countTarget = val
+        pass
 
     def setPath(self, path):
         self.path = path
@@ -124,7 +129,10 @@ class FileUpLoader(QObject):
 
             try:
                 floatVal = [float(x) for x in stringVal.split(',')]
-                floatTarget = float(stringTarg)
+                #floatTarget = float(stringTarg)
+                floatTarget = [float(x) for x in stringTarg.split(',')]
+
+
             except:
                 self.correctSimbols.emit("Некорректные данные в файле!", "error")
                 return
@@ -159,7 +167,7 @@ class FileUpLoader(QObject):
                 tempIn = []
                 tempTar = []
                 for count in range(len(tempFull[i])):
-                    if (count < (len(tempFull[i]) - 1)):
+                    if (count < (len(tempFull[i]) - self.countTarget)):
                         x = float(tempFull[i][count])
                         tempIn.append(x)
                     else:

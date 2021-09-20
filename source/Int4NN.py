@@ -202,10 +202,13 @@ class NNControl(QtCore.QObject):
             count += 1
             value = self.NN.query(i)
 
-            
-            minVal = t[0] - self.performanceError
-            maxVal = t[0] + self.performanceError
-            if ((value < maxVal) and (value > minVal)):
+            inArrVal = 0
+            for count in range(len(value)):
+                minVal = t[0] - self.performanceError
+                maxVal = t[0] + self.performanceError
+                if ((value[count] < maxVal) and (value[count] > minVal)):
+                    inArrVal += 1
+            if (inArrVal == len(value)):
                 val += 1
 
         self.performanceRate = val/count
