@@ -39,8 +39,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
 
-
-
         ######################################################
         ##_________________________________________icons_start
 
@@ -55,9 +53,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
 
         self.infoIcon = QtGui.QIcon()
         self.infoIcon.addPixmap(QtGui.QPixmap(filenameInfoIcon), QtGui.QIcon.Normal, QtGui.QIcon.Off) 
-
-        
-
 
         #self.oNodesIn.setEnabled(False) ##Not work yet
         self.goToClose = False
@@ -613,6 +608,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             return
         self.outputLabel.setText(np.array2string(self.INT.defQuery(inputArr)))
         pass
+   
     #######################################################
     ##_____________________________________Функции кнопочек
     def btnLock(self, val):        #Лок кнопок при начале обучения

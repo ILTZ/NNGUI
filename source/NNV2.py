@@ -1,7 +1,6 @@
 import numpy as np
 import scipy.special as ss
 
-
 #activation func
 def sigmoid(x):
     return ss.expit(x)
@@ -11,7 +10,6 @@ def_inputN = 5
 def_hiddenN = 5
 def_outputN = 1
 def_learnRate = 0.3
-
 
 def_hidden1Capacity = 5
 def_hidden2Capacity = 5
@@ -31,7 +29,6 @@ class Neiron:
         
     def query(self, inputArr):
         self.input = np.dot(self.weights, inputArr)
-        #self.output = self.ActivationFunc(self.input)
         return self.input
     def query2(self, inputArr, count):       #For 2nd hidden
         self.input = np.dot(self.weights[count], inputArr)
@@ -94,7 +91,6 @@ class FinalNeiron:
     def setWeights(self, newWeights):
         self.weights = newWeights
         pass
-
 
 
 class neuralNetwork2:

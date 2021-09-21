@@ -1,5 +1,4 @@
 from PyQt5 import QtCore
-from NNVSCode import neuralNetwork
 from NNV2 import neuralNetwork2
 import numpy as np
 
