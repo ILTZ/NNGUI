@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'f:\Dev\neyroNet\code\NNCopyVsCode\NNGUI\uixml\helpProp.ui'
+# Form implementation generated from reading ui file 'f:\Dev\neyroNet\code\NNCopyVsCode\NNGUI\uixml\helpPropDialog.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -11,17 +11,12 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_helpWindow(object):
-    def setupUi(self, helpWindow):
-        helpWindow.setObjectName("helpWindow")
-        helpWindow.resize(670, 487)
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("f:\\Dev\\neyroNet\\code\\NNCopyVsCode\\NNGUI\\uixml\\../source/resources/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        helpWindow.setWindowIcon(icon)
-        self.centralwidget = QtWidgets.QWidget(helpWindow)
-        self.centralwidget.setObjectName("centralwidget")
-        self.textGroupBox = QtWidgets.QGroupBox(self.centralwidget)
-        self.textGroupBox.setGeometry(QtCore.QRect(10, 10, 641, 431))
+class Ui_htlpPropDialog(object):
+    def setupUi(self, htlpPropDialog):
+        htlpPropDialog.setObjectName("htlpPropDialog")
+        htlpPropDialog.resize(660, 460)
+        self.textGroupBox = QtWidgets.QGroupBox(htlpPropDialog)
+        self.textGroupBox.setGeometry(QtCore.QRect(10, 10, 641, 441))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
         font.setPointSize(14)
@@ -30,7 +25,7 @@ class Ui_helpWindow(object):
         self.textGroupBox.setFont(font)
         self.textGroupBox.setObjectName("textGroupBox")
         self.label = QtWidgets.QLabel(self.textGroupBox)
-        self.label.setGeometry(QtCore.QRect(20, 30, 621, 501))
+        self.label.setGeometry(QtCore.QRect(20, 30, 621, 411))
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(False)
@@ -38,23 +33,15 @@ class Ui_helpWindow(object):
         self.label.setFont(font)
         self.label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.label.setObjectName("label")
-        helpWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(helpWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 670, 21))
-        self.menubar.setObjectName("menubar")
-        helpWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(helpWindow)
-        self.statusbar.setObjectName("statusbar")
-        helpWindow.setStatusBar(self.statusbar)
 
-        self.retranslateUi(helpWindow)
-        QtCore.QMetaObject.connectSlotsByName(helpWindow)
+        self.retranslateUi(htlpPropDialog)
+        QtCore.QMetaObject.connectSlotsByName(htlpPropDialog)
 
-    def retranslateUi(self, helpWindow):
+    def retranslateUi(self, htlpPropDialog):
         _translate = QtCore.QCoreApplication.translate
-        helpWindow.setWindowTitle(_translate("helpWindow", "Помощь"))
-        self.textGroupBox.setTitle(_translate("helpWindow", "Настройки"))
-        self.label.setText(_translate("helpWindow", "В разделе \"Настройки\" отображены текущие параметры нейронной сети, \n"
+        htlpPropDialog.setWindowTitle(_translate("htlpPropDialog", "Помощь"))
+        self.textGroupBox.setTitle(_translate("htlpPropDialog", "Настройки"))
+        self.label.setText(_translate("htlpPropDialog", "В разделе \"Настройки\" отображены текущие параметры нейронной сети, \n"
 "которые могут быть изменены пользователем.\n"
 "Окна \"Количество входных/выходных значений\" отвечают за то, сколько\n"
 "значений будет приниматься нейросетью на вход, и сколько значений она при\n"

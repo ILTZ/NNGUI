@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>htlpPropDialog</class>
+ <widget class="QDialog" name="htlpPropDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>660</width>
+    <height>460</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Помощь</string>
+  </property>
+  <widget class="QGroupBox" name="textGroupBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>641</width>
+     <height>441</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Times New Roman</family>
+     <pointsize>14</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="title">
+    <string>Настройки</string>
+   </property>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>30</y>
+      <width>621</width>
+      <height>411</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>В разделе &quot;Настройки&quot; отображены текущие параметры нейронной сети, 
+которые могут быть изменены пользователем.
+Окна &quot;Количество входных/выходных значений&quot; отвечают за то, сколько
+значений будет приниматься нейросетью на вход, и сколько значений она при
+этом будет выводить (последняя функция ограничена).
+Окна &quot;Количество нейронов&quot; отвечают за количество нейронов с 1-м и 2-м
+скрытых слоях нейронной сети. 
+После изменения любых вышеприведенных параметров веса сети должны быть
+сгенерированы занаво (отвечает кнопка &quot;Сгенерировать новые веса&quot;).
+Окна &quot;Количество эпох&quot; и &quot;Количество циклов&quot; определяют то, на сколько долго
+сеть будет обучаться на представленной выборке (при выборке сыше 100
+позиций имеет смысл сократить количество циклов и увеличить количество эпох).
+&quot;Коэффициент обучения&quot; отвечает за то, на сколько сколько сильно сеть будет
+изменять свои веса в процессе обучения (где 0.0 - вообще не изменяет, 1.0 - 
+изменяет максимально возможно).
+После изменения любых параметров необходимо нажать на кнопку &quot;Изменить&quot;,
+чтобы новые настройки были приняты.
+Кнопки &quot;Сохранить/Загрузить веса&quot; отвечают за одноименные действия. Перед
+тем, как загрузить веса, необходимо привести параметры сети к тем, в которых
+эти веса были сохранены (сеть не будет подстраивать под веса автоматически).</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -10,11 +10,6 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 
 import Ui_shield
-import Ui_startWindow
-import Ui_FAQwindow
-import Ui_helpLearn
-import Ui_helpQuery
-import Ui_helpProp
 
 
 import numpy as np
@@ -85,9 +80,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.learnStartBtn.clicked.connect(self.startTrain_Act)
         self.StopBtn.clicked.connect(self.stopTrain_Act)
         self.learnHelpBtn.clicked.connect(self.showHelpLearnWindow_Act)
-        self.learnFAQBtn.clicked.connect(self.changeVisFAQLearn_Act)
-        self.showFAQLearn = False
-        self.FAQLearnBox.setVisible(False)
         ########################################################
         #Вкладка "Query"
         self.queryBtn.clicked.connect(self.defQuery_Act)
@@ -103,9 +95,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.clearBtn.clicked.connect(self.clearParams_Act)
         self.epochsLoopsBtn.clicked.connect(self.setNewLearnParams_Act)
 
-        self.setingsFAQBtn.clicked.connect(self.changeVisFAQSet_Act)
-        self.showFAQSet = False 
-        self.FAQSettingsBox.setVisible(False)
         self.settingsHelpBtn.clicked.connect(self.showHelpPropWindow_Act)
 
         self.tabWidget_2.tabBarClicked.connect(self.showParams) #Чтобы во владке всегда стояли текущие параметры сети
@@ -539,7 +528,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.learnLoops = def_loops
         self.hand_target_val = 0.0
         self.hand_input_arr.clear()
-        self.woLoadFromFileBoxFAQ.setVisible(True)
+
 
         self.showPercents(0)
         self.clearAll()
@@ -686,7 +675,9 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
 
 #########################################
 ##Стартовое окно с лого/авторами и прочим
-class GUIstartWindow(QtWidgets.QMainWindow, Ui_startWindow.Ui_MainWindow):
+import Ui_startDialog as SD
+
+class GUIstartWindow(QtWidgets.QDialog, SD.Ui_startDialog):
 
     finished = QtCore.pyqtSignal()
     FAQsig = QtCore.pyqtSignal()
@@ -735,7 +726,9 @@ class GUIstartWindow(QtWidgets.QMainWindow, Ui_startWindow.Ui_MainWindow):
 
 ####################
 ##Окно "О программе"
-class GUIFaqWin(QtWidgets.QMainWindow, Ui_FAQwindow.Ui_MainWindow):
+import Ui_FAQDialog as FD
+
+class GUIFaqWin(QtWidgets.QDialog, FD.Ui_FAQDialog):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -743,7 +736,9 @@ class GUIFaqWin(QtWidgets.QMainWindow, Ui_FAQwindow.Ui_MainWindow):
     
 ###################
 ##Окно помощи "Обучение"
-class GUIhelpLearn(QtWidgets.QMainWindow, Ui_helpLearn.Ui_helpWindow)  :
+import Ui_helpLearnDialog as HD
+
+class GUIhelpLearn(QtWidgets.QDialog, HD.Ui_helpLearnDialog)  :
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -751,7 +746,9 @@ class GUIhelpLearn(QtWidgets.QMainWindow, Ui_helpLearn.Ui_helpWindow)  :
 
 ###################
 ##Окно помощи "Опрос"
-class GUIhelpQuery(QtWidgets.QMainWindow, Ui_helpQuery.Ui_helpWindow):
+import Ui_helpQueryDialog as QD
+
+class GUIhelpQuery(QtWidgets.QDialog, QD.Ui_helpQueryDialog):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -759,7 +756,9 @@ class GUIhelpQuery(QtWidgets.QMainWindow, Ui_helpQuery.Ui_helpWindow):
 
 ###################
 ##Окно помощи "Настройки"
-class GUIhelpProp(QtWidgets.QMainWindow, Ui_helpProp.Ui_helpWindow):
+import Ui_helpPropDialog as PD
+
+class GUIhelpProp(QtWidgets.QDialog, PD.Ui_htlpPropDialog):
     def __init__(self):
         super().__init__()
         self.setupUi(self)  

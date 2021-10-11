@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'f:\Dev\neyroNet\code\NNCopyVsCode\NNGUI\uixml\helpLearn.ui'
+# Form implementation generated from reading ui file 'f:\Dev\neyroNet\code\NNCopyVsCode\NNGUI\uixml\helpLearnDialog.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -11,17 +11,12 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_helpWindow(object):
-    def setupUi(self, helpWindow):
-        helpWindow.setObjectName("helpWindow")
-        helpWindow.resize(662, 521)
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("f:\\Dev\\neyroNet\\code\\NNCopyVsCode\\NNGUI\\uixml\\../source/resources/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        helpWindow.setWindowIcon(icon)
-        self.centralwidget = QtWidgets.QWidget(helpWindow)
-        self.centralwidget.setObjectName("centralwidget")
-        self.textGroupBox = QtWidgets.QGroupBox(self.centralwidget)
-        self.textGroupBox.setGeometry(QtCore.QRect(10, 10, 641, 541))
+class Ui_helpLearnDialog(object):
+    def setupUi(self, helpLearnDialog):
+        helpLearnDialog.setObjectName("helpLearnDialog")
+        helpLearnDialog.resize(663, 504)
+        self.textGroupBox = QtWidgets.QGroupBox(helpLearnDialog)
+        self.textGroupBox.setGeometry(QtCore.QRect(10, 10, 641, 481))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
         font.setPointSize(14)
@@ -30,7 +25,7 @@ class Ui_helpWindow(object):
         self.textGroupBox.setFont(font)
         self.textGroupBox.setObjectName("textGroupBox")
         self.label = QtWidgets.QLabel(self.textGroupBox)
-        self.label.setGeometry(QtCore.QRect(20, 30, 611, 501))
+        self.label.setGeometry(QtCore.QRect(20, 30, 611, 451))
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(False)
@@ -38,23 +33,15 @@ class Ui_helpWindow(object):
         self.label.setFont(font)
         self.label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.label.setObjectName("label")
-        helpWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(helpWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 662, 21))
-        self.menubar.setObjectName("menubar")
-        helpWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(helpWindow)
-        self.statusbar.setObjectName("statusbar")
-        helpWindow.setStatusBar(self.statusbar)
 
-        self.retranslateUi(helpWindow)
-        QtCore.QMetaObject.connectSlotsByName(helpWindow)
+        self.retranslateUi(helpLearnDialog)
+        QtCore.QMetaObject.connectSlotsByName(helpLearnDialog)
 
-    def retranslateUi(self, helpWindow):
+    def retranslateUi(self, helpLearnDialog):
         _translate = QtCore.QCoreApplication.translate
-        helpWindow.setWindowTitle(_translate("helpWindow", "Помощь"))
-        self.textGroupBox.setTitle(_translate("helpWindow", "Обучение"))
-        self.label.setText(_translate("helpWindow", "В разделе \"Обучение\" проходит процесс выбора параметров, на которые будет\n"
+        helpLearnDialog.setWindowTitle(_translate("helpLearnDialog", "Помощь"))
+        self.textGroupBox.setTitle(_translate("helpLearnDialog", "Обучение"))
+        self.label.setText(_translate("helpLearnDialog", "В разделе \"Обучение\" проходит процесс выбора параметров, на которые будет\n"
 "настраиваться нейросеть.\n"
 "Данные для нейросети (выборка) могут быть как заданы в ручную, так и \n"
 "выбраны из файла (при помощи кнопки в \"Меню\" в левом верхнем углу).\n"

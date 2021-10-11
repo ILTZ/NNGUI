@@ -2,56 +2,10 @@ from PyQt5.QtWidgets import QFileDialog, QMainWindow
 from PyQt5.QtCore import QObject, pyqtSignal
 import pandas as pd
 
-from Ui_loadFile import Ui_MainWindow
+
 import os
 
-#Надо бы отдельное окно присобачить для выбора файлов
-class loadFileWindow(QMainWindow, Ui_MainWindow):
 
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)
-
-        self.LoadBtn.clicked.connect(self.pathAndFile)
-        self.csvRBtn.toggled.connect(self.showFAQ)
-        self.CancleBtn.clicked.connect(self.close)
-        self.OkBtn.clicked.connect
-
-
-        faqVis = False
-        self.csvBox.setVisible(faqVis)
-
-        pass
-
-    def showFAQ(self):      
-        if self.csvRBtn.isChecked():
-            self.csvBox.setVisible(True)
-        else:
-            self.csvBox.setVisible(False)
-        pass
-
-    def pathAndFile(self):
-        filter = ""
-        if self.txtRBtn.isChecked():
-            filter = "(*.txt)"
-        if self.xlsxRBtn.isChecked():
-            filter = "(*.xlsx)"
-        if self.csvRBtn.isChecked():
-            filter = "(*.csv)"
-
-        path = QFileDialog.getOpenFileName(self, 'Open file', filter=(f"TextFiles {filter}"))
-        if (path[0] == ""):
-            print("UnLoaded")
-            return
-        
-        self.lineEdit.setText(path[0])
-            
-
-        pass
-    
-    
-
-    pass
 
 
 
@@ -71,7 +25,7 @@ class FileUpLoader(QObject):
 
         self.countTarget = 0
 
-        self.pathWindow = loadFileWindow()
+
         pass
     
     def showPathWindow(self):
