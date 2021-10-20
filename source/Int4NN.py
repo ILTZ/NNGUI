@@ -37,8 +37,8 @@ class NNControl(QtCore.QObject):
         #self.NN = neuralNetwork(self.inputN, self.hiddenN, self.outputN, self.learnRate)
         self.NN = neuralNetwork2(self.inputN, self.hiddenN, self.outputN, self.learnRate)
 
-        self.inputVal = []
-        self.targetVal = 0.0
+        self.inputVal = [[]]
+        self.targetVal = [[]]
 
         self.inputArr = []
         self.targetArr = []
@@ -128,15 +128,16 @@ class NNControl(QtCore.QObject):
         it = 0
         for epochs in range(self.epochs):
             for count in range(self.learnLoops):
-                self.NN.learnProcess(self.inputVal, self.targetVal)
-                self.PBSignal.emit(it / (self.learnLoops * self.epochs))
-                it += 1
-                if (self.stopSignal == True):
-                    self.stopSignal = False
-                    self.finished4Btn.emit(True)
-                    self.DebugSignal.emit("Процесс тренировки остановлен.", 'info')
-                    self.finished.emit()
-                    return
+                for i,t in zip(self.inputVal, self.targetVal):
+                    self.NN.learnProcess(i, t)
+                    self.PBSignal.emit(it / (self.learnLoops * self.epochs))
+                    it += 1
+                    if (self.stopSignal == True):
+                        self.stopSignal = False
+                        self.finished4Btn.emit(True)
+                        self.DebugSignal.emit("Процесс тренировки остановлен.", 'info')
+                        self.finished.emit()
+                        return
         print("TrainSucces")
         self.PBSignal.emit(1)
         self.finished4Btn.emit(True)
@@ -151,13 +152,13 @@ class NNControl(QtCore.QObject):
                 for i,t in zip(self.inputArr, self.targetArr):
                     self.NN.learnProcess(i, t)
                     self.PBSignal.emit(it / (self.learnLoops * self.epochs))
-                it += 1
-                if (self.stopSignal == True):
-                    self.stopSignal = False
-                    self.finished4Btn.emit(True)
-                    self.DebugSignal.emit("Процесс тренировки остановлен.", 'info')
-                    self.finished.emit()
-                    return
+                    it += 1
+                    if (self.stopSignal == True):
+                        self.stopSignal = False
+                        self.finished4Btn.emit(True)
+                        self.DebugSignal.emit("Процесс тренировки остановлен.", 'info')
+                        self.finished.emit()
+                        return
         print("TrainSucces")
         self.performanceTest()
         self.PBSignal.emit(1)
@@ -167,16 +168,16 @@ class NNControl(QtCore.QObject):
     #Булево нужно для корректной работы с потоком, в котором выполняется(не смог придумать иначе и привязал старт потока к этой функции)
     def startLearnProcess(self):
         self.activate4Btn.emit(False)
-        try:
-            if (self.learnFromFile):
-                self.fileLearn()
-            else:
-                self.handLearn()
-            pass
-        except:
-            self.activate4Btn.emit(True)
-            self.DebugSignal.emit("Проверьте параметры сети (после изменеия количества входных значений связи должны быть изменены)", 'error')
-            self.finished.emit()
+        #try:
+        if (self.learnFromFile):
+            self.fileLearn()
+        else:
+            self.handLearn()
+        pass
+        #except:
+        #    self.activate4Btn.emit(True)
+        #    self.DebugSignal.emit("Проверьте параметры сети (после изменеия количества входных значений связи должны быть изменены)", 'error')
+        #    self.finished.emit()
     #Стандартный опрос сети
     def defQuery(self, inputArr):
         return self.NN.query(inputArr)
@@ -210,7 +211,7 @@ class NNControl(QtCore.QObject):
             if (inArrVal == len(value)):
                 val += 1
 
-        self.performanceRate = val/count
+        #self.performanceRate = val/count
         pass
     #Процесс схоранения/загрузки весов
     def saveWeights(self, path):

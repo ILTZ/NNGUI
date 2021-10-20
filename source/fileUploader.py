@@ -33,7 +33,7 @@ class FileUpLoader(QObject):
         pass
 
     def setCountOfTargets(self, val):
-        if (val > 1):
+        if (val >= 1):
             self.countTarget = val
         pass
 

@@ -11,11 +11,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_startDialog(object):
-    def setupUi(self, startDialog):
-        startDialog.setObjectName("startDialog")
-        startDialog.resize(850, 540)
-        self.MainTextLabel = QtWidgets.QLabel(startDialog)
+class Ui_Dialog(object):
+    def setupUi(self, Dialog):
+        Dialog.setObjectName("Dialog")
+        Dialog.resize(850, 540)
+        Dialog.setWhatsThis("")
+        Dialog.setModal(False)
+        self.MainTextLabel = QtWidgets.QLabel(Dialog)
         self.MainTextLabel.setGeometry(QtCore.QRect(250, 180, 381, 91))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
@@ -38,7 +40,7 @@ class Ui_startDialog(object):
         self.MainTextLabel.setLineWidth(0)
         self.MainTextLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.MainTextLabel.setObjectName("MainTextLabel")
-        self.DevLabel = QtWidgets.QLabel(startDialog)
+        self.DevLabel = QtWidgets.QLabel(Dialog)
         self.DevLabel.setGeometry(QtCore.QRect(50, 370, 661, 91))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -49,7 +51,7 @@ class Ui_startDialog(object):
         self.DevLabel.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.DevLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.DevLabel.setObjectName("DevLabel")
-        self.FAQBtn = QtWidgets.QPushButton(startDialog)
+        self.FAQBtn = QtWidgets.QPushButton(Dialog)
         self.FAQBtn.setGeometry(QtCore.QRect(140, 10, 111, 41))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -59,13 +61,13 @@ class Ui_startDialog(object):
         self.FAQBtn.setDefault(False)
         self.FAQBtn.setFlat(False)
         self.FAQBtn.setObjectName("FAQBtn")
-        self.label_2 = QtWidgets.QLabel(startDialog)
+        self.label_2 = QtWidgets.QLabel(Dialog)
         self.label_2.setGeometry(QtCore.QRect(0, 110, 851, 241))
         self.label_2.setText("")
         self.label_2.setPixmap(QtGui.QPixmap("f:\\Dev\\neyroNet\\code\\NNCopyVsCode\\NNGUI\\uixml\\../source/resources/startWindowPict.png"))
         self.label_2.setScaledContents(True)
         self.label_2.setObjectName("label_2")
-        self.label_3 = QtWidgets.QLabel(startDialog)
+        self.label_3 = QtWidgets.QLabel(Dialog)
         self.label_3.setGeometry(QtCore.QRect(360, 480, 131, 51))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -75,7 +77,7 @@ class Ui_startDialog(object):
         self.label_3.setFont(font)
         self.label_3.setAlignment(QtCore.Qt.AlignCenter)
         self.label_3.setObjectName("label_3")
-        self.label = QtWidgets.QLabel(startDialog)
+        self.label = QtWidgets.QLabel(Dialog)
         self.label.setGeometry(QtCore.QRect(390, 20, 251, 41))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -85,7 +87,7 @@ class Ui_startDialog(object):
         self.label.setFont(font)
         self.label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.label.setObjectName("label")
-        self.StartWorkBtn = QtWidgets.QPushButton(startDialog)
+        self.StartWorkBtn = QtWidgets.QPushButton(Dialog)
         self.StartWorkBtn.setGeometry(QtCore.QRect(10, 10, 111, 41))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -96,7 +98,7 @@ class Ui_startDialog(object):
         self.StartWorkBtn.setDefault(False)
         self.StartWorkBtn.setFlat(False)
         self.StartWorkBtn.setObjectName("StartWorkBtn")
-        self.LogoLabel = QtWidgets.QLabel(startDialog)
+        self.LogoLabel = QtWidgets.QLabel(Dialog)
         self.LogoLabel.setGeometry(QtCore.QRect(640, 10, 201, 61))
         self.LogoLabel.setText("")
         self.LogoLabel.setTextFormat(QtCore.Qt.RichText)
@@ -104,8 +106,8 @@ class Ui_startDialog(object):
         self.LogoLabel.setScaledContents(True)
         self.LogoLabel.setWordWrap(False)
         self.LogoLabel.setObjectName("LogoLabel")
-        self.MainTextLabel_2 = QtWidgets.QLabel(startDialog)
-        self.MainTextLabel_2.setGeometry(QtCore.QRect(260, 190, 381, 91))
+        self.MainTextLabel_2 = QtWidgets.QLabel(Dialog)
+        self.MainTextLabel_2.setGeometry(QtCore.QRect(260, 200, 381, 91))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -127,23 +129,35 @@ class Ui_startDialog(object):
         self.MainTextLabel_2.setLineWidth(0)
         self.MainTextLabel_2.setAlignment(QtCore.Qt.AlignCenter)
         self.MainTextLabel_2.setObjectName("MainTextLabel_2")
+        self.exitBtn = QtWidgets.QPushButton(Dialog)
+        self.exitBtn.setGeometry(QtCore.QRect(720, 480, 111, 41))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        self.exitBtn.setFont(font)
+        self.exitBtn.setStyleSheet("")
+        self.exitBtn.setAutoDefault(False)
+        self.exitBtn.setDefault(False)
+        self.exitBtn.setFlat(False)
+        self.exitBtn.setObjectName("exitBtn")
 
-        self.retranslateUi(startDialog)
-        QtCore.QMetaObject.connectSlotsByName(startDialog)
+        self.retranslateUi(Dialog)
+        QtCore.QMetaObject.connectSlotsByName(Dialog)
 
-    def retranslateUi(self, startDialog):
+    def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        startDialog.setWindowTitle(_translate("startDialog", "УГЛТУ"))
-        self.MainTextLabel.setText(_translate("startDialog", "НЕЙРОННАЯ СЕТЬ С ОБРАТНЫМ\n"
+        Dialog.setWindowTitle(_translate("Dialog", "УГЛТУ"))
+        self.MainTextLabel.setText(_translate("Dialog", "НЕЙРОННАЯ СЕТЬ С ОБРАТНЫМ\n"
 "РАСПРОСТРАНЕНИЕМ ОШИБКИ"))
-        self.DevLabel.setText(_translate("startDialog", "Разработал:           Писарев Илья Дмитриевич\n"
+        self.DevLabel.setText(_translate("Dialog", "Разработал:           Писарев Илья Дмитриевич\n"
 "\n"
 "Руководитель:       проф., д.т.н. Побединский В. В."))
-        self.FAQBtn.setText(_translate("startDialog", "О программе"))
-        self.label_3.setText(_translate("startDialog", "Екатеринбург\n"
+        self.FAQBtn.setText(_translate("Dialog", "О программе"))
+        self.label_3.setText(_translate("Dialog", "Екатеринбург\n"
 "2021"))
-        self.label.setText(_translate("startDialog", "Уральский государственный\n"
+        self.label.setText(_translate("Dialog", "Уральский государственный\n"
 "лесотехнический университет"))
-        self.StartWorkBtn.setText(_translate("startDialog", "Начать работу"))
-        self.MainTextLabel_2.setText(_translate("startDialog", "НЕЙРОННАЯ СЕТЬ С ОБРАТНЫМ\n"
+        self.StartWorkBtn.setText(_translate("Dialog", "Начать работу"))
+        self.MainTextLabel_2.setText(_translate("Dialog", "НЕЙРОННАЯ СЕТЬ С ОБРАТНЫМ\n"
 "РАСПРОСТРАНЕНИЕМ ОШИБКИ"))
+        self.exitBtn.setText(_translate("Dialog", "Выход"))

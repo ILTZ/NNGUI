@@ -8,6 +8,13 @@ Available at: https://github.com/GTRONICK/QSS/blob/master/Aqua.qss
 QMainWindow {
 	background-color:#ececec;
 }
+
+QDialog {
+	border-width: 1px;
+	border-style: solid;
+	border-radius: 10px;
+}
+
 QTextEdit {
 	border-width: 1px;
 	border-style: solid;

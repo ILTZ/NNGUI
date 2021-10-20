@@ -57,7 +57,7 @@
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <property name="elideMode">
      <enum>Qt::ElideLeft</enum>
@@ -443,7 +443,7 @@
          <x>210</x>
          <y>30</y>
          <width>151</width>
-         <height>121</height>
+         <height>331</height>
         </rect>
        </property>
        <property name="font">
@@ -1203,6 +1203,8 @@
     <addaction name="currentParamBtn"/>
     <addaction name="separator"/>
     <addaction name="FAQbtn"/>
+    <addaction name="separator"/>
+    <addaction name="exitAction_2"/>
    </widget>
    <addaction name="menu"/>
   </widget>
@@ -1220,6 +1222,11 @@
   <action name="FAQbtn">
    <property name="text">
     <string>О программе</string>
+   </property>
+  </action>
+  <action name="exitAction_2">
+   <property name="text">
+    <string>Закрыть программу</string>
    </property>
   </action>
  </widget>
