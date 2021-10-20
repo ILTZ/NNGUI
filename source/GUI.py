@@ -248,9 +248,12 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
     ##Fill groupBoxes learn/query/target }
     
     def setVisible4Input(self, param):  #Когда данные берутся из внешнего файла, боксы для входных значений нам уже не нужны
-        self.inputValuesBox.setVisible(param)
-        self.targetValBox.setVisible(param)
-        
+        #self.inputValuesBox.setVisible(param)
+        #self.targetValBox.setVisible(param)
+
+        self.inputValuesBox.setEnabled(param)
+        self.targetValBox.setEnabled(param)
+
         pass
     
     def showHelpLearnTitle(self):
@@ -285,7 +288,9 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         pass
     
     def clearTargetBoxes(self):
-        self.targetVal.clear()
+        for targetTB in self.targetLearnValuesTracker:
+            targetTB.setText("")
+            pass
     
     def clearAll(self):
         self.clearLearnBoxes()
