@@ -151,14 +151,14 @@ class NNControl(QtCore.QObject):
             for count in range(self.learnLoops):
                 for i,t in zip(self.inputArr, self.targetArr):
                     self.NN.learnProcess(i, t)
-                    self.PBSignal.emit(it / (self.learnLoops * self.epochs))
-                    it += 1
-                    if (self.stopSignal == True):
-                        self.stopSignal = False
-                        self.finished4Btn.emit(True)
-                        self.DebugSignal.emit("Процесс тренировки остановлен.", 'info')
-                        self.finished.emit()
-                        return
+                self.PBSignal.emit(it / (self.learnLoops * self.epochs))
+                it += 1
+                if (self.stopSignal == True):
+                    self.stopSignal = False
+                    self.finished4Btn.emit(True)
+                    self.DebugSignal.emit("Процесс тренировки остановлен.", 'info')
+                    self.finished.emit()
+                    return
         print("TrainSucces")
         self.performanceTest()
         self.PBSignal.emit(1)
@@ -211,7 +211,11 @@ class NNControl(QtCore.QObject):
             if (inArrVal == len(value)):
                 val += 1
 
-        #self.performanceRate = val/count
+        try:
+            self.performanceRate = val/count
+        except ZeroDivisionError:
+            self.DebugSignal.emit("PerformanceTest::ZeroDivision", 'error')
+            return
         pass
     #Процесс схоранения/загрузки весов
     def saveWeights(self, path):

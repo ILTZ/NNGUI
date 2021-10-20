@@ -29,7 +29,7 @@ def_epochs = 1
 def_loops = 30000
 
 
-
+##MainWindowClass {
 class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
     finished = QtCore.pyqtSignal()
     def __init__(self):
@@ -712,7 +712,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.showHelpPropTitle()
         pass
 ##ButtonsHandler }
-
+##MainWindowClass }
 
 ##SubWindows {
 
