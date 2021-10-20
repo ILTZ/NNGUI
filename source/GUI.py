@@ -7,7 +7,7 @@ filenameErrorIcon = os.path.join(dirname, 'resources/errorIcon.png')
 filenameInfoIcon = os.path.join(dirname, 'resources/infoIcon.png')
 
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtWidgets import QFileDialog, QMessageBox
+from PyQt5.QtWidgets import QBoxLayout, QFileDialog, QMessageBox, QTextEdit, QVBoxLayout
 
 import Ui_shield
 
@@ -28,15 +28,15 @@ def_learnRate = 0.3
 def_epochs = 1
 def_loops = 30000
 
+
+
 class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
     finished = QtCore.pyqtSignal()
     def __init__(self):
         super().__init__()
         self.setupUi(self)
 
-        ######################################################
-        ##_________________________________________icons_start
-
+##Icons and other cosmetic {
         self.setFixedSize(self.size())
 
         self.icon = QtGui.QIcon()
@@ -71,84 +71,109 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.helpPropWindow = GUIhelpProp()
         self.helpPropWindow.setWindowIcon(self.icon)
 
-        ##____________________________________________icons_end
-        #######################################################
+        ###Maski
+        PP = QtGui.QPainterPath() 
+        PP.addRoundedRect(QtCore.QRectF(self.rect()), 3, 3)
+        mask = QtGui.QRegion(PP.toFillPolygon().toPolygon())
+        self.setMask(mask)
+        
+        ##Startwindow
+        PP2 = QtGui.QPainterPath()
+        PP2.addRoundedRect(QtCore.QRectF(self.startTitle.rect()), 3, 3)
+        mask2 = QtGui.QRegion(PP2.toFillPolygon().toPolygon())
+        self.startTitle.setMask(mask2)
+##Icons and other cosmetic }
 
-        ################################################################
-        #____________________________________________________start slots
-        #Вкладка "Learn"
-        self.learnStartBtn.clicked.connect(self.startTrain_Act)
+
+#TextBoxes for take values from user {
+        self.learnValuesBox = QVBoxLayout()
+        self.learnValuesTracker = []
+        self.inputValuesBox.setLayout(self.learnValuesBox)
+
+        self.queryValuesBox = QVBoxLayout()
+        self.queryValuesTracker = []
+        self.inputValuesBox_2.setLayout(self.queryValuesBox)
+
+        self.targetLearnValuesBox = QVBoxLayout()
+        self.targetLearnValuesTracker = []
+        self.targetValBox.setLayout(self.targetLearnValuesBox)
+#TextBoxes for take values from user }
+
+
+##Slots for buttons {
+        ##LearnPage {
+        self.learnStartBtn.clicked.connect(self.startTrain_Act)  
         self.StopBtn.clicked.connect(self.stopTrain_Act)
         self.learnHelpBtn.clicked.connect(self.showHelpLearnWindow_Act)
-        ########################################################
-        #Вкладка "Query"
+        ##LearnPage }
+        
+        ##QueryPage {
         self.queryBtn.clicked.connect(self.defQuery_Act)
         self.queryHelpBtn.clicked.connect(self.showHelpQueryHelpWindow_Act)
-        ########################################################
-        #Вкладка "Settings"
+        ##QueryPage {
+
+        ##SettingsPage {    
         self.LoadWeightsBtn.clicked.connect(self.loadWeights_Act)
-        self.SaveWeightsBtn.clicked.connect(self.saveWeights_Act)
-        self.RerandWeightsBtn.clicked.connect(self.randWeights_Act)
-        self.chCountBtn.clicked.connect(self.neironsCount_Act)
-
+        self.SaveWeightsBtn.clicked.connect(self.saveWeights_Act)   
+        self.RerandWeightsBtn.clicked.connect(self.randWeights_Act) 
+        self.chCountBtn.clicked.connect(self.neironsCount_Act)  
         self.chLinksBtn.clicked.connect(self.setNewLincks_Act)
-        self.clearBtn.clicked.connect(self.clearParams_Act)
-        self.epochsLoopsBtn.clicked.connect(self.setNewLearnParams_Act)
+        self.clearBtn.clicked.connect(self.clearParams_Act) 
+        self.epochsLoopsBtn.clicked.connect(self.setNewLearnParams_Act) 
+        self.settingsHelpBtn.clicked.connect(self.showHelpPropWindow_Act) 
+        self.tabWidget_2.tabBarClicked.connect(self.showParams) #Show current params NN in textBoxes after go to the page
+        ##SettingsPage }
 
-        self.settingsHelpBtn.clicked.connect(self.showHelpPropWindow_Act)
-
-        self.tabWidget_2.tabBarClicked.connect(self.showParams) #Чтобы во владке всегда стояли текущие параметры сети
-        #########################################################
-        #Buttons "Menu"
-        self.currentParamBtn.triggered.connect(self.currentParams_Act)
-        self.loadFromFile.triggered.connect(self.loadFromFile_Act)
+        ##SideMenuButtons {
+        self.currentParamBtn.triggered.connect(self.currentParams_Act) 
+        self.loadFromFile.triggered.connect(self.loadFromFile_Act) 
         self.FAQbtn.triggered.connect(self.showAboutWindow_Act)
-        #_______________________________________________________end slots
-        #################################################################
+        self.exitAction_2.triggered.connect(self.close)
+        ##SideMenuButtons {
+##Slots for buttons }
         
-
-        #Количество принимаемых значений
+##InitVariables {
         self.countOfNumbers = def_inputN
-
         self.hand_input_arr = []
         self.hand_target_val = 0.0
         self.inputValues = []
         self.targetValues = []  
         self.zipInput = []
-        ####################################################################
-        #_______________________________________________________start threads
-        #############################
-        #LearnProcess thread#
-        self.learnFromFile = False
-        self.LearnThread = QtCore.QThread()
-        self.INT = NNControl()
+##InitVariables }
 
-        self.INT.PBSignal.connect(self.showPercents)
-        self.INT.activate4Btn.connect(self.btnLock)
-        self.INT.finished4Btn.connect(self.btnLock)
-
-        self.INT.moveToThread(self.LearnThread)
-        self.LearnThread.started.connect(self.INT.startLearnProcess)
-        self.INT.finished.connect(self.LearnThread.quit)
-        self.INT.finished.connect(self.showPerformance)
-        self.LearnThread.finished.connect(self.correctThread)
+##Threads {
+        ##LearnProcessThread {
+        self.learnFromFile = False   
+        self.LearnThread = QtCore.QThread()   
+        self.INT = NNControl()        
+        self.INT.PBSignal.connect(self.showPercents)       
+        self.INT.activate4Btn.connect(self.btnLock)       
+        self.INT.finished4Btn.connect(self.btnLock)       
+        self.INT.moveToThread(self.LearnThread)     
+        self.LearnThread.started.connect(self.INT.startLearnProcess)    
+        self.INT.finished.connect(self.LearnThread.quit)   
+        self.INT.finished.connect(self.showPerformance)     
+        self.LearnThread.finished.connect(self.correctThread)    
         self.INT.DebugSignal.connect(self.showDebugDialog)  #Debug signal
-        ####################################
-        #ReadFromFile thread#
-        self.ReadThread = QtCore.QThread()
-        self.UpLoader = FileUpLoader()
-        
-        self.UpLoader.correctSignal.connect(self.fileUpLoadMessage)
-        self.UpLoader.correctSimbols.connect(self.showDebugDialog)
-        
-        self.UpLoader.moveToThread(self.ReadThread)
-        self.ReadThread.started.connect(self.UpLoader.loadFromFile)
-        self.ReadThread.finished.connect(self.correctThread)
-        #_______________________________________________________stop threads
-        ####################################################################
+        ##LearnProcessThread }
 
-    ##################################
-    ##Проверка пользовательского ввода    
+        ##ReadFromFileThread {
+        self.ReadThread = QtCore.QThread()     
+        self.UpLoader = FileUpLoader()    
+        self.UpLoader.correctSignal.connect(self.fileUpLoadMessage)     
+        self.UpLoader.correctSimbols.connect(self.showDebugDialog)    
+        self.UpLoader.moveToThread(self.ReadThread)     
+        self.ReadThread.started.connect(self.UpLoader.loadFromFile)    
+        self.ReadThread.finished.connect(self.correctThread)
+        ##ReadFromFileThread }
+##Threads }
+
+##FillGroupBoxes {
+        self.refillValuesBoxes()
+        self.refillTargetValueBoxes()
+##FillGroupBoxes }
+
+##CheckUserInput {  
     def correctToInt(self, val):
         try:
             x = int(val)
@@ -163,99 +188,111 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             self.showDebugDialog("Введите значение типа <float> (натуральная дробь).", "error")
             return False
         return True
-    ###############################################################################################################################
-    #_____________________________________________________________________________________visibilyty/debug (and enables) work start
-    #
-    #Enable/disable слоты для входных значений после изменения количества входных значений
-    def disSlots(self):
-        self.inputVal1.setEnabled(False)
-        self.inputVal1_2.setEnabled(False)
+##CheckUserInput }
 
-        self.inputVal2.setEnabled(False)
-        self.inputVal2_2.setEnabled(False)
-
-        self.inputVal3.setEnabled(False)
-        self.inputVal3_2.setEnabled(False)
-
-        self.inputVal4.setEnabled(False)
-        self.inputVal4_2.setEnabled(False)
-
-        self.inputVal5.setEnabled(False)
-        self.inputVal5_2.setEnabled(False)
-        pass
-    def slotsEnDis(self):
-        self.disSlots()
-        for i in range(self.countOfNumbers):
-            if (i == 0):
-                self.inputVal1.setEnabled(True)
-                self.inputVal1_2.setEnabled(True)
-            if (i == 1):
-                self.inputVal2.setEnabled(True)
-                self.inputVal2_2.setEnabled(True)
-            if (i == 2):
-                self.inputVal3.setEnabled(True)
-                self.inputVal3_2.setEnabled(True)
-            if (i == 3):
-                self.inputVal4.setEnabled(True)
-                self.inputVal4_2.setEnabled(True)
-            if (i == 4):
-                self.inputVal5.setEnabled(True)
-                self.inputVal5_2.setEnabled(True)
+##TextBoxes, debugMessageBoxes, helpBoxes {
+    ##Fill groupBoxes learn/query/target {
+    def clearValuesBoxes(self):
+        self.learnValuesTracker.clear()
+        self.queryValuesTracker.clear()
+        for i in range(self.learnValuesBox.count()):
+            item = self.learnValuesBox.takeAt(i)
+            item2 = self.queryValuesBox.takeAt(i)
+            del item
+            del item2
+            pass  
+        for text,text1 in zip(self.inputValuesBox.findChildren(QtWidgets.QTextEdit), self.inputValuesBox_2.findChildren(QtWidgets.QTextEdit)):
+            text.deleteLater()
+            text1.deleteLater()
         pass
     
-    def changeVisFAQLearn(self):
-        self.showFAQLearn = not self.showFAQLearn
-        self.FAQLearnBox.setVisible(self.showFAQLearn)
+    def refillValuesBoxes(self):
+        self.clearValuesBoxes()
+        for i in range(self.INT.getCurrentWIH()):
+            inputVal = QtWidgets.QTextEdit(self.inputValuesBox)
+            inputVal.setFixedSize(51,31)
+            inputVal.setObjectName(f"inputVal{i}")
+
+            inputVal2 = QtWidgets.QTextEdit(self.inputValuesBox_2)
+            inputVal2.setFixedSize(51,31)
+            inputVal2.setObjectName(f"inputVal{i}")
+
+            self.learnValuesBox.addWidget(inputVal)
+            self.learnValuesTracker.append(inputVal)
+
+            self.queryValuesBox.addWidget(inputVal2)
+            self.queryValuesTracker.append(inputVal2)
+            pass  
         pass
-    def changeVisFAQSet(self):
-        self.showFAQSet = not self.showFAQSet
-        self.FAQSettingsBox.setVisible(self.showFAQSet)
+    
+    def clearTargetValueBoxes(self):
+        self.targetLearnValuesTracker.clear()
+        for i in range(self.targetLearnValuesBox.count()):
+            item = self.targetLearnValuesBox.takeAt(i)
+            del item
+        for text in self.targetValBox.findChildren(QtWidgets.QTextEdit):
+            text.deleteLater()
+
         pass
+    
+    def refillTargetValueBoxes(self):
+        self.clearTargetValueBoxes()
+        for i in range(self.INT.getCurrentWHO()):
+            targetVal = inputVal = QtWidgets.QTextEdit(self.targetValBox)
+            targetVal.setFixedSize(51,31)
+            targetVal.setObjectName(f"targettVal{i}")
+
+            self.targetLearnValuesBox.addWidget(targetVal)
+            self.targetLearnValuesTracker.append(targetVal)
+        pass
+    ##Fill groupBoxes learn/query/target }
+    
     def setVisible4Input(self, param):  #Когда данные берутся из внешнего файла, боксы для входных значений нам уже не нужны
         self.inputValuesBox.setVisible(param)
         self.targetValBox.setVisible(param)
+        
         pass
-
+    
     def showHelpLearnTitle(self):
         self.helpLearnTitle.close()
         self.helpPropWindow.close()
 
         self.helpLearnTitle.show()
         pass
+    
     def showHelpQueryTitle(self):
         self.helpLearnTitle.close()
         self.helpPropWindow.close()
 
         self.helpQueryWindow.show()
         pass
+    
     def showHelpPropTitle(self):
         self.helpLearnTitle.close()
         self.helpQueryWindow.close()
 
         self.helpPropWindow.show()
         pass
-    #Очистка боксов от вводимых пользователем значений
+       
     def clearLearnBoxes(self):
-        self.inputVal1.clear()
-        self.inputVal2.clear()
-        self.inputVal3.clear()
-        self.inputVal4.clear()
-        self.inputVal5.clear()
-        self.targetVal.clear()
+        for learnTB in self.learnValuesTracker:
+                learnTB.setText("")
+        pass
+    
     def clearQueryBoxes(self):
-        self.inputVal1_2.clear()
-        self.inputVal2_2.clear()
-        self.inputVal3_2.clear()
-        self.inputVal4_2.clear()
-        self.inputVal5_2.clear()
-        self.outputLabel.clear()
+        for queryTB in self.queryValuesTracker:
+                queryTB.setText("")
+        pass
+    
     def clearTargetBoxes(self):
         self.targetVal.clear()
+    
     def clearAll(self):
         self.clearLearnBoxes()
         self.clearQueryBoxes()
         self.clearTargetBoxes()
-
+    
+    ##ShowSomethitg {
     def showCurrentParams(self):                    #Для отображения уставновленных параметров сети
         mes = (f"Количество входных значений: {self.INT.getCurrentWIH()}\n" +
         f"Количество скрытых нодов: {self.INT.getCurrentWHH()}\n" +
@@ -267,6 +304,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         f"Количество нейронов во 2-м скрытом слое: {self.INT.getCurrentNeironsCount()[1]}")
         self.showDebugDialog(mes, 'info')
         pass
+    
     def showDebugDialog(self, message, type):       #Окно для отправки в него дебаг сообщений  
         if self.goToClose:
             return
@@ -287,15 +325,19 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.ReadThread.quit()
         msgBox.exec_()
         pass  
+    
     def showPerformance(self):                      #Отображение точности сети
         if (self.learnFromFile):
             self.performanceLabel.setText(str(self.INT.getPerformanceRate()))
         pass
+    
     def showPercents(self, value):                  #Значения для прогресс бара приходят сигналом из INT
         self.progressBar.setValue(value * 100.0)
         pass
+    
     def correctThread(self):                        #Дебаг в консоль про потоки
         print("ThreadStopped")
+    
     def showParams(self, index):    #При переключении на вкладку с настройками параметры заполняются из текущих параметров сети
         if (index == 2): #Через сигнал принимает индекс текущей вкладки
             self.hNodesIn.setText(str(self.INT.getCurrentWHH()))   
@@ -306,61 +348,29 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             self.hiddenLayerCount1.setText(str(self.INT.getCurrentNeironsCount()[0]))
             self.HiddenLayerCount2.setText(str(self.INT.getCurrentNeironsCount()[1]))
         pass
-    #
-    #_____________________________________________________________________________________visibilyty/debug (and enables) work end
-    #############################################################################################################################
-    
-    #####################################################################################
-    #_________________________________________________________Get parrams from form start
-    #
-    #Получение начальных значений со вккладки "Обучение"
+    ##ShowSomethitg {
+##TextBoxes, debugMessageBoxes, helpBoxes }
+
+
+##Get parametrs from user {
     def getParams(self, param):
-        #Хз как иначе брать из ячеек ровно то количество параметров, 
-        #под которое в процессе работы может быть подстроена сетка
         x = []
         if param == 'learn':
-            for i in range(self.countOfNumbers):
-                if (i == 0):
-                    first = float(self.inputVal1.toPlainText())
-                    x.append(first)
-                if (i == 1):
-                    second = float(self.inputVal2.toPlainText())
-                    x.append(second)
-                if (i == 2):
-                    thirth = float(self.inputVal3.toPlainText())
-                    x.append(thirth)
-                if (i == 3):
-                    fourth = float(self.inputVal4.toPlainText())
-                    x.append(fourth)
-                if (i == 4):
-                    fifth = float(self.inputVal5.toPlainText())
-                    x.append(fifth)
+            for learnTB in self.learnValuesTracker:
+                x.append(float(learnTB.toPlainText()))
+
         elif param == 'query':
-            for i in range(self.countOfNumbers):
-                if (i == 0):
-                    first = float(self.inputVal1_2.toPlainText())
-                    x.append(first)
-                if (i == 1):
-                    second = float(self.inputVal2_2.toPlainText())
-                    x.append(second)
-                if (i == 2):
-                    thirth = float(self.inputVal3_2.toPlainText())
-                    x.append(thirth)
-                if (i == 3):
-                    fourth = float(self.inputVal4_2.toPlainText())
-                    x.append(fourth)
-                if (i == 4):
-                    fifth = float(self.inputVal5_2.toPlainText())
-                    x.append(fifth)
+            for queryTB in self.queryValuesTracker:
+                x.append(float(queryTB.toPlainText()))
 
         print(x)
         return x
+
     def getTargetVal(self):
-        try:
-            return float(self.targetVal.toPlainText())
-        except:
-            self.targetVal.clear()
-            return 'targetError'
+        x = []
+        for targetTB in self.targetLearnValuesTracker:
+            x.append(float(targetTB.toPlainText()))
+        return x
     #Получение значений с вкладки "Настройки"
     def getLearnLoops(self):
         try:
@@ -385,13 +395,10 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         H2 = int(self.HiddenLayerCount2.toPlainText())
         return [H1, H2]
         pass
-    #
-    #_________________________________________________________Get parrams from form end
-    ###################################################################################
+##Get parametrs from user }
     
-    ###################################################################################
-    #_________________________________________________________Set parrams for net start
-    #Установка новых значений во вкладке "Настройка"
+
+##Set parameters fo NN {  
     def setNewLinks(self):          #Смена количества входных/выходных значений
         wIH = 0
         wHO = 0
@@ -406,14 +413,17 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             return
 
         self.countOfNumbers = wIH
-        self.slotsEnDis()
         self.INT.changeLinks(wIH, wHO, wIH)
+        self.refillValuesBoxes()
+        self.refillTargetValueBoxes()
         self.showDebugDialog("Параметры успешно изменены!", "info")
         pass  
+    
     def rerandWeights(self):        #После смены может потребоваться перерандомить веса
         self.INT.rerandWeights()
         self.showDebugDialog("Новые веса сгенерированы.", 'info')
         pass
+    
     def setNewLearnParams(self):    #Установка новых количество циклов, эпох и К-обучения, и количества нейронов в слоях
         newLL = self.getLearnLoops()
         newLE = self.getLearnEpochs()
@@ -431,6 +441,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.INT.setLearnLoops(newLL)
         self.showDebugDialog("Новые значения установлены!", 'info')
         pass  
+    
     def setNewNeironCounts(self):   #Установка нового количества нейронов в 1/2 слоях
         try:
             newCounts = self.getNeironCount()
@@ -443,17 +454,13 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.INT.setCurrentNeironH2(newCounts)
         self.showDebugDialog("Новые значения нейронов установлены!", "info")
         pass
-    #
-    #_________________________________________________________Set parrams for net end
-    ###################################################################################
+##Set parameters fo NN }
     
-    ######################################################################
-    #_________________________________________________Load from file start
-    #
-    #Для загрузки файлов из <file_name>.txt/.xlsx
+##LoadFromFile { (<file_name>.txt/.xlsx)
     def setFilePath(self, path):
         self.UpLoader.setPath(path)
         pass
+    
     def loadFile(self):
         #self.UpLoader.showPathWindow()
 
@@ -465,10 +472,11 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.UpLoader.setCountOfTargets(self.INT.getCurrentWHO())
         self.ReadThread.start()
         pass
+    
     def setParametrsAfterRead(self):                #После загрузки из файла аплоадер подает сигнал, и GUI получает у него извлеченные из файла значения                                           
         self.zipInput = self.UpLoader.getValues()   #ток счас понял, что надо бы сразу в INT Отправлять
         pass
-
+    
     def fileUpLoadMessage(self, bVal):      #После загрузки выборки аплодер отправит в ГУИ сигнал, чтобы сказать, что всё прошло успешно
         if (bVal == True):
             self.showDebugDialog("Данные успешно загружены!", 'info')
@@ -476,14 +484,11 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             self.setParametrsAfterRead()
             self.ReadThread.quit()
             self.setVisible4Input(False)
-            self.woLoadFromFileBoxFAQ.setVisible(False)
         else:
             self.showDebugDialog("Ошибка при чтении файлов!", 'error')
             self.ReadThread.quit()
         pass
-    #
-    #__________________________________________________Load from file end
-    #####################################################################
+##LoadFromFile }
     
     def closeEvent(self, event):
         result = QMessageBox.question(self, "Выход",
@@ -512,11 +517,11 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         pass
 
 
-    #######################################################
-    ##____________________________________Работа с сеткой
+##MainProcessesNN { 
     def showAboutWindow(self):  #Отображение окна "О программе"
         self.FAQTitle.show()
         pass
+    
     def clearParams(self):      #Сброс к дефолтным параметрам
         self.setVisible4Input(True)
         self.learnFromFile = False
@@ -532,12 +537,12 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
 
         self.showPercents(0)
         self.clearAll()
-        self.slotsEnDis()
         self.INT.backToDefaultParams()
+        self.refillValuesBoxes()
         self.showDebugDialog("Параметры сброшены.", 'info')
         self.showParams(2)
         pass
-
+    
     def startLearn(self):       #"Старт" обучения сетки
         procName = 'learn'
         #В случае загрузки значенией из внешнего файла
@@ -554,13 +559,19 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
                 return
             self.goToLearnHand()
         pass
+    
     def goToLearnHand(self):    #По факту - просто запускает поток обучения(та, что ниже - тоже самое)
-        inputArr = self.hand_input_arr
-        targetArr = self.hand_target_val
+        inputArr = []
+        targetArr = []
+        inputArr.append(self.hand_input_arr)
+        targetArr.append(self.hand_target_val)
+        # inputArr = self.hand_input_arr
+        # targetArr = self.hand_target_val
         self.INT.setLFFStatus(False)
         self.INT.setInputVal(inputArr, targetArr, 0)
         self.LearnThread.start()
         pass
+    
     def goToLearnFile(self):
         self.INT.setInputVal(self.zipInput)
         self.INT.setLFFStatus(True)
@@ -568,10 +579,11 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
 
         self.LearnThread.start()
         pass
+    
     def stopLearn(self):        #"Стоп" обучения сети
         self.INT.stopSignal = True
         pass
-
+    
     def loadWeights(self):      #Загрузка весов
         path = QFileDialog.getOpenFileName(self, 'Open file')
         if (path[0] == ""):
@@ -579,6 +591,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             return
         self.INT.loadWeights(path[0])
         pass
+    
     def saveWeights(self):      #Сохранение весов
         path = QFileDialog.getSaveFileName(self, 'Save file')
         if (path[0] == ""):
@@ -586,6 +599,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             return
         self.INT.saveWeights(path[0])
         pass
+    
     def defQuery(self):         #Стандартный опрос, наверное, тоже стоит в поток запихать(?)
         procName = 'query'
         try:
@@ -597,9 +611,9 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             return
         self.outputLabel.setText(np.array2string(self.INT.defQuery(inputArr)))
         pass
-   
-    #######################################################
-    ##_____________________________________Функции кнопочек
+##MainProcessesNN }
+
+##ButtonsHandlers {
     def btnLock(self, val):        #Лок кнопок при начале обучения
         self.clearBtn.setEnabled(val)
         self.learnStartBtn.setEnabled(val)
@@ -612,72 +626,94 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.loadFromFile.setEnabled(val)
         self.SaveWeightsBtn.setEnabled(val)
         self.LoadWeightsBtn.setEnabled(val)
+    
     def startTrain_Act(self):
         self.startLearn()
         pass
+    
     def stopTrain_Act(self):
         self.stopLearn()
         pass
+    
     def defaultParams_Act(self):
         self.clearParams()
         pass
+    
     def loadWeights_Act(self):
         self.loadWeights()
         pass
+    
     def saveWeights_Act(self):
         self.saveWeights()
         pass
+    
     def defQuery_Act(self):
         self.defQuery()
         pass
+    
     def randWeights_Act(self):
         self.rerandWeights()
         pass
+    
     def neironsCount_Act(self):
         self.setNewNeironCounts()
         pass
+    
     def setNewLincks_Act(self):
         self.setNewLinks()
         pass
+    
     def clearParams_Act(self):
         self.clearParams()
         pass
+    
     def setNewLearnParams_Act(self):
         self.setNewLearnParams()
         pass
+    
     def currentParams_Act(self):
         self.showCurrentParams()
         pass
+    
     def loadFromFile_Act(self):
         self.loadFile()
         pass
+    
     def showAboutWindow_Act(self):
         self.showAboutWindow()
         pass
+    
     def changeVisFAQLearn_Act(self):
         self.changeVisFAQLearn()
         pass
+    
     def changeVisFAQSet_Act(self):
         self.changeVisFAQSet()
         pass
+    
     def changeVisFAQQuery_Act(self):
 
         pass
+    
     def showHelpLearnWindow_Act(self):
         self.showHelpLearnTitle()
         pass
+    
     def showHelpQueryHelpWindow_Act(self):
         self.showHelpQueryTitle()
         pass
+    
     def showHelpPropWindow_Act(self):
         self.showHelpPropTitle()
         pass
+##ButtonsHandler }
 
-#########################################
-##Стартовое окно с лого/авторами и прочим
+
+##SubWindows {
+
+##StartWindow{
 import Ui_startDialog as SD
-
-class GUIstartWindow(QtWidgets.QDialog, SD.Ui_startDialog):
+class GUIstartWindow(QtWidgets.QDialog, SD.Ui_Dialog):
 
     finished = QtCore.pyqtSignal()
     FAQsig = QtCore.pyqtSignal()
@@ -689,6 +725,7 @@ class GUIstartWindow(QtWidgets.QDialog, SD.Ui_startDialog):
         self.StartWorkBtn.clicked.connect(self.goToProgram)
         self.FAQBtn.clicked.connect(self.showFAQ)
         self.setFixedSize(self.size())
+        self.exitBtn.clicked.connect(self.close)
 
         self.show()
         self.fastClose = True
@@ -708,6 +745,7 @@ class GUIstartWindow(QtWidgets.QDialog, SD.Ui_startDialog):
     def showFAQ(self):
         self.FAQsig.emit()
         pass
+    
 
     def closeEvent(self, event):
         if (self.fastClose):
@@ -723,43 +761,46 @@ class GUIstartWindow(QtWidgets.QDialog, SD.Ui_startDialog):
 
         pass
     pass
+##StartWindow{
 
-####################
-##Окно "О программе"
+
+##AboutProgrammWindow {
 import Ui_FAQDialog as FD
-
 class GUIFaqWin(QtWidgets.QDialog, FD.Ui_FAQDialog):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.setFixedSize(self.size())
-    
-###################
-##Окно помощи "Обучение"
-import Ui_helpLearnDialog as HD
+##AboutProgrammWindow }
 
+
+##HelpLearnModeWeindow {
+import Ui_helpLearnDialog as HD
 class GUIhelpLearn(QtWidgets.QDialog, HD.Ui_helpLearnDialog)  :
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.setFixedSize(self.size())
+##HelpLearnModeWeindow }
 
-###################
-##Окно помощи "Опрос"
+
+##HelpQueryModeWindow {
 import Ui_helpQueryDialog as QD
-
 class GUIhelpQuery(QtWidgets.QDialog, QD.Ui_helpQueryDialog):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.setFixedSize(self.size())
+##HelpQueryModeWindow }
 
-###################
-##Окно помощи "Настройки"
+
+##HelpPropertiesModeWindow {
 import Ui_helpPropDialog as PD
-
 class GUIhelpProp(QtWidgets.QDialog, PD.Ui_htlpPropDialog):
     def __init__(self):
         super().__init__()
         self.setupUi(self)  
         self.setFixedSize(self.size())   
+##HelpPropertiesModeWindow {
+
+##SubWindows }
