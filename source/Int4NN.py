@@ -79,7 +79,9 @@ class NNControl(QtCore.QObject):
         self.NN.randWeights4H2()
         self.NN.randWeights4F()
         pass
-    #Геттеры/сеттеры
+    
+    ## Get/Set {
+
     def getCurrentWIH(self):
         return self.NN.getCurrentWIH()
     def getCurrentWHH(self):
@@ -122,22 +124,26 @@ class NNControl(QtCore.QObject):
     def setCurrentNeironH2(self, arr):
         self.NN.setCurrentNeironCount(arr)
         pass
+
+    ## Get/Set {
+
     #Обучение по вводимым вручную значениям
     def handLearn(self):
         print("HandLearn", self.epochs, self.learnLoops, self.learnFromFile)
         it = 0
         for epochs in range(self.epochs):
             for count in range(self.learnLoops):
-                for i,t in zip(self.inputVal, self.targetVal):
+                for i,t in zip(self.inputVal[0], self.targetVal[0]):
+                    print(i,t)
                     self.NN.learnProcess(i, t)
-                    self.PBSignal.emit(it / (self.learnLoops * self.epochs))
-                    it += 1
-                    if (self.stopSignal == True):
-                        self.stopSignal = False
-                        self.finished4Btn.emit(True)
-                        self.DebugSignal.emit("Процесс тренировки остановлен.", 'info')
-                        self.finished.emit()
-                        return
+                self.PBSignal.emit(it / (self.learnLoops * self.epochs))
+                it += 1
+                if (self.stopSignal == True):
+                    self.stopSignal = False
+                    self.finished4Btn.emit(True)
+                    self.DebugSignal.emit("Процесс тренировки остановлен.", 'info')
+                    self.finished.emit()
+                    return
         print("TrainSucces")
         self.PBSignal.emit(1)
         self.finished4Btn.emit(True)
@@ -150,6 +156,7 @@ class NNControl(QtCore.QObject):
         for epochs in range(self.epochs):
             for count in range(self.learnLoops):
                 for i,t in zip(self.inputArr, self.targetArr):
+                    print(i,t)
                     self.NN.learnProcess(i, t)
                 self.PBSignal.emit(it / (self.learnLoops * self.epochs))
                 it += 1
@@ -180,7 +187,10 @@ class NNControl(QtCore.QObject):
         #    self.finished.emit()
     #Стандартный опрос сети
     def defQuery(self, inputArr):
-        return self.NN.query(inputArr)
+        queryResults = []
+        for i in inputArr:
+            queryResults.append(self.NN.query(i))
+        return queryResults
     #Установка входных значений перед отправкой выполнения обучения в отдельный поток(от параметра зависит, будут установленны
     # значения для обучения из формы, либо из файла)
     def setInputVal(self, inputArr, targetArr = 0, param = 1):
