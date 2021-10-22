@@ -6,8 +6,11 @@ filenameIcon = os.path.join(dirname, 'resources/icon.png')
 filenameErrorIcon = os.path.join(dirname, 'resources/errorIcon.png')
 filenameInfoIcon = os.path.join(dirname, 'resources/infoIcon.png')
 
+filenameCloseIcon = os.path.join(dirname, 'resources/close.png')
+
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtWidgets import QBoxLayout, QFileDialog, QMessageBox, QTextEdit, QVBoxLayout
+from PyQt5.QtWidgets import QBoxLayout, QDialog, QFileDialog, QGroupBox, QHBoxLayout, QLabel, QMessageBox, QPushButton, QTextEdit, QVBoxLayout, QScrollBar
+
 
 import Ui_shield
 
@@ -28,10 +31,45 @@ def_learnRate = 0.3
 def_epochs = 1
 def_loops = 30000
 
+import Ui_shield2
+
+class GUIDialogOrigin(QtWidgets.QDialog):
+    def __init__(self):
+        super().__init__()
+        self.closeBtn = QPushButton(self)
+        self.closeBtn.clicked.connect(self.closeWindow)
+               
+
+    def setCustomMask(self):
+        PP = QtGui.QPainterPath() 
+        PP.addRoundedRect(QtCore.QRectF(self.rect()), 3, 3)
+        mask = QtGui.QRegion(PP.toFillPolygon().toPolygon())
+        self.setMask(mask)
+        pass 
+
+    def setButtons(self, x = 0):
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(filenameCloseIcon), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+
+        self.closeBtn.setGeometry(QtCore.QRect(self.width() - x, 0, 31, 19))
+        self.closeBtn.setObjectName("dialogCloseBtn")
+        self.closeBtn.setIcon(icon)
+        pass
+
+    def deleteButton(self):
+        self.closeBtn.deleteLater()
+        pass
+
+    def closeWindow(self):
+        self.close()
+        pass
+    pass
+
 
 ##MainWindowClass {
-class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
+class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
     finished = QtCore.pyqtSignal()
+#Constructor {
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -76,27 +114,29 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         PP.addRoundedRect(QtCore.QRectF(self.rect()), 3, 3)
         mask = QtGui.QRegion(PP.toFillPolygon().toPolygon())
         self.setMask(mask)
+
         
-        ##Startwindow
-        PP2 = QtGui.QPainterPath()
-        PP2.addRoundedRect(QtCore.QRectF(self.startTitle.rect()), 3, 3)
-        mask2 = QtGui.QRegion(PP2.toFillPolygon().toPolygon())
-        self.startTitle.setMask(mask2)
 ##Icons and other cosmetic }
 
 
 #TextBoxes for take values from user {
         self.learnValuesBox = QVBoxLayout()
+        self.learnValuesHLayoutsArray = []
         self.learnValuesTracker = []
         self.inputValuesBox.setLayout(self.learnValuesBox)
 
         self.queryValuesBox = QVBoxLayout()
+        self.queryValuesHLayoutsArray = []
         self.queryValuesTracker = []
-        self.inputValuesBox_2.setLayout(self.queryValuesBox)
+        self.queryInputValuesBox.setLayout(self.queryValuesBox)
 
         self.targetLearnValuesBox = QVBoxLayout()
+        self.targetLearnHLayoutsArray = []
         self.targetLearnValuesTracker = []
         self.targetValBox.setLayout(self.targetLearnValuesBox)
+
+        self.currentCountVibroki = 0
+        self.currentCountVibrokiQ = 0
 #TextBoxes for take values from user }
 
 
@@ -105,11 +145,15 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.learnStartBtn.clicked.connect(self.startTrain_Act)  
         self.StopBtn.clicked.connect(self.stopTrain_Act)
         self.learnHelpBtn.clicked.connect(self.showHelpLearnWindow_Act)
+        self.addViborkaBtn.clicked.connect(self.addViborka_Act)
+        self.deleteViborkaBtn.clicked.connect(self.deleteViborka_Act)
         ##LearnPage }
         
         ##QueryPage {
         self.queryBtn.clicked.connect(self.defQuery_Act)
         self.queryHelpBtn.clicked.connect(self.showHelpQueryHelpWindow_Act)
+        self.addQueryViborkaBtn.clicked.connect(self.addViborkaQ_Act)
+        self.deleteQueryViborkaBtn.clicked.connect(self.deleteViborkaQ_Act)
         ##QueryPage {
 
         ##SettingsPage {    
@@ -169,8 +213,8 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
 ##Threads }
 
 ##FillGroupBoxes {
-        self.refillValuesBoxes()
-        self.refillTargetValueBoxes()
+        #self.refillValuesBoxes()
+        #self.refillTargetValueBoxes()
 ##FillGroupBoxes }
 
 ##CheckUserInput {  
@@ -190,38 +234,72 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         return True
 ##CheckUserInput }
 
+#Constructor }
+
 ##TextBoxes, debugMessageBoxes, helpBoxes {
-    ##Fill groupBoxes learn/query/target {
+    
     def clearValuesBoxes(self):
         self.learnValuesTracker.clear()
         self.queryValuesTracker.clear()
+
         for i in range(self.learnValuesBox.count()):
             item = self.learnValuesBox.takeAt(i)
             item2 = self.queryValuesBox.takeAt(i)
             del item
             del item2
-            pass  
+
+        ##VBoxComponents {    
         for text,text1 in zip(self.inputValuesBox.findChildren(QtWidgets.QTextEdit), self.inputValuesBox_2.findChildren(QtWidgets.QTextEdit)):
             text.deleteLater()
             text1.deleteLater()
-        pass
-    
+
+        
+        input1 = self.inputValuesBox.findChildren(QLabel)
+        input2 = self.inputValuesBox_2.findChildren(QLabel)
+        for i in range(len(input1)):
+            input1[i].deleteLater()
+        for i in range(len(input2)):
+            input2[i].deleteLater()
+        ##VBoxComponents }
+        print(self.learnValuesBox.count())
+
+        pass 
+
     def refillValuesBoxes(self):
         self.clearValuesBoxes()
+        XCount = 1
+        af = QGroupBox()
         for i in range(self.INT.getCurrentWIH()):
+            hLayout = QHBoxLayout()
+            hLayout.addStretch(1)
             inputVal = QtWidgets.QTextEdit(self.inputValuesBox)
-            inputVal.setFixedSize(51,31)
+            inputVal.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            inputVal.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            inputVal.setFixedSize(self.inputValuesBox.width() - 35 ,25)
             inputVal.setObjectName(f"inputVal{i}")
-
-            inputVal2 = QtWidgets.QTextEdit(self.inputValuesBox_2)
-            inputVal2.setFixedSize(51,31)
-            inputVal2.setObjectName(f"inputVal{i}")
-
-            self.learnValuesBox.addWidget(inputVal)
+            qText = QLabel(self.inputValuesBox)
+            qText.setText(f"V{i + 1}")
+            hLayout.addWidget(qText)
+            hLayout.addWidget(inputVal)
             self.learnValuesTracker.append(inputVal)
+            self.learnValuesBox.addLayout(hLayout)
+            self.learnValuesHLayoutsArray.append(hLayout)
 
-            self.queryValuesBox.addWidget(inputVal2)
-            self.queryValuesTracker.append(inputVal2)
+
+            hTargetLayout = QHBoxLayout()
+            hTargetLayout.addStretch(1)
+            targetVal = QTextEdit(self.targetValBox)
+            targetVal.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            targetVal.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            targetVal.setFixedSize(self.targetValBox.width() - 35, 25)
+            targetVal.setObjectName(f"targetVal")
+            qTarText = QLabel(self.targetValBox)
+            qTarText.setText(f"T{self.currentCountVibroki}")
+            hTargetLayout.addWidget(qTarText)
+            hTargetLayout.addWidget(targetVal)
+            self.targetLearnValuesTracker.append(targetVal)
+            self.targetLearnValuesBox.addLayout(hTargetLayout)
+            self.targetLearnHLayoutsArray.append(hTargetLayout)
             pass  
         pass
     
@@ -245,6 +323,150 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             self.targetLearnValuesBox.addWidget(targetVal)
             self.targetLearnValuesTracker.append(targetVal)
         pass
+    
+    ##Fill groupBoxes learn/query/target {
+
+    def addViborkaQuery(self):
+        if (self.currentCountVibrokiQ >= 14):
+            return
+
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        LabelText = ""
+        self.currentCountVibrokiQ += 1
+        if (self.currentCountVibrokiQ >= 10):
+            LabelText = ""
+        elif (self.currentCountVibrokiQ < 10):
+            LabelText = "0"
+
+        hLayoutQ = QHBoxLayout()
+        hLayoutQ.addStretch(1)
+        inputValQ = QTextEdit()
+        inputValQ = QtWidgets.QTextEdit()
+        inputValQ.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        inputValQ.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        inputValQ.setFixedSize(self.queryInputValuesBox.width() - 35 ,25)
+        inputValQ.setObjectName(f"inputVal")
+        inputValQ.setFont(font)
+        qTextQ = QLabel()
+        qTextQ.setText(f"{LabelText}{self.currentCountVibrokiQ}")
+        qTextQ.setFont(font)
+        hLayoutQ.addWidget(qTextQ)
+        hLayoutQ.addWidget(inputValQ)
+        self.queryValuesTracker.append(inputValQ)
+        self.queryValuesBox.addLayout(hLayoutQ)
+        self.queryValuesHLayoutsArray.append(hLayoutQ)
+        
+        pass
+
+    def delViborkaQuery(self):
+        if (self.currentCountVibrokiQ <= 0):
+            return
+
+        self.currentCountVibrokiQ -= 1
+        itemQ = self.queryValuesBox.takeAt(self.queryValuesBox.count() - 1)
+        del itemQ
+
+        textBoxQ = self.queryInputValuesBox.findChildren(QtWidgets.QTextEdit)
+        tbQ = textBoxQ[len(textBoxQ) - 1]
+        tbQ.setParent(None)
+        tbQ.deleteLater()
+
+        labelQ = self.queryInputValuesBox.findChildren(QLabel)
+        lbQ = labelQ[len(labelQ) - 1]
+        lbQ.deleteLater()
+
+        self.queryValuesTracker.pop()
+        self.queryValuesHLayoutsArray.pop()
+        pass
+
+    def addViborkaLearn(self):
+        if (self.currentCountVibroki >= 14):
+            return
+
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        LabelText = ""
+        self.currentCountVibroki += 1
+        if (self.currentCountVibroki >= 10):
+            LabelText = ""
+        elif (self.currentCountVibroki < 10):
+            LabelText = "0"
+
+        hLayout = QHBoxLayout()
+        hLayout.addStretch(1)
+        inputVal = QtWidgets.QTextEdit(self.inputValuesBox)
+        inputVal.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        inputVal.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        inputVal.setFixedSize(self.inputValuesBox.width() - 35 ,25)
+        inputVal.setObjectName(f"inputVal")
+        inputVal.setFont(font)
+        qText = QLabel(self.inputValuesBox)
+        qText.setText(f"{LabelText}{self.currentCountVibroki}")
+        qText.setFont(font)
+        hLayout.addWidget(qText)
+        hLayout.addWidget(inputVal)
+        self.learnValuesTracker.append(inputVal)
+        self.learnValuesBox.addLayout(hLayout)
+        self.learnValuesHLayoutsArray.append(hLayout)
+
+        ##TargetValues
+        hTargetLayout = QHBoxLayout()
+        hTargetLayout.addStretch(1)
+        targetVal = QTextEdit(self.targetValBox)
+        targetVal.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        targetVal.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        targetVal.setFixedSize(self.targetValBox.width() - 35, 25)
+        targetVal.setObjectName(f"targetVal")
+        targetVal.setFont(font)
+        qTarText = QLabel(self.targetValBox)
+        qTarText.setText(f"{LabelText}{self.currentCountVibroki}")
+        qTarText.setFont(font)
+        hTargetLayout.addWidget(qTarText)
+        hTargetLayout.addWidget(targetVal)
+        self.targetLearnValuesTracker.append(targetVal)
+        self.targetLearnValuesBox.addLayout(hTargetLayout)
+        self.targetLearnHLayoutsArray.append(hTargetLayout)
+        pass
+
+    def delViborkaLearn(self):
+        if (self.currentCountVibroki <= 0):
+            return
+
+        ##InputValues
+        self.currentCountVibroki -= 1
+        item = self.learnValuesBox.takeAt(self.learnValuesBox.count() - 1)
+        del item
+
+        textBox = self.inputValuesBox.findChildren(QtWidgets.QTextEdit)
+        tb = textBox[len(textBox) - 1]
+        tb.deleteLater()
+
+        label = self.inputValuesBox.findChildren(QLabel)
+        lb = label[len(label) - 1]
+        lb.deleteLater()
+
+        self.learnValuesTracker.pop()
+        self.learnValuesHLayoutsArray.pop()
+
+        ##TargetValues 
+        tItem = self.targetLearnValuesBox.takeAt(self.targetLearnValuesBox.count() - 1)
+        del tItem
+
+        tTextBox = self.targetValBox.findChildren(QTextEdit)
+        tTb = tTextBox[len(tTextBox) - 1]
+        tTb.deleteLater()
+
+        tLabel = self.targetValBox.findChildren(QLabel)
+        tLb = tLabel[len(tLabel) - 1]
+        tLb.deleteLater()
+
+        self.targetLearnValuesTracker.pop()
+        self.targetLearnHLayoutsArray.pop()
+        pass
+
     ##Fill groupBoxes learn/query/target }
     
     def setVisible4Input(self, param):  #Когда данные берутся из внешнего файла, боксы для входных значений нам уже не нужны
@@ -362,19 +584,27 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         x = []
         if param == 'learn':
             for learnTB in self.learnValuesTracker:
-                x.append(float(learnTB.toPlainText()))
+                unParsed = learnTB.toPlainText()
+                parsed = [float(y) for y in unParsed.split(',')]
+                x.append(parsed)
 
         elif param == 'query':
             for queryTB in self.queryValuesTracker:
-                x.append(float(queryTB.toPlainText()))
+                unParsed = queryTB.toPlainText()
+                parsed = [float(y) for y in unParsed.split(',')]
+                x.append(parsed)
 
-        print(x)
+        #print(x)
         return x
 
     def getTargetVal(self):
         x = []
         for targetTB in self.targetLearnValuesTracker:
-            x.append(float(targetTB.toPlainText()))
+            unParsed = targetTB.toPlainText()
+            parsed = [float(y) for y in unParsed.split(',')]
+            x.append(parsed)
+
+        #print(x)
         return x
     #Получение значений с вкладки "Настройки"
     def getLearnLoops(self):
@@ -419,8 +649,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
 
         self.countOfNumbers = wIH
         self.INT.changeLinks(wIH, wHO, wIH)
-        self.refillValuesBoxes()
-        self.refillTargetValueBoxes()
         self.showDebugDialog("Параметры успешно изменены!", "info")
         pass  
     
@@ -543,7 +771,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
         self.showPercents(0)
         self.clearAll()
         self.INT.backToDefaultParams()
-        self.refillValuesBoxes()
         self.showDebugDialog("Параметры сброшены.", 'info')
         self.showParams(2)
         pass
@@ -614,7 +841,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
             self.showDebugDialog("Некорректные данные!", 'error')
             self.clearQueryBoxes()
             return
-        self.outputLabel.setText(np.array2string(self.INT.defQuery(inputArr)))
+        self.outputLabel.setText('\n'.join(str(x) for x in self.INT.defQuery(inputArr)))
         pass
 ##MainProcessesNN }
 
@@ -711,6 +938,22 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
     def showHelpPropWindow_Act(self):
         self.showHelpPropTitle()
         pass
+
+    def addViborka_Act(self):
+        self.addViborkaLearn()
+        pass
+
+    def deleteViborka_Act(self):
+        self.delViborkaLearn()
+        pass
+
+    def deleteViborkaQ_Act(self):
+        self.delViborkaQuery()
+        pass
+
+    def addViborkaQ_Act(self):
+        self.addViborkaQuery()
+        pass
 ##ButtonsHandler }
 ##MainWindowClass }
 
@@ -718,7 +961,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield.Ui_MainWindow):
 
 ##StartWindow{
 import Ui_startDialog as SD
-class GUIstartWindow(QtWidgets.QDialog, SD.Ui_Dialog):
+class GUIstartWindow(GUIDialogOrigin, SD.Ui_Dialog):
 
     finished = QtCore.pyqtSignal()
     FAQsig = QtCore.pyqtSignal()
@@ -736,6 +979,9 @@ class GUIstartWindow(QtWidgets.QDialog, SD.Ui_Dialog):
         self.fastClose = True
 
         self.label_2.setPixmap(QtGui.QPixmap(filepathStartSkin))
+
+        GUIDialogOrigin.setCustomMask(self)
+        GUIDialogOrigin.deleteButton(self)
         
     def setLogo(self, path):
         self.LogoLabel.setPixmap(QtGui.QPixmap(path))
@@ -771,41 +1017,49 @@ class GUIstartWindow(QtWidgets.QDialog, SD.Ui_Dialog):
 
 ##AboutProgrammWindow {
 import Ui_FAQDialog as FD
-class GUIFaqWin(QtWidgets.QDialog, FD.Ui_FAQDialog):
+class GUIFaqWin(GUIDialogOrigin, FD.Ui_FAQDialog):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.setFixedSize(self.size())
+        GUIDialogOrigin.setCustomMask(self)
+        GUIDialogOrigin.setButtons(self, 40)
 ##AboutProgrammWindow }
 
 
 ##HelpLearnModeWeindow {
 import Ui_helpLearnDialog as HD
-class GUIhelpLearn(QtWidgets.QDialog, HD.Ui_helpLearnDialog)  :
+class GUIhelpLearn(GUIDialogOrigin, HD.Ui_helpLearnDialog)  :
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.setFixedSize(self.size())
+        GUIDialogOrigin.setCustomMask(self)
+        GUIDialogOrigin.setButtons(self, 40)
 ##HelpLearnModeWeindow }
 
 
 ##HelpQueryModeWindow {
 import Ui_helpQueryDialog as QD
-class GUIhelpQuery(QtWidgets.QDialog, QD.Ui_helpQueryDialog):
+class GUIhelpQuery(GUIDialogOrigin, QD.Ui_helpQueryDialog):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.setFixedSize(self.size())
+        GUIDialogOrigin.setCustomMask(self)
+        GUIDialogOrigin.setButtons(self, 40)
 ##HelpQueryModeWindow }
 
 
 ##HelpPropertiesModeWindow {
 import Ui_helpPropDialog as PD
-class GUIhelpProp(QtWidgets.QDialog, PD.Ui_htlpPropDialog):
+class GUIhelpProp(GUIDialogOrigin, PD.Ui_htlpPropDialog):
     def __init__(self):
         super().__init__()
         self.setupUi(self)  
         self.setFixedSize(self.size())   
+        GUIDialogOrigin.setCustomMask(self)
+        GUIDialogOrigin.setButtons(self, 40)
 ##HelpPropertiesModeWindow {
 
 ##SubWindows }
