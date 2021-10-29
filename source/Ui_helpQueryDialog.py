@@ -14,9 +14,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_helpQueryDialog(object):
     def setupUi(self, helpQueryDialog):
         helpQueryDialog.setObjectName("helpQueryDialog")
-        helpQueryDialog.resize(663, 183)
+        helpQueryDialog.resize(663, 201)
         self.textGroupBox = QtWidgets.QGroupBox(helpQueryDialog)
-        self.textGroupBox.setGeometry(QtCore.QRect(10, 10, 641, 161))
+        self.textGroupBox.setGeometry(QtCore.QRect(10, 30, 641, 161))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
         font.setPointSize(14)

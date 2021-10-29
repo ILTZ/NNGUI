@@ -134,7 +134,7 @@ class NNControl(QtCore.QObject):
         for epochs in range(self.epochs):
             for count in range(self.learnLoops):
                 for i,t in zip(self.inputVal[0], self.targetVal[0]):
-                    print(i,t)
+                    #print(i,t)
                     self.NN.learnProcess(i, t)
                 self.PBSignal.emit(it / (self.learnLoops * self.epochs))
                 it += 1
@@ -145,6 +145,7 @@ class NNControl(QtCore.QObject):
                     self.finished.emit()
                     return
         print("TrainSucces")
+        self.performanceTest(self.inputVal[0], self.targetVal[0])
         self.PBSignal.emit(1)
         self.finished4Btn.emit(True)
         self.finished.emit()
@@ -156,7 +157,7 @@ class NNControl(QtCore.QObject):
         for epochs in range(self.epochs):
             for count in range(self.learnLoops):
                 for i,t in zip(self.inputArr, self.targetArr):
-                    print(i,t)
+                    #print(i,t)
                     self.NN.learnProcess(i, t)
                 self.PBSignal.emit(it / (self.learnLoops * self.epochs))
                 it += 1
@@ -167,7 +168,7 @@ class NNControl(QtCore.QObject):
                     self.finished.emit()
                     return
         print("TrainSucces")
-        self.performanceTest()
+        self.performanceTest(self.inputArr, self.targetArr)
         self.PBSignal.emit(1)
         self.finished4Btn.emit(True)
         self.finished.emit()
@@ -203,23 +204,32 @@ class NNControl(QtCore.QObject):
         else:
             print("Uncorrect param")
         pass
-    def performanceTest(self):
+    def performanceTest(self, inpArr, tarArr):
         val = 0
         count = 0
+        print(inpArr,tarArr)
 
-
-        for i,t in zip(self.inputArr, self.targetArr):
+        for i,t in zip(inpArr, tarArr):
             count += 1
+
+
             value = self.NN.query(i)
 
-            inArrVal = 0
-            for count in range(len(value)):
+            if (len(t) < 2):
                 minVal = t[0] - self.performanceError
                 maxVal = t[0] + self.performanceError
-                if ((value[count] < maxVal) and (value[count] > minVal)):
-                    inArrVal += 1
-            if (inArrVal == len(value)):
-                val += 1
+                if (value < maxVal and value > minVal):
+                    val += 1
+                    pass
+            else:
+                correctCount = len(t)
+                for inputValues in range(len(t)):
+                    minaVal = t[inputValues] - self.performanceError
+                    maxaVal = t[inputValues] + self.performanceError
+                    if (value[inputValues] < maxaVal and value[inputValues > minaVal]):
+                        correctCount -= 1
+                if (correctCount == 0):
+                    val += 1
 
         try:
             self.performanceRate = val/count
@@ -236,7 +246,9 @@ class NNControl(QtCore.QObject):
         #FNw = self.NN.FN.getWeights()
         #np.savez(path, HN1w, HN2w, FNw)
         #self.DebugSignal.emit("Веса сохранены.", 'info')
-
+        print(path)
+        path += (str("(InputOutput-") + str(self.getCurrentWIH()) + "_" + str(self.getCurrentWHO()) + str(")(HiddenLayers-") + str(self.getCurrentNeironsCount()[0]) + '_' + str(self.getCurrentNeironsCount()[1]) + ")")
+        print(path)
         ####################
         ##For multiNerirons net
         tempArr = []

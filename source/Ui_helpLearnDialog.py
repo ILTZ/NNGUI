@@ -14,9 +14,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_helpLearnDialog(object):
     def setupUi(self, helpLearnDialog):
         helpLearnDialog.setObjectName("helpLearnDialog")
-        helpLearnDialog.resize(663, 504)
+        helpLearnDialog.resize(663, 521)
         self.textGroupBox = QtWidgets.QGroupBox(helpLearnDialog)
-        self.textGroupBox.setGeometry(QtCore.QRect(10, 10, 641, 481))
+        self.textGroupBox.setGeometry(QtCore.QRect(10, 30, 641, 481))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
         font.setPointSize(14)

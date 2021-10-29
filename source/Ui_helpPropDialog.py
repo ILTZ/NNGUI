@@ -14,9 +14,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_htlpPropDialog(object):
     def setupUi(self, htlpPropDialog):
         htlpPropDialog.setObjectName("htlpPropDialog")
-        htlpPropDialog.resize(660, 460)
+        htlpPropDialog.resize(661, 479)
         self.textGroupBox = QtWidgets.QGroupBox(htlpPropDialog)
-        self.textGroupBox.setGeometry(QtCore.QRect(10, 10, 641, 441))
+        self.textGroupBox.setGeometry(QtCore.QRect(10, 30, 641, 441))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
         font.setPointSize(14)

@@ -1,42 +1,96 @@
+## Required import {
 import os
+from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtWidgets import QBoxLayout, QDialog, QFileDialog, QGroupBox, QHBoxLayout, QLabel, QMessageBox, QPushButton, QTextEdit, QVBoxLayout, QScrollBar
+
+import Ui_shield
+import Ui_shield2
+import Ui_shieldV3
+
+from Int4NN import NNControl
+from fileUploader import FileUpLoader
+## Required import }
+
+
+## PathToResources {
 dirname = os.path.dirname(__file__)
 filepathStartSkin = os.path.join(dirname, 'resources/startWindowPict.png')
 filenameLogo = os.path.join(dirname, 'resources/logo.png')
 filenameIcon = os.path.join(dirname, 'resources/icon.png')
 filenameErrorIcon = os.path.join(dirname, 'resources/errorIcon.png')
 filenameInfoIcon = os.path.join(dirname, 'resources/infoIcon.png')
-
 filenameCloseIcon = os.path.join(dirname, 'resources/close.png')
+## PathToResources }
 
-from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtWidgets import QBoxLayout, QDialog, QFileDialog, QGroupBox, QHBoxLayout, QLabel, QMessageBox, QPushButton, QTextEdit, QVBoxLayout, QScrollBar
-
-
-import Ui_shield
-
-
-import numpy as np
+def getMask(object, x = 10, y = 10):
+    PP = QtGui.QPainterPath() 
+    PP.addRoundedRect(QtCore.QRectF(object.rect()), x, y)
+    mask = QtGui.QRegion(PP.toFillPolygon().toPolygon())
+    return mask
 
 
-
-from Int4NN import NNControl
-from fileUploader import FileUpLoader
-
-
-#def params NN
+## DefParams NN {
 def_inputN = 5
 def_hiddenN = 5
 def_outputN = 1
 def_learnRate = 0.3
 def_epochs = 1
 def_loops = 30000
+## DefParams NN }
 
-import Ui_shield2
+##Can move window without shape {
+def setMoveWindow(widget):
 
+    win = widget.window()
+    cursorShape = widget.cursor().shape()
+    moveSource = getattr(widget, "mouseMoveEvent")
+    pressSource = getattr(widget, "mousePressEvent")
+    releaseSource = getattr(widget, "mouseReleaseEvent")
+    
+    def move(event):
+        if move.b_move:
+            x = event.globalX() + move.x_korr - move.lastPoint.x()
+            y = event.globalY() + move.y_korr - move.lastPoint.y()
+            win.move(x, y)
+            widget.setCursor(QtCore.Qt.SizeAllCursor)
+        return moveSource(event)
+    
+    def press(event):
+        if event.button() == QtCore.Qt.LeftButton:
+            # Корекция геометрии окна: учитываем размеры рамки и заголовока
+            x_korr = win.frameGeometry().x() - win.geometry().x()
+            y_korr = win.frameGeometry().y() - win.geometry().y()
+            # Корекция геометрии виджита: учитываем смещение относительно окна
+            parent = widget
+            while not parent == win:
+                x_korr -= parent.x()
+                y_korr -= parent.y()
+                parent = parent.parent()
+            move.__dict__.update({"lastPoint":event.pos(), "b_move":True, "x_korr":x_korr, "y_korr":y_korr})
+        else:
+            move.__dict__.update({"b_move":False})
+            widget.setCursor(cursorShape)
+        return pressSource(event)
+    
+    def release(event):
+        move.__dict__.update({"b_move":False})
+        widget.setCursor(cursorShape)
+        return releaseSource(event)
+    
+    setattr(widget, "mouseMoveEvent", move)
+    setattr(widget, "mousePressEvent", press)
+    setattr(widget, "mouseReleaseEvent", release)
+    move.__dict__.update({"b_move":False})
+    return widget
+##Source: https://www.cyberforum.ru/python-graphics/thread1692328.html
+##Can move window without shape }
+
+##Parent for QDialog {
 class GUIDialogOrigin(QtWidgets.QDialog):
     def __init__(self):
         super().__init__()
         self.closeBtn = QPushButton(self)
+        self.closeBtn.setFixedSize(40,20)
         self.closeBtn.clicked.connect(self.closeWindow)
                
 
@@ -47,11 +101,11 @@ class GUIDialogOrigin(QtWidgets.QDialog):
         self.setMask(mask)
         pass 
 
-    def setButtons(self, x = 0):
+    def setButtons(self, x = 20, y = 0):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(filenameCloseIcon), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
-        self.closeBtn.setGeometry(QtCore.QRect(self.width() - x, 0, 31, 19))
+        self.closeBtn.setGeometry(QtCore.QRect(self.width() - x, y, 31, 19))
         self.closeBtn.setObjectName("dialogCloseBtn")
         self.closeBtn.setIcon(icon)
         pass
@@ -64,7 +118,7 @@ class GUIDialogOrigin(QtWidgets.QDialog):
         self.close()
         pass
     pass
-
+##Parent for QDialog }
 
 ##MainWindowClass {
 class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
@@ -73,9 +127,11 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        
 
 ##Icons and other cosmetic {
         self.setFixedSize(self.size())
+        #self.setAcceptDrops(True)
 
         self.icon = QtGui.QIcon()
         self.icon.addPixmap(QtGui.QPixmap(filenameIcon), QtGui.QIcon.Normal, QtGui.QIcon.Off) 
@@ -110,12 +166,21 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         self.helpPropWindow.setWindowIcon(self.icon)
 
         ###Maski
-        PP = QtGui.QPainterPath() 
-        PP.addRoundedRect(QtCore.QRectF(self.rect()), 3, 3)
-        mask = QtGui.QRegion(PP.toFillPolygon().toPolygon())
-        self.setMask(mask)
+        # PP = QtGui.QPainterPath() 
+        # PP.addRoundedRect(QtCore.QRectF(self.rect()), 3, 3)
+        # mask = QtGui.QRegion(PP.toFillPolygon().toPolygon())
+        # self.setMask(mask)
 
+        self.setMask(getMask(self, 3, 3))
         
+
+        ##MovebleWindow
+        setMoveWindow(self)
+        setMoveWindow(self.startTitle)
+        setMoveWindow(self.FAQTitle)
+        setMoveWindow(self.helpLearnTitle)
+        setMoveWindow(self.helpQueryWindow)
+        setMoveWindow(self.helpPropWindow)    
 ##Icons and other cosmetic }
 
 
@@ -160,8 +225,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         self.LoadWeightsBtn.clicked.connect(self.loadWeights_Act)
         self.SaveWeightsBtn.clicked.connect(self.saveWeights_Act)   
         self.RerandWeightsBtn.clicked.connect(self.randWeights_Act) 
-        self.chCountBtn.clicked.connect(self.neironsCount_Act)  
-        self.chLinksBtn.clicked.connect(self.setNewLincks_Act)
         self.clearBtn.clicked.connect(self.clearParams_Act) 
         self.epochsLoopsBtn.clicked.connect(self.setNewLearnParams_Act) 
         self.settingsHelpBtn.clicked.connect(self.showHelpPropWindow_Act) 
@@ -343,7 +406,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         hLayoutQ = QHBoxLayout()
         hLayoutQ.addStretch(1)
         inputValQ = QTextEdit()
-        inputValQ = QtWidgets.QTextEdit()
+        inputValQ = QtWidgets.QTextEdit()#self.frame_2)
         inputValQ.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         inputValQ.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         inputValQ.setFixedSize(self.queryInputValuesBox.width() - 35 ,25)
@@ -469,6 +532,13 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
 
     ##Fill groupBoxes learn/query/target }
     
+    def setFocusSubWindow(self, dialog):
+        dialog.setFocus(True)
+        dialog.activateWindow()
+        dialog.raise_()
+        dialog.show()
+        pass
+
     def setVisible4Input(self, param):  #Когда данные берутся из внешнего файла, боксы для входных значений нам уже не нужны
         #self.inputValuesBox.setVisible(param)
         #self.targetValBox.setVisible(param)
@@ -482,12 +552,20 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         self.helpLearnTitle.close()
         self.helpPropWindow.close()
 
+        if (not self.helpLearnTitle.isActiveWindow()):
+            self.setFocusSubWindow(self.helpLearnTitle)
+            return
+
         self.helpLearnTitle.show()
         pass
     
     def showHelpQueryTitle(self):
         self.helpLearnTitle.close()
         self.helpPropWindow.close()
+        
+        if ( not self.helpQueryWindow.isActiveWindow()):
+            self.setFocusSubWindow(self.helpQueryWindow)
+            return
 
         self.helpQueryWindow.show()
         pass
@@ -495,6 +573,10 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
     def showHelpPropTitle(self):
         self.helpLearnTitle.close()
         self.helpQueryWindow.close()
+
+        if (not self.helpPropWindow.isActiveWindow()):
+            self.setFocusSubWindow(self.helpPropWindow)
+            return
 
         self.helpPropWindow.show()
         pass
@@ -520,6 +602,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         self.clearTargetBoxes()
     
     ##ShowSomethitg {
+
     def showCurrentParams(self):                    #Для отображения уставновленных параметров сети
         mes = (f"Количество входных значений: {self.INT.getCurrentWIH()}\n" +
         f"Количество скрытых нодов: {self.INT.getCurrentWHH()}\n" +
@@ -535,10 +618,12 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
     def showDebugDialog(self, message, type):       #Окно для отправки в него дебаг сообщений  
         if self.goToClose:
             return
-
+        
         msgBox = QMessageBox()
         msgBox.setText(message)
+        msgBox.setMask(getMask(msgBox))
         
+
         #msgBox.setStandardButtons(QMessageBox.standardButtons)
         if type == 'error':
             msgBox.setWindowTitle("ERROR")
@@ -575,7 +660,9 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
             self.hiddenLayerCount1.setText(str(self.INT.getCurrentNeironsCount()[0]))
             self.HiddenLayerCount2.setText(str(self.INT.getCurrentNeironsCount()[1]))
         pass
+    
     ##ShowSomethitg {
+
 ##TextBoxes, debugMessageBoxes, helpBoxes }
 
 
@@ -634,6 +721,12 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
     
 
 ##Set parameters fo NN {  
+    def setNewParamas(self):
+        self.setNewLinks()
+        self.setNewLearnParams()
+        self.setNewNeironCounts()
+        pass
+
     def setNewLinks(self):          #Смена количества входных/выходных значений
         wIH = 0
         wHO = 0
@@ -799,6 +892,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         targetArr.append(self.hand_target_val)
         # inputArr = self.hand_input_arr
         # targetArr = self.hand_target_val
+        self.INT.setPerfError(self.errorBox.value())
         self.INT.setLFFStatus(False)
         self.INT.setInputVal(inputArr, targetArr, 0)
         self.LearnThread.start()
@@ -850,11 +944,11 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         self.clearBtn.setEnabled(val)
         self.learnStartBtn.setEnabled(val)
         self.queryBtn.setEnabled(val)
-        self.chLinksBtn.setEnabled(val)
+        #self.chLinksBtn.setEnabled(val)
         self.epochsLoopsBtn.setEnabled(val)
         self.errorBox.setEnabled(val)
         self.RerandWeightsBtn.setEnabled(val)
-        self.chCountBtn.setEnabled(val)
+        #self.chCountBtn.setEnabled(val)
         self.loadFromFile.setEnabled(val)
         self.SaveWeightsBtn.setEnabled(val)
         self.LoadWeightsBtn.setEnabled(val)
@@ -900,7 +994,8 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         pass
     
     def setNewLearnParams_Act(self):
-        self.setNewLearnParams()
+        #self.setNewLearnParams()
+        self.setNewParamas()
         pass
     
     def currentParams_Act(self):
@@ -1023,7 +1118,8 @@ class GUIFaqWin(GUIDialogOrigin, FD.Ui_FAQDialog):
         self.setupUi(self)
         self.setFixedSize(self.size())
         GUIDialogOrigin.setCustomMask(self)
-        GUIDialogOrigin.setButtons(self, 40)
+        GUIDialogOrigin.setButtons(self, 50, 10)
+        
 ##AboutProgrammWindow }
 
 
@@ -1035,7 +1131,7 @@ class GUIhelpLearn(GUIDialogOrigin, HD.Ui_helpLearnDialog)  :
         self.setupUi(self)
         self.setFixedSize(self.size())
         GUIDialogOrigin.setCustomMask(self)
-        GUIDialogOrigin.setButtons(self, 40)
+        GUIDialogOrigin.setButtons(self, 50, 10)
 ##HelpLearnModeWeindow }
 
 
@@ -1047,7 +1143,7 @@ class GUIhelpQuery(GUIDialogOrigin, QD.Ui_helpQueryDialog):
         self.setupUi(self)
         self.setFixedSize(self.size())
         GUIDialogOrigin.setCustomMask(self)
-        GUIDialogOrigin.setButtons(self, 40)
+        GUIDialogOrigin.setButtons(self, 50, 10)
 ##HelpQueryModeWindow }
 
 
@@ -1059,7 +1155,7 @@ class GUIhelpProp(GUIDialogOrigin, PD.Ui_htlpPropDialog):
         self.setupUi(self)  
         self.setFixedSize(self.size())   
         GUIDialogOrigin.setCustomMask(self)
-        GUIDialogOrigin.setButtons(self, 40)
+        GUIDialogOrigin.setButtons(self, 50, 10)
 ##HelpPropertiesModeWindow {
 
 ##SubWindows }
