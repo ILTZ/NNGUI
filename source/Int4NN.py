@@ -80,7 +80,7 @@ class NNControl(QtCore.QObject):
         self.NN.randWeights4F()
         pass
     
-    ## Get/Set {
+## Get/Set {
 
     def getCurrentWIH(self):
         return self.NN.getCurrentWIH()
@@ -125,7 +125,7 @@ class NNControl(QtCore.QObject):
         self.NN.setCurrentNeironCount(arr)
         pass
 
-    ## Get/Set {
+## Get/Set }
 
     #Обучение по вводимым вручную значениям
     def handLearn(self):
@@ -134,7 +134,6 @@ class NNControl(QtCore.QObject):
         for epochs in range(self.epochs):
             for count in range(self.learnLoops):
                 for i,t in zip(self.inputVal[0], self.targetVal[0]):
-                    #print(i,t)
                     self.NN.learnProcess(i, t)
                 self.PBSignal.emit(it / (self.learnLoops * self.epochs))
                 it += 1
@@ -157,7 +156,6 @@ class NNControl(QtCore.QObject):
         for epochs in range(self.epochs):
             for count in range(self.learnLoops):
                 for i,t in zip(self.inputArr, self.targetArr):
-                    #print(i,t)
                     self.NN.learnProcess(i, t)
                 self.PBSignal.emit(it / (self.learnLoops * self.epochs))
                 it += 1
@@ -237,20 +235,25 @@ class NNControl(QtCore.QObject):
             self.DebugSignal.emit("PerformanceTest::ZeroDivision", 'error')
             return
         pass
-    #Процесс схоранения/загрузки весов
+    
+## Save/load weights {
+
     def saveWeights(self, path):
-        ####################
-        ##For 1-neirons net
-        #HN1w = self.NN.HN.getWeights()
-        #HN2w = self.NN.HN2.getWeights()
-        #FNw = self.NN.FN.getWeights()
-        #np.savez(path, HN1w, HN2w, FNw)
-        #self.DebugSignal.emit("Веса сохранены.", 'info')
+
         print(path)
         path += (str("(InputOutput-") + str(self.getCurrentWIH()) + "_" + str(self.getCurrentWHO()) + str(")(HiddenLayers-") + str(self.getCurrentNeironsCount()[0]) + '_' + str(self.getCurrentNeironsCount()[1]) + ")")
         print(path)
-        ####################
-        ##For multiNerirons net
+
+
+        modelProp = []
+        ## Current parametrs of net {
+        modelProp.append(self.getCurrentWIH())
+        modelProp.append(self.getCurrentWHH())
+        modelProp.append(self.getCurrentWHO())
+        modelProp.append(self.getCurrentNeironsCount()[0])
+        modelProp.append(self.getCurrentNeironsCount()[1])
+        ## Current parametrs of net }
+
         tempArr = []
         for i in range(self.NN.HiddenLayer1Count):
             tempArr.append(self.NN.HiddenLayer1[i].getWeights())
@@ -261,22 +264,31 @@ class NNControl(QtCore.QObject):
         tempArr3.append(self.NN.FN.getWeights())
 
         try:
-            np.savez(path, tempArr, tempArr2, tempArr3)
+            np.savez(path, tempArr, tempArr2, tempArr3, modelProp)
         except:
             self.DebugSignal.emit("Невозможно сохранить!", "error")
             return
 
         self.DebugSignal.emit("Веса сохранены!", "info")
         pass
+
     def loadWeights(self, path):
         allArr = np.load(path)
         
         HN = allArr['arr_0']
         HN2 = allArr['arr_1']
         FN = allArr['arr_2']
+        modelProp = allArr['arr_3']
 
 
-
+        try:
+            self.NN.setWIH(modelProp[0])
+            self.NN.setWHH(modelProp[1])
+            self.NN.setWHO(modelProp[2])
+            self.NN.setCurrentNeironCount([modelProp[3], modelProp[4]])         
+        except:
+            self.DebugSignal.emit("Не удалось загрузить параметры модели!", 'error')
+            return
 
         try:
             for i in range(len(HN)):
@@ -294,3 +306,5 @@ class NNControl(QtCore.QObject):
 
         self.DebugSignal.emit("Веса загружены и поставлены.", 'info')
         pass
+
+## Save/load weights {

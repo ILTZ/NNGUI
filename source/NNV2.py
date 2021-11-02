@@ -285,6 +285,8 @@ class neuralNetwork2:
         self.changeLearnRate(self.lr)
     def getCurrentNeironCount(self):
         return [self.HiddenLayer1Count, self.HiddenLayer2Count]
+    
+    ##Set and refill arrays of neirons
     def setCurrentNeironCount(self, arr):
         self.HiddenLayer1Count = arr[0]
         self.HiddenLayer2Count = arr[1]
@@ -293,6 +295,7 @@ class neuralNetwork2:
         self.reFillHidden2Arr()
         self.randWeights4H2()
         self.randWeights4F()
+        
     ###########################
     ##Работа с весами нейронов
     def getWeights1st(self): #1-st hidden layer

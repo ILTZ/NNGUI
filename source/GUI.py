@@ -143,7 +143,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         self.infoIcon = QtGui.QIcon()
         self.infoIcon.addPixmap(QtGui.QPixmap(filenameInfoIcon), QtGui.QIcon.Normal, QtGui.QIcon.Off) 
 
-        #self.oNodesIn.setEnabled(False) ##Not work yet
         self.goToClose = False
         ##SubWindows
         self.startTitle = GUIstartWindow()
@@ -273,6 +272,9 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         self.ReadThread.started.connect(self.UpLoader.loadFromFile)    
         self.ReadThread.finished.connect(self.correctThread)
         ##ReadFromFileThread }
+
+        self.learnStartBtn.setEnabled(False)
+        self.queryBtn.setEnabled(False)
 ##Threads }
 
 ##FillGroupBoxes {
@@ -300,98 +302,14 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
 #Constructor }
 
 ##TextBoxes, debugMessageBoxes, helpBoxes {
-    
-    def clearValuesBoxes(self):
-        self.learnValuesTracker.clear()
-        self.queryValuesTracker.clear()
-
-        for i in range(self.learnValuesBox.count()):
-            item = self.learnValuesBox.takeAt(i)
-            item2 = self.queryValuesBox.takeAt(i)
-            del item
-            del item2
-
-        ##VBoxComponents {    
-        for text,text1 in zip(self.inputValuesBox.findChildren(QtWidgets.QTextEdit), self.inputValuesBox_2.findChildren(QtWidgets.QTextEdit)):
-            text.deleteLater()
-            text1.deleteLater()
-
-        
-        input1 = self.inputValuesBox.findChildren(QLabel)
-        input2 = self.inputValuesBox_2.findChildren(QLabel)
-        for i in range(len(input1)):
-            input1[i].deleteLater()
-        for i in range(len(input2)):
-            input2[i].deleteLater()
-        ##VBoxComponents }
-        print(self.learnValuesBox.count())
-
-        pass 
-
-    def refillValuesBoxes(self):
-        self.clearValuesBoxes()
-        XCount = 1
-        af = QGroupBox()
-        for i in range(self.INT.getCurrentWIH()):
-            hLayout = QHBoxLayout()
-            hLayout.addStretch(1)
-            inputVal = QtWidgets.QTextEdit(self.inputValuesBox)
-            inputVal.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-            inputVal.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-            inputVal.setFixedSize(self.inputValuesBox.width() - 35 ,25)
-            inputVal.setObjectName(f"inputVal{i}")
-            qText = QLabel(self.inputValuesBox)
-            qText.setText(f"V{i + 1}")
-            hLayout.addWidget(qText)
-            hLayout.addWidget(inputVal)
-            self.learnValuesTracker.append(inputVal)
-            self.learnValuesBox.addLayout(hLayout)
-            self.learnValuesHLayoutsArray.append(hLayout)
-
-
-            hTargetLayout = QHBoxLayout()
-            hTargetLayout.addStretch(1)
-            targetVal = QTextEdit(self.targetValBox)
-            targetVal.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-            targetVal.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-            targetVal.setFixedSize(self.targetValBox.width() - 35, 25)
-            targetVal.setObjectName(f"targetVal")
-            qTarText = QLabel(self.targetValBox)
-            qTarText.setText(f"T{self.currentCountVibroki}")
-            hTargetLayout.addWidget(qTarText)
-            hTargetLayout.addWidget(targetVal)
-            self.targetLearnValuesTracker.append(targetVal)
-            self.targetLearnValuesBox.addLayout(hTargetLayout)
-            self.targetLearnHLayoutsArray.append(hTargetLayout)
-            pass  
-        pass
-    
-    def clearTargetValueBoxes(self):
-        self.targetLearnValuesTracker.clear()
-        for i in range(self.targetLearnValuesBox.count()):
-            item = self.targetLearnValuesBox.takeAt(i)
-            del item
-        for text in self.targetValBox.findChildren(QtWidgets.QTextEdit):
-            text.deleteLater()
-
-        pass
-    
-    def refillTargetValueBoxes(self):
-        self.clearTargetValueBoxes()
-        for i in range(self.INT.getCurrentWHO()):
-            targetVal = inputVal = QtWidgets.QTextEdit(self.targetValBox)
-            targetVal.setFixedSize(51,31)
-            targetVal.setObjectName(f"targettVal{i}")
-
-            self.targetLearnValuesBox.addWidget(targetVal)
-            self.targetLearnValuesTracker.append(targetVal)
-        pass
-    
+     
     ##Fill groupBoxes learn/query/target {
 
     def addViborkaQuery(self):
         if (self.currentCountVibrokiQ >= 14):
             return
+
+
 
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -427,6 +345,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         if (self.currentCountVibrokiQ <= 0):
             return
 
+
         self.currentCountVibrokiQ -= 1
         itemQ = self.queryValuesBox.takeAt(self.queryValuesBox.count() - 1)
         del itemQ
@@ -447,6 +366,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
     def addViborkaLearn(self):
         if (self.currentCountVibroki >= 14):
             return
+
 
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -497,6 +417,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
     def delViborkaLearn(self):
         if (self.currentCountVibroki <= 0):
             return
+
 
         ##InputValues
         self.currentCountVibroki -= 1
@@ -603,7 +524,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
     
     ##ShowSomethitg {
 
-    def showCurrentParams(self):                    #Для отображения уставновленных параметров сети
+    def showCurrentParams(self):                   
         mes = (f"Количество входных значений: {self.INT.getCurrentWIH()}\n" +
         f"Количество скрытых нодов: {self.INT.getCurrentWHH()}\n" +
         f"Количество выходных значений: {self.INT.getCurrentWHO()}\n" +
@@ -615,7 +536,17 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         self.showDebugDialog(mes, 'info')
         pass
     
-    def showDebugDialog(self, message, type):       #Окно для отправки в него дебаг сообщений  
+    def showDebugDialog(self, message, type): 
+        """
+        Show debug message. Use "signal_name".emit() in\n
+        <Int4NN> or <fileUploader>.\n
+        Parametrs:\n
+        "message" is message whic user will see,\n
+        "type" may be 'error' or 'info' - set the icon of\n
+        window.
+        """
+        
+              
         if self.goToClose:
             return
         
@@ -638,12 +569,13 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         msgBox.exec_()
         pass  
     
-    def showPerformance(self):                      #Отображение точности сети
+    def showPerformance(self):                      
         if (self.learnFromFile):
             self.performanceLabel.setText(str(self.INT.getPerformanceRate()))
         pass
     
-    def showPercents(self, value):                  #Значения для прогресс бара приходят сигналом из INT
+    def showPercents(self, value): 
+
         self.progressBar.setValue(value * 100.0)
         pass
     
@@ -661,38 +593,69 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
             self.HiddenLayerCount2.setText(str(self.INT.getCurrentNeironsCount()[1]))
         pass
     
+    def disableButtons(self, inMode):
+        """
+        If boxes for values in GB is absent\n
+        StartBtn for learn or query process\n
+        is disabled.
+        """
+        vTracker = len(self.learnValuesTracker)
+        curBtn = self.learnStartBtn
+        if (inMode == 'query'):
+            vTracker = len(self.queryValuesTracker)
+            curBtn = self.queryBtn
+
+        if (vTracker < 1):
+            curBtn.setEnabled(False)
+        elif (vTracker > 0):
+            curBtn.setEnabled(True)
+
+        
+        pass
     ##ShowSomethitg {
 
 ##TextBoxes, debugMessageBoxes, helpBoxes }
 
 
 ##Get parametrs from user {
+
+    
     def getParams(self, param):
+        """
+        Get params for learn from selected groupBox.
+        Parameters:\n
+        "param" defines, which groupBox will 
+        be used.\n
+        It may be\n
+        'query' - GB from query table,\n
+        'target' - GB with target values from learn table,\n
+        Default is 'learn' - GB with learn values from learn table.
+        """
+
         x = []
-        if param == 'learn':
-            for learnTB in self.learnValuesTracker:
-                unParsed = learnTB.toPlainText()
-                parsed = [float(y) for y in unParsed.split(',')]
-                x.append(parsed)
+        requaresLen = 0
 
-        elif param == 'query':
-            for queryTB in self.queryValuesTracker:
-                unParsed = queryTB.toPlainText()
-                parsed = [float(y) for y in unParsed.split(',')]
-                x.append(parsed)
+        valuesTracker = self.learnValuesTracker
+        requaresLen = self.INT.getCurrentWIH()
+        if (param == 'query'):
+            valuesTracker = self.queryValuesTracker
+            requaresLen = self.INT.getCurrentWIH()
+        elif (param == 'target'):
+            valuesTracker = self.targetLearnValuesTracker
+            requaresLen = self.INT.getCurrentWHO()
 
-        #print(x)
-        return x
-
-    def getTargetVal(self):
-        x = []
-        for targetTB in self.targetLearnValuesTracker:
-            unParsed = targetTB.toPlainText()
+        for TB in valuesTracker:
+            unParsed = TB.toPlainText()
             parsed = [float(y) for y in unParsed.split(',')]
-            x.append(parsed)
+            if (len(parsed) != requaresLen):
+                TB.setText("")
+                raise
 
-        #print(x)
+            x.append(parsed)
+            
+
         return x
+
     #Получение значений с вкладки "Настройки"
     def getLearnLoops(self):
         try:
@@ -848,7 +811,10 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         self.FAQTitle.show()
         pass
     
-    def clearParams(self):      #Сброс к дефолтным параметрам
+    def clearParams(self):      
+        """
+        Back all app to default parameters.
+        """
         self.setVisible4Input(True)
         self.learnFromFile = False
         self.countOfNumbers = def_inputN
@@ -868,30 +834,28 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         self.showParams(2)
         pass
     
-    def startLearn(self):       #"Старт" обучения сетки
-        procName = 'learn'
-        #В случае загрузки значенией из внешнего файла
+    def startLearn(self):       
+
         if self.learnFromFile == True:
             self.goToLearnFile()
-        #В случае, если значения вводятся ручками
         else:
             try:
                 self.hand_input_arr = self.getParams('learn')
-                self.hand_target_val = self.getTargetVal()
+                self.hand_target_val = self.getParams('target')
             except:
                 self.showDebugDialog("Введите корректные значения!", 'error')
-                self.clearLearnBoxes()
                 return
             self.goToLearnHand()
         pass
     
-    def goToLearnHand(self):    #По факту - просто запускает поток обучения(та, что ниже - тоже самое)
+    def goToLearnHand(self):
+        """
+        Run learn in other thread with values from GB from learnTable.
+        """    
         inputArr = []
         targetArr = []
         inputArr.append(self.hand_input_arr)
         targetArr.append(self.hand_target_val)
-        # inputArr = self.hand_input_arr
-        # targetArr = self.hand_target_val
         self.INT.setPerfError(self.errorBox.value())
         self.INT.setLFFStatus(False)
         self.INT.setInputVal(inputArr, targetArr, 0)
@@ -899,6 +863,9 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         pass
     
     def goToLearnFile(self):
+        """
+        Run learn in other thread with values from file.
+        """  
         self.INT.setInputVal(self.zipInput)
         self.INT.setLFFStatus(True)
         self.INT.setPerfError(self.errorBox.value())
@@ -906,11 +873,11 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         self.LearnThread.start()
         pass
     
-    def stopLearn(self):        #"Стоп" обучения сети
+    def stopLearn(self):        
         self.INT.stopSignal = True
         pass
     
-    def loadWeights(self):      #Загрузка весов
+    def loadWeights(self):      
         path = QFileDialog.getOpenFileName(self, 'Open file')
         if (path[0] == ""):
             print("UnLoaded")
@@ -918,7 +885,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         self.INT.loadWeights(path[0])
         pass
     
-    def saveWeights(self):      #Сохранение весов
+    def saveWeights(self):      
         path = QFileDialog.getSaveFileName(self, 'Save file')
         if (path[0] == ""):
             print("UnSaved")
@@ -926,14 +893,12 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         self.INT.saveWeights(path[0])
         pass
     
-    def defQuery(self):         #Стандартный опрос, наверное, тоже стоит в поток запихать(?)
-        procName = 'query'
+    def defQuery(self):        
         try:
-            inputArr = self.getParams(procName)
+            inputArr = self.getParams('query')
         except:
             print("Некоректные данные!")
             self.showDebugDialog("Некорректные данные!", 'error')
-            self.clearQueryBoxes()
             return
         self.outputLabel.setText('\n'.join(str(x) for x in self.INT.defQuery(inputArr)))
         pass
@@ -944,11 +909,9 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         self.clearBtn.setEnabled(val)
         self.learnStartBtn.setEnabled(val)
         self.queryBtn.setEnabled(val)
-        #self.chLinksBtn.setEnabled(val)
         self.epochsLoopsBtn.setEnabled(val)
         self.errorBox.setEnabled(val)
         self.RerandWeightsBtn.setEnabled(val)
-        #self.chCountBtn.setEnabled(val)
         self.loadFromFile.setEnabled(val)
         self.SaveWeightsBtn.setEnabled(val)
         self.LoadWeightsBtn.setEnabled(val)
@@ -1036,18 +999,22 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
 
     def addViborka_Act(self):
         self.addViborkaLearn()
+        self.disableButtons('learn')
         pass
 
     def deleteViborka_Act(self):
         self.delViborkaLearn()
+        self.disableButtons('learn')
         pass
 
     def deleteViborkaQ_Act(self):
         self.delViborkaQuery()
+        self.disableButtons('query')
         pass
 
     def addViborkaQ_Act(self):
         self.addViborkaQuery()
+        self.disableButtons('query')
         pass
 ##ButtonsHandler }
 ##MainWindowClass }
