@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>931</width>
-    <height>512</height>
+    <height>507</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -42,7 +42,7 @@
       <x>10</x>
       <y>0</y>
       <width>911</width>
-      <height>471</height>
+      <height>461</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
@@ -63,9 +63,9 @@
        <property name="font">
         <font>
          <family>Times New Roman</family>
-         <pointsize>12</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <pointsize>14</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
         </font>
        </property>
        <property name="tabShape">
@@ -120,7 +120,7 @@
           <property name="font">
            <font>
             <family>Times New Roman</family>
-            <pointsize>12</pointsize>
+            <pointsize>14</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
@@ -132,7 +132,7 @@
          <widget class="QGroupBox" name="targetValBox">
           <property name="geometry">
            <rect>
-            <x>300</x>
+            <x>310</x>
             <y>20</y>
             <width>191</width>
             <height>411</height>
@@ -141,7 +141,7 @@
           <property name="font">
            <font>
             <family>Times New Roman</family>
-            <pointsize>12</pointsize>
+            <pointsize>14</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
@@ -168,7 +168,7 @@
           <property name="font">
            <font>
             <family>Times New Roman</family>
-            <pointsize>12</pointsize>
+            <pointsize>14</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
@@ -189,7 +189,7 @@
           <property name="font">
            <font>
             <family>Times New Roman</family>
-            <pointsize>12</pointsize>
+            <pointsize>14</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
@@ -203,7 +203,7 @@
            <rect>
             <x>510</x>
             <y>20</y>
-            <width>231</width>
+            <width>261</width>
             <height>141</height>
            </rect>
           </property>
@@ -222,7 +222,7 @@
           <property name="font">
            <font>
             <family>Times New Roman</family>
-            <pointsize>12</pointsize>
+            <pointsize>14</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
@@ -238,7 +238,7 @@
             <rect>
              <x>10</x>
              <y>60</y>
-             <width>101</width>
+             <width>131</width>
              <height>71</height>
             </rect>
            </property>
@@ -250,6 +250,8 @@
            </property>
            <property name="font">
             <font>
+             <family>Times New Roman</family>
+             <pointsize>14</pointsize>
              <weight>50</weight>
              <bold>false</bold>
             </font>
@@ -262,14 +264,14 @@
              <rect>
               <x>10</x>
               <y>30</y>
-              <width>81</width>
-              <height>22</height>
+              <width>111</width>
+              <height>31</height>
              </rect>
             </property>
             <property name="maximumSize">
              <size>
-              <width>81</width>
-              <height>22</height>
+              <width>120</width>
+              <height>100</height>
              </size>
             </property>
             <property name="wrapping">
@@ -298,14 +300,22 @@
           <widget class="QGroupBox" name="groupBox_5">
            <property name="geometry">
             <rect>
-             <x>110</x>
+             <x>140</x>
              <y>60</y>
              <width>111</width>
              <height>71</height>
             </rect>
            </property>
+           <property name="maximumSize">
+            <size>
+             <width>10000</width>
+             <height>10000</height>
+            </size>
+           </property>
            <property name="font">
             <font>
+             <family>Times New Roman</family>
+             <pointsize>14</pointsize>
              <weight>50</weight>
              <bold>false</bold>
             </font>
@@ -316,16 +326,16 @@
            <widget class="QLabel" name="performanceLabel">
             <property name="geometry">
              <rect>
-              <x>16</x>
-              <y>22</y>
-              <width>81</width>
+              <x>10</x>
+              <y>30</y>
+              <width>91</width>
               <height>31</height>
              </rect>
             </property>
             <property name="maximumSize">
              <size>
-              <width>81</width>
-              <height>31</height>
+              <width>1000</width>
+              <height>1000</height>
              </size>
             </property>
             <property name="font">
@@ -357,9 +367,9 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>12</pointsize>
-            <weight>50</weight>
-            <bold>false</bold>
+            <pointsize>14</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
            </font>
           </property>
           <property name="value">
@@ -369,22 +379,22 @@
          <widget class="QPushButton" name="learnHelpBtn">
           <property name="geometry">
            <rect>
-            <x>790</x>
+            <x>780</x>
             <y>20</y>
-            <width>91</width>
-            <height>41</height>
+            <width>101</width>
+            <height>51</height>
            </rect>
           </property>
           <property name="maximumSize">
            <size>
-            <width>91</width>
-            <height>41</height>
+            <width>10000</width>
+            <height>10000</height>
            </size>
           </property>
           <property name="font">
            <font>
             <family>Times New Roman</family>
-            <pointsize>12</pointsize>
+            <pointsize>14</pointsize>
             <weight>50</weight>
             <bold>false</bold>
            </font>
@@ -398,14 +408,14 @@
            <rect>
             <x>210</x>
             <y>70</y>
-            <width>81</width>
+            <width>91</width>
             <height>51</height>
            </rect>
           </property>
           <property name="font">
            <font>
             <family>Times New Roman</family>
-            <pointsize>12</pointsize>
+            <pointsize>14</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
@@ -420,14 +430,14 @@
            <rect>
             <x>210</x>
             <y>340</y>
-            <width>81</width>
+            <width>91</width>
             <height>51</height>
            </rect>
           </property>
           <property name="font">
            <font>
             <family>Times New Roman</family>
-            <pointsize>12</pointsize>
+            <pointsize>14</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
@@ -446,7 +456,7 @@
         <widget class="QGroupBox" name="targetValBox_2">
          <property name="geometry">
           <rect>
-           <x>300</x>
+           <x>310</x>
            <y>10</y>
            <width>371</width>
            <height>411</height>
@@ -455,7 +465,7 @@
          <property name="font">
           <font>
            <family>Times New Roman</family>
-           <pointsize>12</pointsize>
+           <pointsize>14</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -500,7 +510,7 @@
          <property name="font">
           <font>
            <family>Times New Roman</family>
-           <pointsize>12</pointsize>
+           <pointsize>14</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -520,14 +530,14 @@
           <rect>
            <x>210</x>
            <y>60</y>
-           <width>81</width>
+           <width>91</width>
            <height>51</height>
           </rect>
          </property>
          <property name="font">
           <font>
            <family>Times New Roman</family>
-           <pointsize>12</pointsize>
+           <pointsize>14</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -542,14 +552,14 @@
           <rect>
            <x>210</x>
            <y>330</y>
-           <width>81</width>
+           <width>91</width>
            <height>51</height>
           </rect>
          </property>
          <property name="font">
           <font>
            <family>Times New Roman</family>
-           <pointsize>12</pointsize>
+           <pointsize>14</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -562,16 +572,16 @@
         <widget class="QPushButton" name="queryHelpBtn">
          <property name="geometry">
           <rect>
-           <x>790</x>
+           <x>780</x>
            <y>10</y>
-           <width>91</width>
-           <height>41</height>
+           <width>101</width>
+           <height>51</height>
           </rect>
          </property>
          <property name="font">
           <font>
            <family>Times New Roman</family>
-           <pointsize>12</pointsize>
+           <pointsize>14</pointsize>
            <weight>50</weight>
            <bold>false</bold>
           </font>
@@ -592,7 +602,7 @@
          <property name="font">
           <font>
            <family>Times New Roman</family>
-           <pointsize>12</pointsize>
+           <pointsize>14</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -637,15 +647,16 @@
            <rect>
             <x>20</x>
             <y>160</y>
-            <width>201</width>
+            <width>331</width>
             <height>61</height>
            </rect>
           </property>
           <property name="font">
            <font>
-            <pointsize>10</pointsize>
-            <weight>50</weight>
-            <bold>false</bold>
+            <family>Times New Roman</family>
+            <pointsize>14</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
            </font>
           </property>
           <property name="title">
@@ -656,24 +667,37 @@
             <rect>
              <x>10</x>
              <y>20</y>
-             <width>51</width>
+             <width>81</width>
              <height>31</height>
             </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="verticalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
           </widget>
          </widget>
          <widget class="QPushButton" name="epochsLoopsBtn">
           <property name="geometry">
            <rect>
-            <x>330</x>
-            <y>240</y>
-            <width>121</width>
-            <height>41</height>
+            <x>450</x>
+            <y>250</y>
+            <width>191</width>
+            <height>31</height>
            </rect>
           </property>
           <property name="font">
            <font>
-            <pointsize>12</pointsize>
+            <pointsize>14</pointsize>
             <weight>50</weight>
             <bold>false</bold>
            </font>
@@ -687,7 +711,7 @@
            <rect>
             <x>10</x>
             <y>10</y>
-            <width>491</width>
+            <width>709</width>
             <height>20</height>
            </rect>
           </property>
@@ -698,8 +722,8 @@
          <widget class="Line" name="line_2">
           <property name="geometry">
            <rect>
-            <x>490</x>
-            <y>20</y>
+            <x>710</x>
+            <y>19</y>
             <width>20</width>
             <height>390</height>
            </rect>
@@ -713,7 +737,7 @@
            <rect>
             <x>10</x>
             <y>400</y>
-            <width>490</width>
+            <width>710</width>
             <height>20</height>
            </rect>
           </property>
@@ -737,16 +761,15 @@
          <widget class="QPushButton" name="RerandWeightsBtn">
           <property name="geometry">
            <rect>
-            <x>170</x>
+            <x>180</x>
             <y>330</y>
-            <width>151</width>
+            <width>161</width>
             <height>51</height>
            </rect>
           </property>
           <property name="font">
            <font>
-            <family>Times New Roman</family>
-            <pointsize>12</pointsize>
+            <pointsize>14</pointsize>
             <weight>50</weight>
             <bold>false</bold>
            </font>
@@ -760,14 +783,14 @@
           <property name="geometry">
            <rect>
             <x>400</x>
-            <y>310</y>
-            <width>91</width>
-            <height>41</height>
+            <y>330</y>
+            <width>101</width>
+            <height>51</height>
            </rect>
           </property>
           <property name="font">
            <font>
-            <pointsize>12</pointsize>
+            <pointsize>14</pointsize>
             <weight>50</weight>
             <bold>false</bold>
            </font>
@@ -780,15 +803,15 @@
          <widget class="QPushButton" name="LoadWeightsBtn">
           <property name="geometry">
            <rect>
-            <x>400</x>
-            <y>360</y>
-            <width>91</width>
-            <height>41</height>
+            <x>590</x>
+            <y>330</y>
+            <width>101</width>
+            <height>51</height>
            </rect>
           </property>
           <property name="font">
            <font>
-            <pointsize>12</pointsize>
+            <pointsize>14</pointsize>
             <weight>50</weight>
             <bold>false</bold>
            </font>
@@ -801,7 +824,7 @@
          <widget class="QPushButton" name="clearBtn">
           <property name="geometry">
            <rect>
-            <x>20</x>
+            <x>30</x>
             <y>330</y>
             <width>101</width>
             <height>51</height>
@@ -809,8 +832,7 @@
           </property>
           <property name="font">
            <font>
-            <family>Times New Roman</family>
-            <pointsize>12</pointsize>
+            <pointsize>14</pointsize>
             <weight>50</weight>
             <bold>false</bold>
            </font>
@@ -825,15 +847,16 @@
            <rect>
             <x>20</x>
             <y>230</y>
-            <width>201</width>
+            <width>331</width>
             <height>61</height>
            </rect>
           </property>
           <property name="font">
            <font>
-            <pointsize>10</pointsize>
-            <weight>50</weight>
-            <bold>false</bold>
+            <family>Times New Roman</family>
+            <pointsize>14</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
            </font>
           </property>
           <property name="title">
@@ -844,25 +867,38 @@
             <rect>
              <x>10</x>
              <y>20</y>
-             <width>51</width>
+             <width>81</width>
              <height>31</height>
             </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="verticalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
           </widget>
          </widget>
          <widget class="QPushButton" name="settingsHelpBtn">
           <property name="geometry">
            <rect>
-            <x>780</x>
+            <x>770</x>
             <y>20</y>
-            <width>91</width>
-            <height>41</height>
+            <width>101</width>
+            <height>51</height>
            </rect>
           </property>
           <property name="font">
            <font>
             <family>Times New Roman</family>
-            <pointsize>12</pointsize>
+            <pointsize>14</pointsize>
             <weight>50</weight>
             <bold>false</bold>
            </font>
@@ -876,9 +912,17 @@
            <rect>
             <x>20</x>
             <y>30</y>
-            <width>211</width>
+            <width>331</width>
             <height>61</height>
            </rect>
+          </property>
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+            <pointsize>14</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
           </property>
           <property name="title">
            <string>Количество входных значений</string>
@@ -888,9 +932,25 @@
             <rect>
              <x>10</x>
              <y>20</y>
-             <width>51</width>
+             <width>81</width>
              <height>31</height>
             </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="verticalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
           </widget>
          </widget>
@@ -899,9 +959,17 @@
            <rect>
             <x>20</x>
             <y>90</y>
-            <width>211</width>
+            <width>331</width>
             <height>61</height>
            </rect>
+          </property>
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+            <pointsize>14</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
           </property>
           <property name="title">
            <string>Количество выходных значений</string>
@@ -911,20 +979,41 @@
             <rect>
              <x>10</x>
              <y>20</y>
-             <width>51</width>
+             <width>81</width>
              <height>31</height>
             </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="verticalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
           </widget>
          </widget>
          <widget class="QGroupBox" name="groupBox_8">
           <property name="geometry">
            <rect>
-            <x>280</x>
+            <x>350</x>
             <y>30</y>
-            <width>201</width>
+            <width>351</width>
             <height>61</height>
            </rect>
+          </property>
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+            <pointsize>14</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
           </property>
           <property name="title">
            <string>Количество нейронов в 1-м слое</string>
@@ -934,20 +1023,41 @@
             <rect>
              <x>10</x>
              <y>20</y>
-             <width>51</width>
+             <width>91</width>
              <height>31</height>
             </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="verticalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
           </widget>
          </widget>
          <widget class="QGroupBox" name="groupBox_9">
           <property name="geometry">
            <rect>
-            <x>280</x>
+            <x>350</x>
             <y>90</y>
-            <width>201</width>
+            <width>351</width>
             <height>61</height>
            </rect>
+          </property>
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+            <pointsize>14</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
           </property>
           <property name="title">
            <string>Количество нейронов во 2-м слое</string>
@@ -957,26 +1067,40 @@
             <rect>
              <x>10</x>
              <y>20</y>
-             <width>51</width>
+             <width>91</width>
              <height>31</height>
             </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="verticalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
           </widget>
          </widget>
          <widget class="QGroupBox" name="groupBox">
           <property name="geometry">
            <rect>
-            <x>280</x>
+            <x>350</x>
             <y>160</y>
-            <width>201</width>
+            <width>351</width>
             <height>61</height>
            </rect>
           </property>
           <property name="font">
            <font>
-            <pointsize>10</pointsize>
-            <weight>50</weight>
-            <bold>false</bold>
+            <family>Times New Roman</family>
+            <pointsize>14</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
            </font>
           </property>
           <property name="title">
@@ -987,9 +1111,22 @@
             <rect>
              <x>10</x>
              <y>20</y>
-             <width>51</width>
+             <width>91</width>
              <height>31</height>
             </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="verticalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
           </widget>
          </widget>
@@ -998,7 +1135,7 @@
            <rect>
             <x>10</x>
             <y>290</y>
-            <width>490</width>
+            <width>710</width>
             <height>20</height>
            </rect>
           </property>
@@ -1009,8 +1146,21 @@
          <widget class="Line" name="line_6">
           <property name="geometry">
            <rect>
-            <x>120</x>
-            <y>299</y>
+            <x>140</x>
+            <y>300</y>
+            <width>20</width>
+            <height>111</height>
+           </rect>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+         <widget class="Line" name="line_7">
+          <property name="geometry">
+           <rect>
+            <x>360</x>
+            <y>300</y>
             <width>20</width>
             <height>111</height>
            </rect>
@@ -1038,6 +1188,7 @@
          <zorder>groupBox</zorder>
          <zorder>line_4</zorder>
          <zorder>line_6</zorder>
+         <zorder>line_7</zorder>
         </widget>
        </widget>
       </widget>
@@ -1051,10 +1202,28 @@
      <x>0</x>
      <y>0</y>
      <width>931</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Times New Roman</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="defaultUp">
+    <bool>false</bool>
+   </property>
+   <property name="nativeMenuBar">
+    <bool>true</bool>
+   </property>
    <widget class="QMenu" name="menu">
+    <property name="font">
+     <font>
+      <family>Times New Roman</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="title">
      <string>Меню</string>
     </property>
