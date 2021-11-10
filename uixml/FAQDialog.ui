@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>708</width>
-    <height>303</height>
+    <width>641</width>
+    <height>361</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,8 +36,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>665</width>
-        <height>1019</height>
+        <width>598</width>
+        <height>1076</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
@@ -86,7 +86,7 @@
             <property name="font">
              <font>
               <family>Times New Roman</family>
-              <pointsize>12</pointsize>
+              <pointsize>14</pointsize>
               <weight>75</weight>
               <bold>true</bold>
              </font>
@@ -123,7 +123,7 @@
             <property name="font">
              <font>
               <family>Times New Roman</family>
-              <pointsize>12</pointsize>
+              <pointsize>14</pointsize>
               <weight>75</weight>
               <bold>true</bold>
              </font>
@@ -142,7 +142,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>Программа предназначена для </string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Times New Roman,serif'; font-size:12pt;&quot;&gt;Программа предназначена для численного решения широкого класса задач. Исходные данные вводятся в нормированном, т.е. в безразмерном виде от 0 до 1 виде, что делает ее универсальной.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -160,7 +160,7 @@
             <property name="font">
              <font>
               <family>Times New Roman</family>
-              <pointsize>12</pointsize>
+              <pointsize>14</pointsize>
               <weight>75</weight>
               <bold>true</bold>
              </font>
@@ -198,7 +198,7 @@
             <property name="font">
              <font>
               <family>Times New Roman</family>
-              <pointsize>12</pointsize>
+              <pointsize>14</pointsize>
               <weight>75</weight>
               <bold>true</bold>
              </font>
@@ -217,7 +217,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>Данный раздел отвечает за внутренние параметры сети. В левой части экрана пользователь может изменять количество входных/выходных значений, количество нейронов в 1-м и 2-м скрытых слоях (после данных изменений веса должны быть сгенерированы заново, за что отвечает одноименная кнопка). Параметры &quot;Количество циклов&quot; и &quot;Количество эпох&quot; будут определять, на сколько точно нейросеть будет обучена на представляемой выборке. Параметр &quot;Коэффициент обучения&quot; отвечает за то, на сколько &quot;быстро&quot; нейросеть будет обучаться (как сильно её веса будут меняться за 1 цикл). Если текущие веса нейросети удовлетворяют целям пользователя, он может их сохранить, нажав на кнопку &quot;Сохранить веса&quot;. &quot;Загрузить веса&quot; отвечает за одноименное действие (перед загрузкой весов необходимо привести нейросеть в то состояние, в котором загружаемые веса сохранялись).</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Данный раздел отвечает за внутренние параметры сети. В левой части экрана пользователь может изменять количество входных/выходных значений, количество нейронов в 1-м и 2-м скрытых слоях (после данных изменений веса должны быть сгенерированы заново, за что отвечает одноименная кнопка). Параметры &amp;quot;Количество циклов&amp;quot; и &amp;quot;Количество эпох&amp;quot; будут определять, на сколько точно нейросеть будет обучена на представляемой выборке. Параметр &amp;quot;Коэффициент обучения&amp;quot; отвечает за то, на сколько &amp;quot;быстро&amp;quot; нейросеть будет обучаться (как сильно её веса будут меняться за 1 цикл). Если текущие веса нейросети удовлетворяют целям пользователя, он может их сохранить, нажав на кнопку &amp;quot;Сохранить веса&amp;quot;. &amp;quot;Загрузить веса&amp;quot; отвечает за одноименное действие.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -235,7 +235,7 @@
             <property name="font">
              <font>
               <family>Times New Roman</family>
-              <pointsize>12</pointsize>
+              <pointsize>14</pointsize>
               <weight>75</weight>
               <bold>true</bold>
              </font>

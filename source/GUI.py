@@ -552,7 +552,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         
         msgBox = QMessageBox()
         msgBox.setText(message)
-        msgBox.setMask(getMask(msgBox))
+        ##msgBox.setMask(getMask(msgBox,1 ,1))
         
 
         #msgBox.setStandardButtons(QMessageBox.standardButtons)
