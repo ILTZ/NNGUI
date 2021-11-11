@@ -3,23 +3,30 @@ import os
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QBoxLayout, QDialog, QFileDialog, QGroupBox, QHBoxLayout, QLabel, QMessageBox, QPushButton, QTextEdit, QVBoxLayout, QScrollBar
 
-import Ui_shield
+
 import Ui_shield2
-import Ui_shieldV3
+
 
 from Int4NN import NNControl
 from fileUploader import FileUpLoader
+from HelpDialog import HelpDialog, GUIDialogOrigin
 ## Required import }
 
 
 ## PathToResources {
-dirname = os.path.dirname(__file__)
-filepathStartSkin = os.path.join(dirname, 'resources/startWindowPict.png')
-filenameLogo = os.path.join(dirname, 'resources/logo.png')
-filenameIcon = os.path.join(dirname, 'resources/icon.png')
-filenameErrorIcon = os.path.join(dirname, 'resources/errorIcon.png')
-filenameInfoIcon = os.path.join(dirname, 'resources/infoIcon.png')
-filenameCloseIcon = os.path.join(dirname, 'resources/close.png')
+dirname             =   os.path.dirname(__file__)
+
+filepathStartSkin   =   os.path.join(dirname, 'resources/startWindowPict.png')
+filenameLogo        =   os.path.join(dirname, 'resources/logo.png')
+filenameIcon        =   os.path.join(dirname, 'resources/icon.png')
+filenameErrorIcon   =   os.path.join(dirname, 'resources/errorIcon.png')
+filenameInfoIcon    =   os.path.join(dirname, 'resources/infoIcon.png')
+filenameCloseIcon   =   os.path.join(dirname, 'resources/close.png')
+
+pathToIcon_Acept    =   os.path.join(dirname, 'resources/acept.png')    #Source:<"https://icons8.ru/icon/sz8cPVwzLrMP/галочка">
+pathToIcon_Reject   =   os.path.join(dirname, 'resources/reject.png')   #Source:<"https://icons8.ru/icon/T9nkeADgD3z6/крестик">
+pathToIcon_Error    =   os.path.join(dirname, 'resources/error.png')    #Source:<"https://icons8.ru/icon/0cMIlydOAkeN/error">
+pathToIcon_Info     =   os.path.join(dirname, 'resources/info.png')     #Source:<"https://icons8.ru/icon/gIgSag3InNzB/question">
 ## PathToResources }
 
 def getMask(object, x = 10, y = 10):
@@ -85,53 +92,18 @@ def setMoveWindow(widget):
 ##Source: https://www.cyberforum.ru/python-graphics/thread1692328.html
 ##Can move window without shape }
 
-##Parent for QDialog {
-class GUIDialogOrigin(QtWidgets.QDialog):
-    def __init__(self):
-        super().__init__()
-        self.closeBtn = QPushButton(self)
-        self.closeBtn.setFixedSize(40,20)
-        self.closeBtn.clicked.connect(self.closeWindow)
-               
-
-    def setCustomMask(self):
-        PP = QtGui.QPainterPath() 
-        PP.addRoundedRect(QtCore.QRectF(self.rect()), 3, 3)
-        mask = QtGui.QRegion(PP.toFillPolygon().toPolygon())
-        self.setMask(mask)
-        pass 
-
-    def setButtons(self, x = 20, y = 0):
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(filenameCloseIcon), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-
-        self.closeBtn.setGeometry(QtCore.QRect(self.width() - x, y, 31, 19))
-        self.closeBtn.setObjectName("dialogCloseBtn")
-        self.closeBtn.setIcon(icon)
-        pass
-
-    def deleteButton(self):
-        self.closeBtn.deleteLater()
-        pass
-
-    def closeWindow(self):
-        self.close()
-        pass
-    pass
-##Parent for QDialog }
-
 ##MainWindowClass {
 class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
     finished = QtCore.pyqtSignal()
-#Constructor {
+
+##Constructor {
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         
 
-##Icons and other cosmetic {
+    #Icons and other cosmetic {
         self.setFixedSize(self.size())
-        #self.setAcceptDrops(True)
 
         self.icon = QtGui.QIcon()
         self.icon.addPixmap(QtGui.QPixmap(filenameIcon), QtGui.QIcon.Normal, QtGui.QIcon.Off) 
@@ -144,46 +116,26 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         self.infoIcon.addPixmap(QtGui.QPixmap(filenameInfoIcon), QtGui.QIcon.Normal, QtGui.QIcon.Off) 
 
         self.goToClose = False
+
         ##SubWindows
         self.startTitle = GUIstartWindow()
         self.startTitle.finished.connect(self.show)
-        self.startTitle.FAQsig.connect(self.showAboutWindow)
+        self.startTitle.FAQsig.connect(self.showHelpDialog)
 
-        self.FAQTitle = GUIFaqWin()
-        self.FAQTitle.setWindowIcon(self.icon)
+        self.DBM = GUIMBDialog()
 
-        self.startTitle.setWindowIcon(self.icon)
-        self.startTitle.setLogo(filenameLogo)
-
-        self.helpLearnTitle = GUIhelpLearn()
-        self.helpLearnTitle.setWindowIcon(self.icon)
-
-        self.helpQueryWindow = GUIhelpQuery()
-        self.helpQueryWindow.setWindowIcon(self.icon)
-        
-        self.helpPropWindow = GUIhelpProp()
-        self.helpPropWindow.setWindowIcon(self.icon)
+        self.helpDialog = HelpDialog("def")
 
         ###Maski
-        # PP = QtGui.QPainterPath() 
-        # PP.addRoundedRect(QtCore.QRectF(self.rect()), 3, 3)
-        # mask = QtGui.QRegion(PP.toFillPolygon().toPolygon())
-        # self.setMask(mask)
-
         self.setMask(getMask(self, 3, 3))
         
-
         ##MovebleWindow
         setMoveWindow(self)
-        setMoveWindow(self.startTitle)
-        setMoveWindow(self.FAQTitle)
-        setMoveWindow(self.helpLearnTitle)
-        setMoveWindow(self.helpQueryWindow)
-        setMoveWindow(self.helpPropWindow)    
-##Icons and other cosmetic }
+        setMoveWindow(self.startTitle)  
+    #Icons and other cosmetic }
 
 
-#TextBoxes for take values from user {
+    #TextBoxes for take values from user {
         self.learnValuesBox = QVBoxLayout()
         self.learnValuesHLayoutsArray = []
         self.learnValuesTracker = []
@@ -201,10 +153,10 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
 
         self.currentCountVibroki = 0
         self.currentCountVibrokiQ = 0
-#TextBoxes for take values from user }
+    #TextBoxes for take values from user }
 
 
-##Slots for buttons {
+    #Slots for buttons {
         ##LearnPage {
         self.learnStartBtn.clicked.connect(self.startTrain_Act)  
         self.StopBtn.clicked.connect(self.stopTrain_Act)
@@ -236,18 +188,18 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         self.FAQbtn.triggered.connect(self.showAboutWindow_Act)
         self.exitAction_2.triggered.connect(self.close)
         ##SideMenuButtons {
-##Slots for buttons }
+    #Slots for buttons }
         
-##InitVariables {
+    #InitVariables {
         self.countOfNumbers = def_inputN
         self.hand_input_arr = []
         self.hand_target_val = 0.0
         self.inputValues = []
         self.targetValues = []  
         self.zipInput = []
-##InitVariables }
+    #InitVariables }
 
-##Threads {
+    #Threads {
         ##LearnProcessThread {
         self.learnFromFile = False   
         self.LearnThread = QtCore.QThread()   
@@ -275,14 +227,10 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
 
         self.learnStartBtn.setEnabled(False)
         self.queryBtn.setEnabled(False)
-##Threads }
+    #Threads }
+##Constructor }
 
-##FillGroupBoxes {
-        #self.refillValuesBoxes()
-        #self.refillTargetValueBoxes()
-##FillGroupBoxes }
-
-##CheckUserInput {  
+#CheckUserInput {  
     def correctToInt(self, val):
         try:
             x = int(val)
@@ -290,6 +238,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
             self.showDebugDialog("Введите значение типа <int> (целое число).", "error")
             return False
         return True
+
     def correctToFloat(self, val):
         try:
             x = float(val)
@@ -297,14 +246,13 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
             self.showDebugDialog("Введите значение типа <float> (натуральная дробь).", "error")
             return False
         return True
-##CheckUserInput }
+#CheckUserInput }
 
-#Constructor }
+
 
 ##TextBoxes, debugMessageBoxes, helpBoxes {
      
-    ##Fill groupBoxes learn/query/target {
-
+    #Fill groupBoxes learn/query/target {
     def addViborkaQuery(self):
         if (self.currentCountVibrokiQ >= 14):
             return
@@ -451,8 +399,38 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         self.targetLearnHLayoutsArray.pop()
         pass
 
-    ##Fill groupBoxes learn/query/target }
-    
+    #Fill groupBoxes learn/query/target }
+
+    def showHelpDialog(self, param):
+        """
+        Create a new QDialog with text depending on "param".\n
+        Parametrs:\n
+        "param" - string, which can be:\n
+        "faq"   - text about programm;\n
+        "learn" - text about learn procss;\n
+        "query" - text about query process;\n
+        "prop"  - text about properties.\n
+        """
+
+
+        try:
+            if (not self.HelpDialog.isActiveWindow()):
+                self.setFocusSubWindow(self.HelpDialog)
+                return
+        except:
+            pass
+
+        try:
+            self.HelpDialog.closeWindow()
+        except:
+            pass
+        
+        self.HelpDialog = HelpDialog(param)
+        setMoveWindow(self.HelpDialog)
+        self.HelpDialog.show()
+
+        pass
+
     def setFocusSubWindow(self, dialog):
         dialog.setFocus(True)
         dialog.activateWindow()
@@ -461,37 +439,14 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         pass
 
     def setVisible4Input(self, param):  #Когда данные берутся из внешнего файла, боксы для входных значений нам уже не нужны
-        #self.inputValuesBox.setVisible(param)
-        #self.targetValBox.setVisible(param)
+
 
         self.inputValuesBox.setEnabled(param)
         self.targetValBox.setEnabled(param)
 
         pass
     
-    def showHelpLearnTitle(self):
-        self.helpLearnTitle.close()
-        self.helpPropWindow.close()
-
-        if (not self.helpLearnTitle.isActiveWindow()):
-            self.setFocusSubWindow(self.helpLearnTitle)
-            return
-
-        self.helpLearnTitle.show()
-        pass
     
-    def showHelpQueryTitle(self):
-        self.helpLearnTitle.close()
-        self.helpPropWindow.close()
-        
-        if ( not self.helpQueryWindow.isActiveWindow()):
-            self.setFocusSubWindow(self.helpQueryWindow)
-            return
-
-        self.helpQueryWindow.show()
-        pass
-    
-    def showHelpPropTitle(self):
         self.helpLearnTitle.close()
         self.helpQueryWindow.close()
 
@@ -522,8 +477,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         self.clearQueryBoxes()
         self.clearTargetBoxes()
     
-    ##ShowSomethitg {
-
+    #ShowSomethitg {
     def showCurrentParams(self):                   
         mes = (f"Количество входных значений: {self.INT.getCurrentWIH()}\n" +
         f"Количество скрытых нодов: {self.INT.getCurrentWHH()}\n" +
@@ -550,19 +504,21 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         if self.goToClose:
             return
         
-        msgBox = QMessageBox()
-        msgBox.setText(message)
+        msgBox = GUIMBDialog()
+        msgBox.messageLabel.setText(message)
+        msgBox.setCustomIcon4Btn(pathToIcon_Acept)
+        msgBox.resizeBtn([60,60])
         ##msgBox.setMask(getMask(msgBox,1 ,1))
         
 
         #msgBox.setStandardButtons(QMessageBox.standardButtons)
         if type == 'error':
             msgBox.setWindowTitle("ERROR")
-            msgBox.setWindowIcon(self.errorIcon)
+            msgBox.setCustomIcon(pathToIcon_Error)
             #msgBox.setIcon(QMessageBox.Warning)
         elif type == 'info':
-            msgBox.setWindowIcon(self.infoIcon)
             msgBox.setWindowTitle("INFO")
+            msgBox.setCustomIcon(pathToIcon_Info)
             #msgBox.setIcon(QMessageBox.Information)
 
         self.ReadThread.quit()
@@ -612,14 +568,12 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
 
         
         pass
-    ##ShowSomethitg {
-
+    #ShowSomethitg {
 ##TextBoxes, debugMessageBoxes, helpBoxes }
 
 
 ##Get parametrs from user {
-
-    
+  
     def getParams(self, param):
         """
         Get params for learn from selected groupBox.
@@ -789,12 +743,12 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
             self.goToClose = True
 
             self.INT.stopSignal = True
-            self.helpLearnTitle.close()
-            self.helpQueryWindow.close()
-            self.helpPropWindow.close()
-            self.FAQTitle.close()
+            try:
+                self.helpDialog.closeWindow()
+            except:
+                pass
             
-            
+                
             if (self.ReadThread.isRunning()):
                 self.ReadThread.terminate()
                 #self.ReadThread.wait()
@@ -807,9 +761,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
 
 
 ##MainProcessesNN { 
-    def showAboutWindow(self):  #Отображение окна "О программе"
-        self.FAQTitle.show()
-        pass
     
     def clearParams(self):      
         """
@@ -957,7 +908,6 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         pass
     
     def setNewLearnParams_Act(self):
-        #self.setNewLearnParams()
         self.setNewParamas()
         pass
     
@@ -970,31 +920,19 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         pass
     
     def showAboutWindow_Act(self):
-        self.showAboutWindow()
-        pass
-    
-    def changeVisFAQLearn_Act(self):
-        self.changeVisFAQLearn()
-        pass
-    
-    def changeVisFAQSet_Act(self):
-        self.changeVisFAQSet()
-        pass
-    
-    def changeVisFAQQuery_Act(self):
-
+        self.showHelpDialog("faq")
         pass
     
     def showHelpLearnWindow_Act(self):
-        self.showHelpLearnTitle()
+        self.showHelpDialog("learn")
         pass
     
     def showHelpQueryHelpWindow_Act(self):
-        self.showHelpQueryTitle()
+        self.showHelpDialog("query")
         pass
     
     def showHelpPropWindow_Act(self):
-        self.showHelpPropTitle()
+        self.showHelpDialog("prop")
         pass
 
     def addViborka_Act(self):
@@ -1021,12 +959,12 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
 
 ##SubWindows {
 
-##StartWindow{
+#StartWindow{
 import Ui_startDialog as SD
 class GUIstartWindow(GUIDialogOrigin, SD.Ui_Dialog):
 
     finished = QtCore.pyqtSignal()
-    FAQsig = QtCore.pyqtSignal()
+    FAQsig = QtCore.pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
@@ -1056,7 +994,7 @@ class GUIstartWindow(GUIDialogOrigin, SD.Ui_Dialog):
         self.close()
         pass
     def showFAQ(self):
-        self.FAQsig.emit()
+        self.FAQsig.emit("faq")
         pass
     
 
@@ -1074,55 +1012,47 @@ class GUIstartWindow(GUIDialogOrigin, SD.Ui_Dialog):
 
         pass
     pass
-##StartWindow{
+#StartWindow{
 
 
-##AboutProgrammWindow {
-import Ui_FAQDialog as FD
-class GUIFaqWin(GUIDialogOrigin, FD.Ui_FAQDialog):
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)
-        self.setFixedSize(self.size())
-        GUIDialogOrigin.setCustomMask(self)
-        GUIDialogOrigin.setButtons(self, 50, 10)
-        
-##AboutProgrammWindow }
-
-
-##HelpLearnModeWeindow {
-import Ui_helpLearnDialog as HD
-class GUIhelpLearn(GUIDialogOrigin, HD.Ui_helpLearnDialog)  :
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)
-        self.setFixedSize(self.size())
-        GUIDialogOrigin.setCustomMask(self)
-        GUIDialogOrigin.setButtons(self, 50, 10)
-##HelpLearnModeWeindow }
-
-
-##HelpQueryModeWindow {
-import Ui_helpQueryDialog as QD
-class GUIhelpQuery(GUIDialogOrigin, QD.Ui_helpQueryDialog):
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)
-        self.setFixedSize(self.size())
-        GUIDialogOrigin.setCustomMask(self)
-        GUIDialogOrigin.setButtons(self, 50, 10)
-##HelpQueryModeWindow }
-
-
-##HelpPropertiesModeWindow {
-import Ui_helpPropDialog as PD
-class GUIhelpProp(GUIDialogOrigin, PD.Ui_htlpPropDialog):
+##MessageDialog {
+import Ui_MBDialog as MBD
+class GUIMBDialog(GUIDialogOrigin, MBD.Ui_messageDBox):
     def __init__(self):
         super().__init__()
         self.setupUi(self)  
-        self.setFixedSize(self.size())   
+        self.setFixedSize(self.size())  
         GUIDialogOrigin.setCustomMask(self)
-        GUIDialogOrigin.setButtons(self, 50, 10)
-##HelpPropertiesModeWindow {
+        GUIDialogOrigin.setButtons(self, 50, 50)
+        
+        self.closeBtn.parent = self.gridLayout
+        self.gridLayout.addWidget(self.closeBtn, 3,3)
+
+        self.messageLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.messageLabel.setWordWrap(True)
+
+    def setCustomIcon(self, pathToIcon):
+        self.iconLabel.setPixmap(QtGui.QPixmap(pathToIcon))
+        pass
+
+    def setText(self, text = "empty_text"):
+        self.messageLabel.setText(text)
+        pass
+
+    def setCustomIcon4Btn(self, pathToIcon):
+        self.closeBtn.hide()
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(pathToIcon), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.closeBtn.setIcon(icon)
+        self.closeBtn.show()
+        pass
+
+    def resizeBtn(self, newSize):
+        self.closeBtn.resize(newSize[0], newSize[1])
+
+        pass
+#MessageDialog }
+
+
 
 ##SubWindows }

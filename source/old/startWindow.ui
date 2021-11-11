@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>848</width>
-    <height>544</height>
+    <width>850</width>
+    <height>550</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -251,9 +251,9 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>1</x>
       <y>110</y>
-      <width>851</width>
+      <width>849</width>
       <height>241</height>
      </rect>
     </property>
