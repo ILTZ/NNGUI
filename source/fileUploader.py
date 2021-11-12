@@ -136,6 +136,11 @@ class FileUpLoader(QObject):
         
         self.inputValues = inputValues
         self.targetValues = targetValues
+
+        print(self.countTarget)
+        print(self.inputValues)
+        print(self.targetValues)
+
         self.correctSignal.emit(True)
         
     #In development

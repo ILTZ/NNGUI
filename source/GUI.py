@@ -1,12 +1,13 @@
 ## Required import {
 import os
+from typing import Text
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QBoxLayout, QDialog, QFileDialog, QGroupBox, QHBoxLayout, QLabel, QMessageBox, QPushButton, QTextEdit, QVBoxLayout, QScrollBar
 
 
 import Ui_shield2
 
-
+from GUIUploader import UploaderDialog
 from Int4NN import NNControl
 from fileUploader import FileUpLoader
 from HelpDialog import HelpDialog, GUIDialogOrigin
@@ -443,18 +444,9 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
 
         self.inputValuesBox.setEnabled(param)
         self.targetValBox.setEnabled(param)
-
+        
         pass
-    
-    
-        self.helpLearnTitle.close()
-        self.helpQueryWindow.close()
 
-        if (not self.helpPropWindow.isActiveWindow()):
-            self.setFocusSubWindow(self.helpPropWindow)
-            return
-
-        self.helpPropWindow.show()
         pass
        
     def clearLearnBoxes(self):
@@ -498,28 +490,21 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         "message" is message whic user will see,\n
         "type" may be 'error' or 'info' - set the icon of\n
         window.
-        """
-        
-              
+        """            
         if self.goToClose:
             return
         
         msgBox = GUIMBDialog()
         msgBox.messageLabel.setText(message)
-        msgBox.setCustomIcon4Btn(pathToIcon_Acept)
-        msgBox.resizeBtn([60,60])
-        ##msgBox.setMask(getMask(msgBox,1 ,1))
+        msgBox.setCustomIcon4Btn(pathToIcon_Reject)
+        msgBox.resizeBtn([50,30])
         
-
-        #msgBox.setStandardButtons(QMessageBox.standardButtons)
         if type == 'error':
             msgBox.setWindowTitle("ERROR")
             msgBox.setCustomIcon(pathToIcon_Error)
-            #msgBox.setIcon(QMessageBox.Warning)
         elif type == 'info':
             msgBox.setWindowTitle("INFO")
             msgBox.setCustomIcon(pathToIcon_Info)
-            #msgBox.setIcon(QMessageBox.Information)
 
         self.ReadThread.quit()
         msgBox.exec_()
@@ -705,15 +690,23 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         pass
     
     def loadFile(self):
-        #self.UpLoader.showPathWindow()
+        
+        uplWindow = UploaderDialog()
+        uplWindow.exec()
 
-        path = QFileDialog.getOpenFileName(self, 'Open file', filter=("TextFiles (*.txt *.xlsx)"))
-        if (path[0] == ""):
-            print("UnLoaded")
+        path = uplWindow.getPathString()
+
+        if (not (uplWindow.getAcepted())):
+            print("Unloaded")
             return
-        self.setFilePath(path[0])
-        self.UpLoader.setCountOfTargets(self.INT.getCurrentWHO())
-        self.ReadThread.start()
+
+        try:
+            self.setFilePath(path)
+            self.UpLoader.setCountOfTargets(uplWindow.getTargetCount())
+            self.ReadThread.start()
+        except:
+            self.showDebugDialog("Не удается загрузить значения.")
+        return
         pass
     
     def setParametrsAfterRead(self):                #После загрузки из файла аплоадер подает сигнал, и GUI получает у него извлеченные из файла значения                                           
@@ -727,6 +720,7 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
             self.setParametrsAfterRead()
             self.ReadThread.quit()
             self.setVisible4Input(False)
+            self.learnStartBtn.setEnabled(True)
         else:
             self.showDebugDialog("Ошибка при чтении файлов!", 'error')
             self.ReadThread.quit()
@@ -734,28 +728,30 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
 ##LoadFromFile }
     
     def closeEvent(self, event):
-        result = QMessageBox.question(self, "Выход",
-                                      "Закрыть программу?",
-                                      QMessageBox.Yes | QMessageBox.No)
-        event.ignore()
+        
+        msgBox = GUIMBDialog()
+        msgBox.setCustomIcon4AceptBtn(pathToIcon_Acept)
+        msgBox.setCustomIcon4Btn(pathToIcon_Reject)
+        msgBox.setCustomIcon(pathToIcon_Info)
+        msgBox.resizeBtn([50,30])
+        msgBox.setText("Сохранить веса перед выходом?")
+        msgBox.setButtonsMode(1)
+        msgBox.exec()
 
-        if result == QMessageBox.Yes:
-            self.goToClose = True
+        result = msgBox.aceptAction
+
+        if (result):
+            self.saveWeights()
 
             self.INT.stopSignal = True
             try:
                 self.helpDialog.closeWindow()
             except:
                 pass
-            
-                
+                            
             if (self.ReadThread.isRunning()):
                 self.ReadThread.terminate()
-                #self.ReadThread.wait()
-
-            event.accept()
-
-            
+            pass
 
         pass
 
@@ -866,6 +862,9 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         self.loadFromFile.setEnabled(val)
         self.SaveWeightsBtn.setEnabled(val)
         self.LoadWeightsBtn.setEnabled(val)
+
+        self.addViborkaBtn.setEnabled(val)
+        self.deleteViborkaBtn.setEnabled(val)
     
     def startTrain_Act(self):
         self.startLearn()
@@ -1025,10 +1024,16 @@ class GUIMBDialog(GUIDialogOrigin, MBD.Ui_messageDBox):
         GUIDialogOrigin.setCustomMask(self)
         GUIDialogOrigin.setButtons(self, 50, 50)
         
-        self.closeBtn.parent = self.gridLayout
-        self.gridLayout.addWidget(self.closeBtn, 3,3)
+        self.aceptBtn = QtWidgets.QPushButton(self)
+        self.aceptBtn.parnt = self.horizontalLayout
+        self.aceptBtn.setFixedSize(50,30)
+        self.horizontalLayout.addWidget(self.aceptBtn)
+        
+        self.aceptBtn.clicked.connect(self.setAceptTrue)
+        self.aceptBtn.hide()
 
-        self.messageLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.closeBtn.parent = self.horizontalLayout
+        self.horizontalLayout.addWidget(self.closeBtn)
         self.messageLabel.setWordWrap(True)
 
     def setCustomIcon(self, pathToIcon):
@@ -1047,10 +1052,40 @@ class GUIMBDialog(GUIDialogOrigin, MBD.Ui_messageDBox):
         self.closeBtn.show()
         pass
 
-    def resizeBtn(self, newSize):
-        self.closeBtn.resize(newSize[0], newSize[1])
-
+    def setCustomIcon4AceptBtn(self, pathToIcon):
+        self.aceptBtn.hide()
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(pathToIcon), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.aceptBtn.setIcon(icon)
+        self.aceptBtn.show()
         pass
+    
+    def setButtonsMode(self, param):
+        if (param == '1'):
+            self.closeBtn.show()
+            self.aceptBtn.show()
+            pass
+        elif (param == '0'):
+            self.closeBtn.show()
+            self.aceptBtn.hide()
+            pass
+        pass
+            
+
+    def resizeBtn(self, newSize):
+        try:
+            self.closeBtn.setFixedSize(newSize[0], newSize[1])
+            self.aceptBtn.setFixedSize(newSize[0], newSize[1])
+        except:
+            pass
+        pass
+    
+    def setAceptTrue(self):
+        self.aceptAction = True
+        self.close()
+        self.deleteLater()
+        pass
+
 #MessageDialog }
 
 

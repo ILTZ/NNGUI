@@ -19,6 +19,11 @@ class GUIDialogOrigin(QtWidgets.QDialog):
         self.closeBtn.hide()
         self.closeBtn.setFixedSize(40,20)
         self.closeBtn.clicked.connect(self.closeWindow)
+
+
+
+        self.aceptAction = False
+
                
 
     def setCustomMask(self):
@@ -46,6 +51,12 @@ class GUIDialogOrigin(QtWidgets.QDialog):
         self.close()
         self.deleteLater()
         pass
+
+    def setAceptAction(self, param):
+        self.aceptAction = param
+        pass
+
+
     pass
 ##Parent for QDialog }
 
