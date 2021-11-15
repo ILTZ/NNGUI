@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QBoxLayout, QDialog, QFileDialog, QGroupBox, QHBoxLa
 
 import Ui_shield2
 
+
 from GUIUploader import UploaderDialog
 from Int4NN import NNControl
 from fileUploader import FileUpLoader
@@ -479,7 +480,9 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         f"Коэффициент ошибки: {self.INT.getLearnRate()}\n" + 
         f"Количество нейронов в 1-м скрытом слое: {self.INT.getCurrentNeironsCount()[0]}\n" + 
         f"Количество нейронов во 2-м скрытом слое: {self.INT.getCurrentNeironsCount()[1]}")
-        self.showDebugDialog(mes, 'info')
+        self.showDebugDialog(mes, 'curpar')
+        
+    
         pass
     
     def showDebugDialog(self, message, type): 
@@ -498,13 +501,18 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         msgBox.messageLabel.setText(message)
         msgBox.setCustomIcon4Btn(pathToIcon_Reject)
         msgBox.resizeBtn([50,30])
-        
+        #msgBox.setFixedSizeOverride(QtCore.QSize(375,300))
+
         if type == 'error':
             msgBox.setWindowTitle("ERROR")
             msgBox.setCustomIcon(pathToIcon_Error)
         elif type == 'info':
             msgBox.setWindowTitle("INFO")
             msgBox.setCustomIcon(pathToIcon_Info)
+        elif (type == 'curpar'):
+            msgBox.setWindowTitle("INFO")
+            msgBox.setCustomIcon(pathToIcon_Info)
+            msgBox.setFixedSizeOverride(QtCore.QSize(375,350)) 
 
         self.ReadThread.quit()
         msgBox.exec_()
@@ -692,9 +700,12 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
     def loadFile(self):
         
         uplWindow = UploaderDialog()
+        uplWindow.setMask(getMask(uplWindow))
+        setMoveWindow(uplWindow)
         uplWindow.exec()
 
         path = uplWindow.getPathString()
+
 
         if (not (uplWindow.getAcepted())):
             print("Unloaded")
@@ -1085,6 +1096,17 @@ class GUIMBDialog(GUIDialogOrigin, MBD.Ui_messageDBox):
         self.close()
         self.deleteLater()
         pass
+
+    # def setFixedSize(self, size):
+    #     GUIDialogOrigin.setFixedSize(size)
+    #     GUIDialogOrigin.setCustomMask(self)
+    #     pass
+    
+    def setFixedSizeOverride(self, size):
+        self.setFixedSize(size)
+        GUIDialogOrigin.setCustomMask(self)
+        pass
+
 
 #MessageDialog }
 

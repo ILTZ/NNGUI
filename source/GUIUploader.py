@@ -1,8 +1,11 @@
+from os import pathsep
 from Ui_FUIfu import Ui_UploaderGUI
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QBoxLayout, QDialog, QFileDialog, QGroupBox, QHBoxLayout, QLabel, QMessageBox, QPushButton, QTextEdit, QVBoxLayout, QScrollBar
 
+##GUI for load from file {
 class UploaderDialog(QDialog, Ui_UploaderGUI):
+    ##Constructor {
     def __init__(self):
         super().__init__()
         self.setupUi(self) 
@@ -13,13 +16,31 @@ class UploaderDialog(QDialog, Ui_UploaderGUI):
 
         self.pathBtn.clicked.connect(self.getPath)
 
+        self.startWidth = 410
+        self.startHeight = 240
+
+
+
+        self.setFixedSize(self.startWidth, self.startHeight)
+
+        self.rbCSV.setEnabled(False)
+
         self.aceptBtn.clicked.connect(self.acept_Act)
         self.cancleBtn.clicked.connect(self.reject_Act)
+    ##Constructor }
 
+    def getExstention(self):
+        if (self.rbCSV.isChecked()):
+            return ("(*.csv)")
+        elif(self.rbTXT.isChecked()):
+            return ("(*.txt)")
+        elif(self.rbXLSX.isChecked()):
+            return ("(*.xlsx)")
+
+        pass
     
-
     def getPath(self):
-        path = QFileDialog.getOpenFileName(self, 'Open file', filter=("TextFiles (*.txt *.xlsx)"))
+        path = QFileDialog.getOpenFileName(self, 'Open file', filter=(f"TextFiles {self.getExstention()}"))
         if (path[0] == ""):
             print("UnLoaded")
             return
@@ -34,7 +55,8 @@ class UploaderDialog(QDialog, Ui_UploaderGUI):
         self.path = path[0]
         self.pathTE.setText(self.path)
         pass
-
+    
+    ##GEt/Set {
     def getPathString(self):
         return self.path
         pass
@@ -50,6 +72,11 @@ class UploaderDialog(QDialog, Ui_UploaderGUI):
     def getAcepted(self):
         return self.acepted
 
+    def setCustomIcon(self, pathToIcon):
+
+        pass
+    ##GEt/Set }
+
     def closeWindow(self):
         try:
             self.targetCount = int(self.spinBox.value())
@@ -60,6 +87,7 @@ class UploaderDialog(QDialog, Ui_UploaderGUI):
         self.deleteLater()
         pass
 
+    ## Buttons handler {
     def reject_Act(self):
         self.closeWindow()
         pass
@@ -68,3 +96,5 @@ class UploaderDialog(QDialog, Ui_UploaderGUI):
         self.setAcept(True)
         self.closeWindow()
         pass
+    ## Buttons handler }
+##GUI for load from file }

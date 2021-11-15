@@ -153,6 +153,7 @@ class FileUpLoader(QObject):
         traningDataFile.close()
 
 
+
         try:
             for record in traningDataList:
                 tempInput = []
