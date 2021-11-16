@@ -1,0 +1,1269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>867</width>
+    <height>545</height>
+   </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1920</width>
+    <height>1080</height>
+   </size>
+  </property>
+  <property name="sizeIncrement">
+   <size>
+    <width>5</width>
+    <height>5</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>NeuralNetwork</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>resources/icon.png</normaloff>resources/icon.png</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonTextUnderIcon</enum>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_4">
+    <item row="0" column="0">
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QTabWidget" name="tabWidget_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>1200</width>
+          <height>480</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Times New Roman</family>
+          <pointsize>14</pointsize>
+          <weight>50</weight>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="tabShape">
+         <enum>QTabWidget::Rounded</enum>
+        </property>
+        <property name="currentIndex">
+         <number>1</number>
+        </property>
+        <property name="elideMode">
+         <enum>Qt::ElideLeft</enum>
+        </property>
+        <property name="documentMode">
+         <bool>false</bool>
+        </property>
+        <property name="tabsClosable">
+         <bool>false</bool>
+        </property>
+        <property name="movable">
+         <bool>false</bool>
+        </property>
+        <property name="tabBarAutoHide">
+         <bool>false</bool>
+        </property>
+        <widget class="QWidget" name="tab_3">
+         <attribute name="title">
+          <string>Обучение</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <layout class="QGridLayout" name="gridLayout">
+            <item row="0" column="0" rowspan="3">
+             <layout class="QHBoxLayout" name="horizontalLayout" stretch="0">
+              <item>
+               <widget class="QGroupBox" name="inputValuesBox">
+                <property name="minimumSize">
+                 <size>
+                  <width>181</width>
+                  <height>424</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Times New Roman</family>
+                  <pointsize>14</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="title">
+                 <string>Входные значения</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="0" column="1" rowspan="3">
+             <layout class="QVBoxLayout" name="verticalLayout">
+              <item>
+               <widget class="QPushButton" name="addViborkaBtn">
+                <property name="font">
+                 <font>
+                  <family>Times New Roman</family>
+                  <pointsize>14</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Добавить
+выборку</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="deleteViborkaBtn">
+                <property name="font">
+                 <font>
+                  <family>Times New Roman</family>
+                  <pointsize>14</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Убрать
+выборку</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="0" column="3">
+             <layout class="QGridLayout" name="gridLayout_6">
+              <item row="0" column="0">
+               <widget class="QGroupBox" name="performanceBox">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>10000</width>
+                  <height>100000</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Times New Roman</family>
+                  <pointsize>14</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="autoFillBackground">
+                 <bool>false</bool>
+                </property>
+                <property name="title">
+                 <string>Точность нейросети</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_5">
+                 <item row="1" column="0">
+                  <widget class="QGroupBox" name="groupBox_4">
+                   <property name="maximumSize">
+                    <size>
+                     <width>10000</width>
+                     <height>10000</height>
+                    </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <family>Times New Roman</family>
+                     <pointsize>14</pointsize>
+                     <weight>50</weight>
+                     <bold>false</bold>
+                    </font>
+                   </property>
+                   <property name="title">
+                    <string>Погрешность</string>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_3">
+                    <item>
+                     <widget class="QDoubleSpinBox" name="errorBox">
+                      <property name="maximumSize">
+                       <size>
+                        <width>120</width>
+                        <height>100</height>
+                       </size>
+                      </property>
+                      <property name="wrapping">
+                       <bool>false</bool>
+                      </property>
+                      <property name="showGroupSeparator" stdset="0">
+                       <bool>false</bool>
+                      </property>
+                      <property name="decimals">
+                       <number>6</number>
+                      </property>
+                      <property name="minimum">
+                       <double>0.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>0.200000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.000100000000000</double>
+                      </property>
+                      <property name="value">
+                       <double>0.000100000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QGroupBox" name="groupBox_5">
+                   <property name="maximumSize">
+                    <size>
+                     <width>10000</width>
+                     <height>10000</height>
+                    </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <family>Times New Roman</family>
+                     <pointsize>14</pointsize>
+                     <weight>50</weight>
+                     <bold>false</bold>
+                    </font>
+                   </property>
+                   <property name="title">
+                    <string>Значение</string>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_4">
+                    <item>
+                     <widget class="QLabel" name="performanceLabel">
+                      <property name="maximumSize">
+                       <size>
+                        <width>1000</width>
+                        <height>1000</height>
+                       </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <weight>50</weight>
+                        <bold>false</bold>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="1" column="3">
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <item>
+               <widget class="QProgressBar" name="progressBar">
+                <property name="maximumSize">
+                 <size>
+                  <width>1000</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>14</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="value">
+                 <number>0</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="0" column="2" rowspan="3">
+             <layout class="QVBoxLayout" name="verticalLayout_2">
+              <item>
+               <widget class="QGroupBox" name="targetValBox">
+                <property name="minimumSize">
+                 <size>
+                  <width>181</width>
+                  <height>424</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Times New Roman</family>
+                  <pointsize>14</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="title">
+                 <string>Целевые значения</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="2" column="3">
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <widget class="QPushButton" name="learnStartBtn">
+                <property name="maximumSize">
+                 <size>
+                  <width>1000</width>
+                  <height>40</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Times New Roman</family>
+                  <pointsize>14</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Старт</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="StopBtn">
+                <property name="maximumSize">
+                 <size>
+                  <width>100000</width>
+                  <height>40</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Times New Roman</family>
+                  <pointsize>14</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Стоп</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="1">
+           <layout class="QVBoxLayout" name="verticalLayout_10">
+            <item>
+             <widget class="QPushButton" name="learnHelpBtn">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>10000</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Times New Roman</family>
+                <pointsize>14</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Помощь</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tab_4">
+         <attribute name="title">
+          <string>Опрос</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout_9">
+          <item row="0" column="1">
+           <layout class="QVBoxLayout" name="verticalLayout_11">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetDefaultConstraint</enum>
+            </property>
+            <item>
+             <widget class="QPushButton" name="queryHelpBtn">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>80</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Times New Roman</family>
+                <pointsize>14</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Помощь</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="0">
+           <layout class="QGridLayout" name="gridLayout_7" rowstretch="0">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetDefaultConstraint</enum>
+            </property>
+            <item row="0" column="0">
+             <layout class="QVBoxLayout" name="verticalLayout_5">
+              <item>
+               <widget class="QGroupBox" name="queryInputValuesBox">
+                <property name="font">
+                 <font>
+                  <family>Times New Roman</family>
+                  <pointsize>14</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="title">
+                 <string>Входные значения</string>
+                </property>
+                <property name="flat">
+                 <bool>false</bool>
+                </property>
+                <property name="checkable">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="0" column="1">
+             <layout class="QVBoxLayout" name="verticalLayout_6">
+              <item>
+               <widget class="QPushButton" name="addQueryViborkaBtn">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Times New Roman</family>
+                  <pointsize>14</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Добавить
+выборку</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="deleteQueryViborkaBtn">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Times New Roman</family>
+                  <pointsize>14</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Убрать
+выборку</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="0" column="2">
+             <layout class="QVBoxLayout" name="verticalLayout_7">
+              <item>
+               <widget class="QGroupBox" name="targetValBox_2">
+                <property name="font">
+                 <font>
+                  <family>Times New Roman</family>
+                  <pointsize>14</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="title">
+                 <string>Выходное значение</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_8">
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="outputLabel">
+                   <property name="minimumSize">
+                    <size>
+                     <width>340</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <family>Unispace</family>
+                     <pointsize>12</pointsize>
+                     <weight>75</weight>
+                     <bold>true</bold>
+                    </font>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="0" column="3">
+             <layout class="QVBoxLayout" name="verticalLayout_8">
+              <item>
+               <widget class="QPushButton" name="queryBtn">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Times New Roman</family>
+                  <pointsize>14</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Опрос</string>
+                </property>
+                <property name="flat">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tab">
+         <attribute name="title">
+          <string>Настройки</string>
+         </attribute>
+         <widget class="QGroupBox" name="groupBoxLink">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>-10</y>
+            <width>891</width>
+            <height>441</height>
+           </rect>
+          </property>
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+            <pointsize>10</pointsize>
+            <weight>50</weight>
+            <bold>false</bold>
+           </font>
+          </property>
+          <property name="title">
+           <string/>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+          <widget class="QGroupBox" name="epochsGroupBox">
+           <property name="geometry">
+            <rect>
+             <x>20</x>
+             <y>160</y>
+             <width>331</width>
+             <height>61</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>14</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="title">
+            <string>Количество эпох</string>
+           </property>
+           <widget class="QTextEdit" name="epochsCount">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>20</y>
+              <width>81</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+           </widget>
+          </widget>
+          <widget class="QPushButton" name="epochsLoopsBtn">
+           <property name="geometry">
+            <rect>
+             <x>450</x>
+             <y>250</y>
+             <width>191</width>
+             <height>31</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Изменить</string>
+           </property>
+          </widget>
+          <widget class="Line" name="line">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>10</y>
+             <width>709</width>
+             <height>20</height>
+            </rect>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+          <widget class="Line" name="line_2">
+           <property name="geometry">
+            <rect>
+             <x>710</x>
+             <y>19</y>
+             <width>20</width>
+             <height>390</height>
+            </rect>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+          <widget class="Line" name="line_3">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>400</y>
+             <width>710</width>
+             <height>20</height>
+            </rect>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+          <widget class="Line" name="line_5">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>20</y>
+             <width>20</width>
+             <height>390</height>
+            </rect>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="RerandWeightsBtn">
+           <property name="geometry">
+            <rect>
+             <x>180</x>
+             <y>330</y>
+             <width>161</width>
+             <height>51</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Сгенерировать
+новые веса</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="SaveWeightsBtn">
+           <property name="geometry">
+            <rect>
+             <x>400</x>
+             <y>330</y>
+             <width>101</width>
+             <height>51</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Сохранить
+веса</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="LoadWeightsBtn">
+           <property name="geometry">
+            <rect>
+             <x>590</x>
+             <y>330</y>
+             <width>101</width>
+             <height>51</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Загрузить
+веса</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="clearBtn">
+           <property name="geometry">
+            <rect>
+             <x>30</x>
+             <y>330</y>
+             <width>101</width>
+             <height>51</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Сбросить
+параметры</string>
+           </property>
+          </widget>
+          <widget class="QGroupBox" name="groupBox_3">
+           <property name="geometry">
+            <rect>
+             <x>20</x>
+             <y>230</y>
+             <width>331</width>
+             <height>61</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>14</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="title">
+            <string>Коэффициент обучения</string>
+           </property>
+           <widget class="QTextEdit" name="learnRateBox">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>20</y>
+              <width>81</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+           </widget>
+          </widget>
+          <widget class="QPushButton" name="settingsHelpBtn">
+           <property name="geometry">
+            <rect>
+             <x>790</x>
+             <y>10</y>
+             <width>101</width>
+             <height>51</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Помощь</string>
+           </property>
+          </widget>
+          <widget class="QGroupBox" name="groupBox_6">
+           <property name="geometry">
+            <rect>
+             <x>20</x>
+             <y>30</y>
+             <width>331</width>
+             <height>61</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>14</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="title">
+            <string>Количество входных значений</string>
+           </property>
+           <widget class="QTextEdit" name="hNodesIn">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>20</y>
+              <width>81</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+           </widget>
+          </widget>
+          <widget class="QGroupBox" name="groupBox_7">
+           <property name="geometry">
+            <rect>
+             <x>20</x>
+             <y>90</y>
+             <width>331</width>
+             <height>61</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>14</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="title">
+            <string>Количество выходных значений</string>
+           </property>
+           <widget class="QTextEdit" name="oNodesIn">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>20</y>
+              <width>81</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+           </widget>
+          </widget>
+          <widget class="QGroupBox" name="groupBox_8">
+           <property name="geometry">
+            <rect>
+             <x>350</x>
+             <y>30</y>
+             <width>351</width>
+             <height>61</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>14</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="title">
+            <string>Количество нейронов в 1-м слое</string>
+           </property>
+           <widget class="QTextEdit" name="hiddenLayerCount1">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>20</y>
+              <width>91</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+           </widget>
+          </widget>
+          <widget class="QGroupBox" name="groupBox_9">
+           <property name="geometry">
+            <rect>
+             <x>350</x>
+             <y>90</y>
+             <width>351</width>
+             <height>61</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>14</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="title">
+            <string>Количество нейронов во 2-м слое</string>
+           </property>
+           <widget class="QTextEdit" name="HiddenLayerCount2">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>20</y>
+              <width>91</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+           </widget>
+          </widget>
+          <widget class="QGroupBox" name="groupBox">
+           <property name="geometry">
+            <rect>
+             <x>350</x>
+             <y>160</y>
+             <width>351</width>
+             <height>61</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>14</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="title">
+            <string>Количество циклов обучения</string>
+           </property>
+           <widget class="QTextEdit" name="loopCount">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>20</y>
+              <width>91</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+           </widget>
+          </widget>
+          <widget class="Line" name="line_4">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>290</y>
+             <width>710</width>
+             <height>20</height>
+            </rect>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+          <widget class="Line" name="line_6">
+           <property name="geometry">
+            <rect>
+             <x>140</x>
+             <y>300</y>
+             <width>20</width>
+             <height>111</height>
+            </rect>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+          <widget class="Line" name="line_7">
+           <property name="geometry">
+            <rect>
+             <x>360</x>
+             <y>300</y>
+             <width>20</width>
+             <height>111</height>
+            </rect>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+          <zorder>epochsGroupBox</zorder>
+          <zorder>line</zorder>
+          <zorder>line_2</zorder>
+          <zorder>line_3</zorder>
+          <zorder>line_5</zorder>
+          <zorder>SaveWeightsBtn</zorder>
+          <zorder>LoadWeightsBtn</zorder>
+          <zorder>epochsLoopsBtn</zorder>
+          <zorder>RerandWeightsBtn</zorder>
+          <zorder>clearBtn</zorder>
+          <zorder>groupBox_3</zorder>
+          <zorder>settingsHelpBtn</zorder>
+          <zorder>groupBox_6</zorder>
+          <zorder>groupBox_7</zorder>
+          <zorder>groupBox_8</zorder>
+          <zorder>groupBox_9</zorder>
+          <zorder>groupBox</zorder>
+          <zorder>line_4</zorder>
+          <zorder>line_6</zorder>
+          <zorder>line_7</zorder>
+         </widget>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>867</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Times New Roman</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="defaultUp">
+    <bool>false</bool>
+   </property>
+   <property name="nativeMenuBar">
+    <bool>true</bool>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="font">
+     <font>
+      <family>Times New Roman</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>Меню</string>
+    </property>
+    <addaction name="loadFromFile"/>
+    <addaction name="currentParamBtn"/>
+    <addaction name="separator"/>
+    <addaction name="FAQbtn"/>
+    <addaction name="separator"/>
+    <addaction name="exitAction_2"/>
+   </widget>
+   <addaction name="menu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="loadFromFile">
+   <property name="text">
+    <string>Загрузить внешний файл(.txt, .xlsx)</string>
+   </property>
+  </action>
+  <action name="currentParamBtn">
+   <property name="text">
+    <string>Просмотреть текущие параметры</string>
+   </property>
+  </action>
+  <action name="FAQbtn">
+   <property name="text">
+    <string>О программе</string>
+   </property>
+  </action>
+  <action name="exitAction_2">
+   <property name="text">
+    <string>Закрыть программу</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

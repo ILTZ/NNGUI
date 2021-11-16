@@ -1053,6 +1053,13 @@ class GUIMBDialog(GUIDialogOrigin, MBD.Ui_messageDBox):
 
     def setText(self, text = "empty_text"):
         self.messageLabel.setText(text)
+
+        lanes = len(text.splitlines())
+        print(lanes)
+        
+        if (lanes >= 3):
+            print(lanes)
+
         pass
 
     def setCustomIcon4Btn(self, pathToIcon):

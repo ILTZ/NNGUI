@@ -379,8 +379,8 @@
          <widget class="QPushButton" name="learnHelpBtn">
           <property name="geometry">
            <rect>
-            <x>780</x>
-            <y>20</y>
+            <x>800</x>
+            <y>10</y>
             <width>101</width>
             <height>51</height>
            </rect>
@@ -572,8 +572,8 @@
         <widget class="QPushButton" name="queryHelpBtn">
          <property name="geometry">
           <rect>
-           <x>780</x>
-           <y>10</y>
+           <x>800</x>
+           <y>0</y>
            <width>101</width>
            <height>51</height>
           </rect>
@@ -889,8 +889,8 @@
          <widget class="QPushButton" name="settingsHelpBtn">
           <property name="geometry">
            <rect>
-            <x>770</x>
-            <y>20</y>
+            <x>790</x>
+            <y>10</y>
             <width>101</width>
             <height>51</height>
            </rect>
