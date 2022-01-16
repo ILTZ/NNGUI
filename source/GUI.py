@@ -415,12 +415,12 @@ class GUImm(QtWidgets.QMainWindow, Ui_shield2.Ui_MainWindow):
         """
 
 
-        try:
-            if (not self.HelpDialog.isActiveWindow()):
-                self.setFocusSubWindow(self.HelpDialog)
-                return
-        except:
-            pass
+        # try:
+        #     if (not self.HelpDialog.isActiveWindow()):
+        #         self.setFocusSubWindow(self.HelpDialog)
+        #         return
+        # except:
+        #     pass
 
         try:
             self.HelpDialog.closeWindow()
