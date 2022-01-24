@@ -983,7 +983,7 @@ class GUIstartWindow(GUIDialogOrigin, SD.Ui_Dialog):
         self.StartWorkBtn.clicked.connect(self.goToProgram)
         self.FAQBtn.clicked.connect(self.showFAQ)
         self.setFixedSize(self.size())
-        self.exitBtn.clicked.connect(self.close)
+        self.exitBtn.clicked.connect(self.fastCloseEvent)
 
         self.show()
         self.fastClose = True
@@ -1008,20 +1008,28 @@ class GUIstartWindow(GUIDialogOrigin, SD.Ui_Dialog):
         pass
     
 
-    def closeEvent(self, event):
-        if (self.fastClose):
-            result = QMessageBox.question(self, "Выход",
-                                          "Закрыть программу?",
-                                          QMessageBox.Yes | QMessageBox.No)
-            event.ignore()
+    def fastCloseEvent(self):
+        
+        msgBox = GUIMBDialog()
+        msgBox.setCustomIcon4AceptBtn(pathToIcon_Acept)
+        msgBox.setCustomIcon4Btn(pathToIcon_Reject)
+        msgBox.setCustomIcon(pathToIcon_Info)
+        msgBox.resizeBtn([50,30])
+        msgBox.setText("Закрыть программу?")
+        msgBox.setButtonsMode(1)
+        msgBox.exec()
 
-            if result == QMessageBox.Yes:
-                event.accept()
+        result = msgBox.aceptAction
 
-            
+        if (result):
+            self.close()
+            pass
+        else:
+            msgBox.close()
 
         pass
-    pass
+
+
 #StartWindow{
 
 
