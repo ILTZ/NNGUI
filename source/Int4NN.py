@@ -1,5 +1,6 @@
+from pickle import FALSE
 from PyQt5 import QtCore
-from NNV2 import neuralNetwork2
+from NNV2 import neuralNet
 import numpy as np
 
 
@@ -35,7 +36,7 @@ class NNControl(QtCore.QObject):
 
         self.stopSignal = False
         #self.NN = neuralNetwork(self.inputN, self.hiddenN, self.outputN, self.learnRate)
-        self.NN = neuralNetwork2(self.inputN, self.hiddenN, self.outputN, self.learnRate)
+        self.NN = neuralNet(self.inputN, self.hiddenN, self.outputN, self.learnRate)
 
         self.inputVal = [[]]
         self.targetVal = [[]]
@@ -48,7 +49,9 @@ class NNControl(QtCore.QObject):
         self.learnFromFile = False
         self.performanceError = 0.0
         self.performanceRate = 0.0
-    
+
+        self.epochsMode = False
+
     #Восстановление стандартных параметров
     def backToDefaultParams(self):
         self.inputN = def_inputN
@@ -67,6 +70,8 @@ class NNControl(QtCore.QObject):
 
         self.learnFromFile = False
         self.NN.setDefaultParams()
+
+        self.epochsMode = False
         pass
     #Процесс смены количества связей и перерандома весов
     def changeLinks(self, hiddenL, outL, inputL = 5):
@@ -131,7 +136,7 @@ class NNControl(QtCore.QObject):
     def handLearn(self):
         print("HandLearn", self.epochs, self.learnLoops, self.learnFromFile)
         it = 0
-        for epochs in range(self.epochs):
+        if (not self.epochsMode):
             for count in range(self.learnLoops):
                 for i,t in zip(self.inputVal[0], self.targetVal[0]):
                     self.NN.learnProcess(i, t)
@@ -143,6 +148,21 @@ class NNControl(QtCore.QObject):
                     self.DebugSignal.emit("Процесс тренировки остановлен.", 'info')
                     self.finished.emit()
                     return
+        elif (self.epochsMode):
+            for count in range(self.epochs):
+                for i,t in zip(self.inputVal[0], self.targetVal[0]):
+                    self.NN.learnProcess(i, t)
+                for i,t in zip(self.inputVal[0].reverse(), self.targetVal[0].reverse()):
+                    self.NN.learnProcess(i, t)
+                self.PBSignal.emit(it / (self.learnLoops * self.epochs))
+                it += 1
+                if (self.stopSignal == True):
+                    self.stopSignal = False
+                    self.finished4Btn.emit(True)
+                    self.DebugSignal.emit("Процесс тренировки остановлен.", 'info')
+                    self.finished.emit()
+                    return  
+
         print("TrainSucces")
         self.performanceTest(self.inputVal[0], self.targetVal[0])
         self.PBSignal.emit(1)
@@ -153,7 +173,7 @@ class NNControl(QtCore.QObject):
     def fileLearn(self):
         print("FileLearn", self.epochs, self.learnLoops, self.learnFromFile)
         it = 0
-        for epochs in range(self.epochs):
+        if (not self.epochsMode):
             for count in range(self.learnLoops):
                 for i,t in zip(self.inputArr, self.targetArr):
                     self.NN.learnProcess(i, t)
@@ -165,6 +185,21 @@ class NNControl(QtCore.QObject):
                     self.DebugSignal.emit("Процесс тренировки остановлен.", 'info')
                     self.finished.emit()
                     return
+        elif (self.epochsMode):
+            for epochs in range(self.epochs):
+                for i,t in zip(self.inputArr, self.targetArr):
+                    self.NN.learnProcess(i,t)
+                for i2,t2 in zip(self.inputArr.reverse(), self.targetArr.reverse()):
+                    self.NN.learnProcess(i2,t2)
+                self.PBSignal.emit(it / (self.learnLoops * self.epochs))
+                it += 1
+                if (self.stopSignal == True):
+                    self.stopSignal = False
+                    self.finished4Btn.emit(True)
+                    self.DebugSignal.emit("Процесс тренировки остановлен.", 'info')
+                    self.finished.emit()
+                    return
+
         print("TrainSucces")
         self.performanceTest(self.inputArr, self.targetArr)
         self.PBSignal.emit(1)

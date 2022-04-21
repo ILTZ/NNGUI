@@ -93,7 +93,7 @@ class FinalNeiron:
         pass
 
 
-class neuralNetwork2:
+class neuralNet:
     def __init__(self, inputNodes, hiddenNodes, outputNodes, learnRate):
         self.iNodes = inputNodes
         self.hNodes = hiddenNodes
@@ -101,7 +101,6 @@ class neuralNetwork2:
         
         self.lr = learnRate
  
-
         self.HiddenLayer1Count = def_hidden1Capacity
         self.HiddenLayer2Count = def_hidden2Capacity
         self.HiddenLayer1 = []
@@ -119,9 +118,8 @@ class neuralNetwork2:
                 finalWeights.append(randWeights(self.hNodes, self.hNodes))
                 #finalWeights.append(np.ones((self.hNodes, self.hNodes)))
 
-
             self.HiddenLayer2.append(Neiron(finalWeights, self.lr))
-        #final output neiron/последний нейрон, покач-то, всегда будет 1
+        #final output neiron/последний нейрон, покачто, всегда будет 1
         finalWeights = [] #генерится массив с матрицами весов(в зависимости от количества нейронов ..
         #...в предыдущем слое)
         for i in range(self.HiddenLayer2Count):
@@ -165,7 +163,7 @@ class neuralNetwork2:
         self.FN.error = FinalError
 
         
-        #Фуууух, сначала вычисляем ошибку на i-ом нейроне 2-го скрытого слоя...
+        #сначала вычисляем ошибку на i-ом нейроне 2-го скрытого слоя...
         for i in range(self.HiddenLayer2Count):
             backProp2 = self.HiddenLayer2[i].backProp(FinalError, self.FN.weights[i])
             for j in range(self.HiddenLayer1Count):
@@ -325,7 +323,7 @@ def test():
     x3 = [1.0, 1.0, 0.0, 0.0]
     y3 = [0.6]
 
-    NN = neuralNetwork2(def_inputN, def_hiddenN, def_outputN, def_learnRate)
+    NN = neuralNet(def_inputN, def_hiddenN, def_outputN, def_learnRate)
 
     #for i in range(def_learnLoop):
     #    NN.learnProcess(x,y)
